@@ -1,0 +1,6 @@
+export * from './Header'
+export * from './Footer'
+export * from './CaroselDoctor'
+export * from './CaroselIntroduction'
+export * from './CaroselVaccine'
+export * from './AppointmentForm'

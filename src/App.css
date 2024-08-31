@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.ant-carousel .slick-dots li button {
+    background: #008000; 
+    opacity: 0.5; 
+  }
+  
+  .ant-carousel .slick-dots li.slick-active button {
+    opacity: 1;
+    background: #008000; 
+  }
+
+
