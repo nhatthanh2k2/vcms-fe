@@ -13,6 +13,9 @@ export default {
         'slide3': "url('/images/slide3.jpg')",
         'bg-vaccination': "url('/images/bg-vaccination.png')",
       },
+      colors: {
+        'admin-bg': 'rgb(241, 245, 249)', 
+      },
     },
   },
   daisyui: {

@@ -1,5 +1,9 @@
 import React from 'react'
-import { CustomerLayout, EmployeeLayout } from '@/components/layouts'
+import {
+    AdminLayout,
+    CustomerLayout,
+    EmployeeLayout,
+} from '@/components/layouts'
 import { CustomerHome, CenterIntroduction } from '@/pages'
 import { PATH } from '@/constant'
 import { Login } from '@/components/ui'
@@ -104,5 +108,10 @@ export const router = [
                 element: <Login />,
             },
         ],
+    },
+    {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [],
     },
 ]

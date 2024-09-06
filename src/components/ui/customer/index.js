@@ -1,5 +1,5 @@
-export * from './Header'
-export * from './Footer'
+export * from './CustomerHeader'
+export * from './CustomerFooter'
 export * from './CaroselDoctor'
 export * from './CaroselIntroduction'
 export * from './CaroselVaccine'

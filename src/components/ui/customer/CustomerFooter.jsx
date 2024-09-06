@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export const Footer = () => {
+export const CustomerFooter = () => {
     return (
         <footer className="border-t-2 mt-auto">
             <div>

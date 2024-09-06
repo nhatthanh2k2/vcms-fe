@@ -6,8 +6,7 @@ export const IntroductionTemplate = () => {
             <div className=" bg-bg-vaccination">
                 <div className="mx-32 flex flex-col">
                     <span className="text-blue-700 mx-auto my-5 text-2xl uppercase font-bold">
-                        "Tiêm chủng đã giúp cứu sống hàng triệu sinh mạng trên
-                        thế giới"
+                        "Sức khỏe của bạn, sứ mệnh của chúng tôi!"
                     </span>
                     <span className="text-justify">
                         Là 1 trong những đơn vị dẫn đầu ngành tiêm chủng vắc xin

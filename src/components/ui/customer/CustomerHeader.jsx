@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export const Header = () => {
+export const CustomerHeader = () => {
     return (
         <header className="w-full h-32 sticky top-0 z-50 bg-white border-b-2 rounded-b-xl shadow-lg font-semibold">
             <div className="flex flex-row items-center justify-center space-x-10 m-5">
