@@ -7,13 +7,7 @@ export const AppointmentTemplate = () => {
             <div className=" uppercase text-3xl  font-bold text-center ">
                 Đăng Ký Lịch Tiêm Chủng
             </div>
-            <div className="flex flex-row">
-                <AppointmentForm />
-
-                <div className="flex justify-center">
-                    <span className=" uppercase">Danh mục vắc-xin</span>
-                </div>
-            </div>
+            <AppointmentForm />
         </div>
     )
 }

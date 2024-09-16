@@ -1,10 +1,24 @@
-import { provinces } from "@/assets/data/provinces"
-import { districts } from "@/assets/data/districts"
-import { wards } from "@/assets/data/wards"
+
+import axios from "axios"
 
 
 export const addressService = {
-    getProvinceList: () => provinces,
-    getDistrictList: () => districts, 
-    getWardList: () => wards
+    getProvinceList: () => {
+        return axios.get("https://provinces.open-api.vn/api/p/")
+    },
+    getDistrictList: () => {
+        return axios.get("https://provinces.open-api.vn/api/d/")
+    }, 
+    getWardList: () => {
+        return axios.get("https://provinces.open-api.vn/api/w/")
+    },
+    getProvinceByCode: (provinceCode) => {
+        return axios.get(`https://provinces.open-api.vn/api/p/${provinceCode}`);
+    },
+    getDistrictByCode: (districtCode) => {
+        return axios.get(`https://provinces.open-api.vn/api/d/${districtCode}`);
+    },
+    getWardByCode: (wardCode) => {
+        return axios.get(`https://provinces.open-api.vn/api/w/${wardCode}`);
+    },
 }

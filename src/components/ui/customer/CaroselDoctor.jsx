@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react'
 
 import { Carousel } from 'antd'
+import { employeeService } from '@/services'
 
 export const CarouselDoctor = () => {
-    const [doctors, setDoctors] = useState([])
+    const [employeeList, setEmployeeList] = useState([])
 
-    useEffect(() => {}, [])
+    useEffect(() => {
+        employeeService
+            .get()
+            .then((response) => setEmployeeList(response.data.result))
+            .catch((err) => console.log('Get employees failed'))
+    }, [])
+
+    const rolesToFilter = ['DOCTOR', 'NURSE']
+
+    const filteredEmployees = employeeList.filter((employee) =>
+        employee.roles.some((role) => rolesToFilter.includes(role))
+    )
 
     return (
         <div className=" w-full mt-10">
@@ -17,18 +29,22 @@ export const CarouselDoctor = () => {
                 arrows={false}
                 autoplaySpeed={5000}
             >
-                {doctors.map((doctor, index) => (
-                    <div key={index} className="mx-4 ">
+                {filteredEmployees.map((employee, index) => (
+                    <div
+                        key={index}
+                        className="mx-4 flex flex-col items-center justify-center pointer-events-none"
+                    >
                         <img
-                            className="w-[200px] h-[200px]"
+                            className="h-96 w-64 object-cover"
                             src={
-                                'http://localhost:8080/images/avatars/' +
-                                doctor.avatar
+                                import.meta.env.VITE_VCMS_IMAGE +
+                                '/avatars/' +
+                                employee.employeeAvatar
                             }
-                            alt="Vac xin"
                         />
-                        <div className="ml-10">
-                            <h2>Bác sĩ. {doctor.employeeName}</h2>
+                        <div className="mx-auto text-center mt-2 flex flex-row space-x-1 items-center justify-center">
+                            <span>{employee.employeeQualification}.</span>
+                            <span>{employee.employeeFullName}</span>
                         </div>
                     </div>
                 ))}

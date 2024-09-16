@@ -10,7 +10,7 @@ export const CustomerHomeTemplate = () => {
     return (
         <div>
             <CarouselIntroduction />
-            <div className="mx-40 space-y-10">
+            <div className=" flex flex-col mx-20 space-y-10">
                 <div>
                     <img
                         className="mx-auto mt-5"

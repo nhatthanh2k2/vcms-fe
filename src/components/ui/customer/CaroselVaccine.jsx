@@ -1,35 +1,44 @@
 import React, { useEffect, useState } from 'react'
 
 import { Carousel } from 'antd'
+import { vaccineService } from '@/services'
 
 export const CarouselVaccine = () => {
-    const [vaccines, setVaccines] = useState([])
+    const [vaccineList, setVaccineList] = useState([])
 
-    useEffect(() => {}, [])
+    useEffect(() => {
+        vaccineService
+            .get()
+            .then((respone) => setVaccineList(respone.data.result))
+            .catch((err) => console.log('Get vaccines failed!'))
+    }, [])
 
     return (
-        <div className=" w-full mt-10">
+        <div className=" w-full h-full mt-10">
             <Carousel
                 autoplay
                 slidesToScroll={3}
-                slidesToShow={5}
+                slidesToShow={4}
                 dots={false}
                 arrows={false}
                 autoplaySpeed={5000}
             >
-                {vaccines.map((vaccine, index) => (
-                    <div key={index} className="mx-4 ">
+                {vaccineList.map((vaccine, index) => (
+                    <div
+                        key={index}
+                        className="mx-4 flex flex-col items-center justify-center pointer-events-none"
+                    >
                         <img
-                            className="w-[200px] h-[200px]"
+                            className="h-64 w-72 mx-auto object-contain"
                             src={
-                                'http://localhost:8080/images/vaccines/' +
+                                import.meta.env.VITE_VCMS_IMAGE +
+                                '/vaccines/' +
                                 vaccine.vaccineImage
                             }
-                            alt="Vac xin"
+                            alt={vaccine.vaccineName}
                         />
-                        <div>
-                            <h2>{vaccine.vaccineName}</h2>
-                            <p className="w-[200px]">{vaccine.description}</p>
+                        <div className="mx-auto text-center mt-2">
+                            {vaccine.vaccineName}
                         </div>
                     </div>
                 ))}

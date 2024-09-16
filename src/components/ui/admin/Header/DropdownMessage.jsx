@@ -153,7 +153,7 @@ export const DropdownMessage = () => {
                                     to="/messages"
                                 >
                                     <div className="h-12.5 w-12.5 rounded-full">
-                                        <img src={UserTwo} alt="User" />
+                                        <img src="" alt="User" />
                                     </div>
 
                                     <div>
