@@ -1,10 +1,6 @@
 import React from 'react'
-import {
-    AdminLayout,
-    CustomerLayout,
-    EmployeeLayout,
-} from '@/components/layouts'
-import { CustomerHome, CenterIntroduction } from '@/pages'
+import { AdminLayout, CustomerLayout, EmployeeLayout } from '@/components/layouts'
+import { CustomerHome, CenterIntroduction, OrderPage } from '@/pages'
 import { PATH } from '@/constant'
 import { Login } from '@/components/ui'
 import { Appointment } from '@/pages/customer/Appointment'
@@ -41,7 +37,7 @@ export const router = [
             },
             {
                 path: PATH.order,
-                element: <Appointment />,
+                element: <OrderPage />,
             },
         ],
     },

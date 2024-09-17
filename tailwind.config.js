@@ -243,6 +243,7 @@ module.exports = {
                 'slide2': "url('/images/slide2.jpg')",
                 'slide3': "url('/images/slide3.jpg')",
                 'bg-vaccination': "url('/images/bg-vaccination.png')",
+                'order-vaccine-list': "url('/images/order-vaccine-list.jpg')",
       },
       content: {
         "icon-copy": 'url("../images/icon/icon-copy-alt.svg")'

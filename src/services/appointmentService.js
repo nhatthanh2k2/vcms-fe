@@ -6,5 +6,7 @@ export const appointmentService = {
     createAppointmentWithOutCustCode: (request) => {
         return axios.post(api_url + "/appointments/create", request)
     },
-
+    createAppointmentWithCustCode: (request) => {
+        return axios.post(api_url + "/appointments/create-code", request)
+    }
 }

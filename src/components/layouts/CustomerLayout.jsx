@@ -1,6 +1,6 @@
 import React from 'react'
-import { CustomerHeader, CustomerFooter } from '../ui/customer'
 import { Outlet } from 'react-router-dom'
+import { BackToTopButton, CustomerHeader, CustomerFooter } from '../ui'
 
 export const CustomerLayout = () => {
     return (
@@ -10,6 +10,7 @@ export const CustomerLayout = () => {
                 <Outlet />
             </div>
             <CustomerFooter />
+            <BackToTopButton />
         </div>
     )
 }
