@@ -12,8 +12,8 @@ import { disabledDoB, formatCurrency, disabledPastDate } from '@/utils'
 const appointmentSchema = z.object({
     appointmentCustomerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
     appointmentCustomerEmail: z.string().email({ message: 'Địa chỉ email không hợp lệ' }),
-    appointmentCustomerPhone: z.string().regex(/^0[0-9]{9,10}$/, {
-        message: 'SĐT phải bắt đầu bằng 0 và có 10 chữ số',
+    appointmentCustomerPhone: z.string().regex(/^0[3-9]\d{8}$/, {
+        message: 'SĐT không hợp lệ',
     }),
     appointmentCustomerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
     appointmentCustomerGender: z.enum(['MALE', 'FEMALE'], { message: 'Giới tính là bắt buộc' }),
@@ -23,8 +23,8 @@ const appointmentSchema = z.object({
     appointmentRelativesFullName: z
         .string()
         .min(1, { message: 'Họ và tên người liên hệ là bắt buộc' }),
-    appointmentRelativesPhone: z.string().regex(/^0[0-9]{9,10}$/, {
-        message: 'SĐT phải bắt đầu bằng 0 và có 10 chữ số',
+    appointmentRelativesPhone: z.string().regex(/^0[3-9]\d{8}$/, {
+        message: 'SĐT không hợp lệ',
     }),
     appointmentRelativesRelationship: z.string().min(1, { message: 'Mối quan hệ là bắt buộc' }),
     appointmentInjectionDate: z.date({ invalid_type_error: 'Ngày tiêm không hợp lệ' }),
@@ -197,6 +197,7 @@ export const AppointmentForm = () => {
             const response = await appointmentService.createAppointmentWithOutCustCode(
                 formattedData
             )
+            console.log(response.data)
 
             if (response.data.code === 1000) {
                 MyToast('success', 'Đăng Ký Thành Công')
@@ -260,7 +261,7 @@ export const AppointmentForm = () => {
                 {isCustomer == 0 ? (
                     <div className="flex flex-row space-x-5">
                         <form className=" max-w-full" onSubmit={handleSubmit(onSubmit)}>
-                            <div className=" text-blue-500 size-5 w-full font-bold text-xl text-center">
+                            <div className=" text-blue-500 size-5 w-full font-bold text-2xl text-center">
                                 Thông tin người tiêm
                             </div>
 
@@ -466,7 +467,7 @@ export const AppointmentForm = () => {
                                 </div>
                             </div>
 
-                            <div className=" text-blue-600 size-5 w-full font-bold my-5 text-xl text-center">
+                            <div className=" text-blue-600 size-5 w-full font-bold my-5 text-2xl text-center">
                                 Thông tin liên hệ
                             </div>
 
@@ -486,7 +487,7 @@ export const AppointmentForm = () => {
                                     </span>
                                 )}
                             </div>
-                            <div className="flex flex-row"></div>
+
                             <div className="relative z-0 w-full mb-5 group">
                                 <input
                                     type="text"
@@ -569,7 +570,7 @@ export const AppointmentForm = () => {
                         </form>
 
                         <div className="flex-1 max-w-full">
-                            <div className="text-blue-500 size-5 w-full font-bold text-xl text-center">
+                            <div className="text-blue-500 size-5 w-full font-bold text-2xl text-center">
                                 Thông tin vắc xin
                             </div>
                             {errors.appointmentBatchDetailId && (
@@ -654,16 +655,14 @@ export const AppointmentForm = () => {
                                 <div className="collapse-title text-lg font-medium">
                                     Gói vắc xin
                                 </div>
-                                <div className="collapse-content">
-                                    <div className="flex flex-col min-h-[400px]">Danh sách gói</div>
-                                </div>
+                                <div className="collapse-content"></div>
                             </div>
                         </div>
                     </div>
                 ) : (
                     <div className="flex flex-row space-x-5">
                         <form className="max-w-full" onSubmit={handleSubmitAppt2(onSubmitAppt2)}>
-                            <div className="text-blue-500 size-5 w-full font-bold text-xl text-center">
+                            <div className="text-blue-500 size-5 w-full font-bold text-2xl text-center">
                                 Thông tin người tiêm
                             </div>
 
@@ -720,7 +719,7 @@ export const AppointmentForm = () => {
                         </form>
 
                         <div className="flex-1 max-w-full">
-                            <div className="text-blue-500 size-5 w-full font-bold text-xl text-center">
+                            <div className="text-blue-500 size-5 w-full font-bold text-2xl text-center">
                                 Thông tin vắc xin
                             </div>
                             {errorsAppt2.appointmentBatchDetailId && (
@@ -805,9 +804,7 @@ export const AppointmentForm = () => {
                                 <div className="collapse-title text-lg font-medium">
                                     Gói vắc xin
                                 </div>
-                                <div className="collapse-content">
-                                    <div className="flex flex-col min-h-[400px]">Danh sách gói</div>
-                                </div>
+                                <div className="collapse-content"></div>
                             </div>
                         </div>
                     </div>

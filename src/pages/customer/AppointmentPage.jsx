@@ -1,6 +1,6 @@
 import { AppointmentTemplate } from '@/components'
 import React from 'react'
 
-export const Appointment = () => {
+export const AppointmentPage = () => {
     return <AppointmentTemplate />
 }

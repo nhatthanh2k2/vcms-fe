@@ -10,6 +10,7 @@ export const CustomerLayout = () => {
                 <Outlet />
             </div>
             <CustomerFooter />
+
             <BackToTopButton />
         </div>
     )

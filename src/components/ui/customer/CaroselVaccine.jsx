@@ -8,7 +8,7 @@ export const CarouselVaccine = () => {
 
     useEffect(() => {
         vaccineService
-            .get()
+            .getAllVaccines()
             .then((respone) => setVaccineList(respone.data.result))
             .catch((err) => console.log('Get vaccines failed!'))
     }, [])
@@ -37,9 +37,7 @@ export const CarouselVaccine = () => {
                             }
                             alt={vaccine.vaccineName}
                         />
-                        <div className="mx-auto text-center mt-2">
-                            {vaccine.vaccineName}
-                        </div>
+                        <div className="mx-auto text-center mt-2">{vaccine.vaccineName}</div>
                     </div>
                 ))}
             </Carousel>

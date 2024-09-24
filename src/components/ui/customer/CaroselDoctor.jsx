@@ -8,7 +8,7 @@ export const CarouselDoctor = () => {
 
     useEffect(() => {
         employeeService
-            .get()
+            .getAllEmployees()
             .then((response) => setEmployeeList(response.data.result))
             .catch((err) => console.log('Get employees failed'))
     }, [])
@@ -23,11 +23,11 @@ export const CarouselDoctor = () => {
         <div className=" w-full mt-10">
             <Carousel
                 autoplay
-                slidesToScroll={3}
+                slidesToScroll={4}
                 slidesToShow={5}
                 dots={false}
                 arrows={false}
-                autoplaySpeed={5000}
+                autoplaySpeed={3000}
             >
                 {filteredEmployees.map((employee, index) => (
                     <div

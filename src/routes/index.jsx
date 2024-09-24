@@ -1,9 +1,14 @@
 import React from 'react'
 import { AdminLayout, CustomerLayout, EmployeeLayout } from '@/components/layouts'
-import { CustomerHome, CenterIntroduction, OrderPage } from '@/pages'
+import {
+    OrderPage,
+    AppointmentPage,
+    CustomerHomePage,
+    IntroductionPage,
+    MedicalTeamPage,
+} from '@/pages'
 import { PATH } from '@/constant'
 import { Login } from '@/components/ui'
-import { Appointment } from '@/pages/customer/Appointment'
 import { Navigate } from 'react-router-dom'
 
 export const router = [
@@ -29,11 +34,11 @@ export const router = [
         children: [
             {
                 index: true,
-                element: <CustomerHome />,
+                element: <CustomerHomePage />,
             },
             {
                 path: PATH.appointment,
-                element: <Appointment />,
+                element: <AppointmentPage />,
             },
             {
                 path: PATH.order,
@@ -47,27 +52,18 @@ export const router = [
         children: [
             {
                 path: PATH.introduction,
-                element: <CenterIntroduction />,
+                element: <IntroductionPage />,
             },
             {
                 path: PATH.medicalTeam,
-                element: <CenterIntroduction />,
+                element: <MedicalTeamPage />,
             },
         ],
     },
     {
         path: '/goi-tiem',
         element: <CustomerLayout />,
-        children: [
-            {
-                path: PATH.listVaccineForChildren,
-                element: <CenterIntroduction />,
-            },
-            {
-                path: PATH.listVaccineForAdults,
-                element: <CenterIntroduction />,
-            },
-        ],
+        children: [],
     },
     {
         path: '/cam-nang',
@@ -94,16 +90,6 @@ export const router = [
     {
         path: PATH.login,
         element: <Login />,
-    },
-    {
-        path: '/nhan-vien',
-        element: <EmployeeLayout />,
-        children: [
-            {
-                path: PATH.home,
-                element: <Login />,
-            },
-        ],
     },
     {
         path: '/admin',

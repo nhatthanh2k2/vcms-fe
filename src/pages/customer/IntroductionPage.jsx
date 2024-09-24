@@ -1,6 +1,6 @@
 import { IntroductionTemplate } from '@/components'
 import React from 'react'
 
-export const CenterIntroduction = () => {
+export const IntroductionPage = () => {
     return <IntroductionTemplate />
 }

@@ -80,6 +80,10 @@ module.exports = {
         danger: "#D34053",
         warning: "#FFA70B",
         'admin': 'rgb(241, 245, 249)', 
+        '41': "#415A80",
+        'D7': "#D7E2E9",
+        'E5': "#E5E7E9"
+        
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],

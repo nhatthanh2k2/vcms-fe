@@ -1,3 +1,5 @@
-export * from './CustomerHome'
-export * from './CenterIntroduction'
+export * from './CustomerHomePage'
+export * from './IntroductionPage'
 export * from './OrderPage'
+export * from './AppointmentPage'
+export * from './MedicalTeamPage'
