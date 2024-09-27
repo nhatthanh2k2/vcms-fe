@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { QRCode } from 'antd'
 import dayjs from 'dayjs'
 import { customerService } from '@/services/customerService'
-import { MyToast } from '../toast'
+import { MyToast } from '../common'
 
 const orderSchema = z.object({
     orderCustomerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),

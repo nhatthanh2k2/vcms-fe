@@ -10,5 +10,6 @@ export const PATH = {
     postVaccination: 'luu-y-sau-tiem',
     vaccineInformation: 'thong-tin-vac-xin',
     vaccinationHistory: 'tra-cuu-lich-su-tiem',
-    login: 'nhan-vien/dang-nhap',
+    login: 'dang-nhap',
+    reception: 'le-tan',
 }

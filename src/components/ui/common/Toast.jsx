@@ -29,6 +29,14 @@ export async function MyToast(type, message) {
             toast.error(message, ToastOption)
             break
         }
+        case 'info': {
+            toast.info(message, ToastOption)
+            break
+        }
+        case 'warn': {
+            toast.warn(message, ToastOption)
+            break
+        }
         default: {
         }
     }

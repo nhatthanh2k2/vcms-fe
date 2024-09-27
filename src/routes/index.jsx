@@ -6,10 +6,12 @@ import {
     CustomerHomePage,
     IntroductionPage,
     MedicalTeamPage,
+    Login,
+    ReceptionPage,
 } from '@/pages'
 import { PATH } from '@/constant'
-import { Login } from '@/components/ui'
 import { Navigate } from 'react-router-dom'
+import { VaccineListTemplate } from '@/components'
 
 export const router = [
     {
@@ -77,10 +79,10 @@ export const router = [
             //     path: PATH.postVaccination,
             //     element: <Introduction />,
             // },
-            // {
-            //     path: PATH.vaccineInformation,
-            //     element: <Introduction />,
-            // },
+            {
+                path: PATH.vaccineInformation,
+                element: <VaccineListTemplate />,
+            },
             // {
             //     path: PATH.vaccinationHistory,
             //     element: <Introduction />,
@@ -95,5 +97,9 @@ export const router = [
         path: '/admin',
         element: <AdminLayout />,
         children: [],
+    },
+    {
+        path: '/nhan-vien/le-tan',
+        element: <EmployeeLayout />,
     },
 ]

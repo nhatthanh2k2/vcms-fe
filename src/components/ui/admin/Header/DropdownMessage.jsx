@@ -7,10 +7,7 @@ export const DropdownMessage = () => {
     const [notifying, setNotifying] = useState(true)
 
     return (
-        <ClickOutside
-            onClick={() => setDropdownOpen(false)}
-            className="relative"
-        >
+        <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
             <li className="relative">
                 <Link
                     onClick={() => {
@@ -61,9 +58,7 @@ export const DropdownMessage = () => {
                         className={`absolute -right-16 mt-2.5 flex h-90 w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:right-0 sm:w-80`}
                     >
                         <div className="px-4.5 py-3">
-                            <h5 className="text-sm font-medium text-bodydark2">
-                                Messages
-                            </h5>
+                            <h5 className="text-sm font-medium text-bodydark2">Messages</h5>
                         </div>
 
                         <ul className="flex h-auto flex-col overflow-y-auto">
@@ -73,16 +68,14 @@ export const DropdownMessage = () => {
                                     to="/messages"
                                 >
                                     <div className="h-12.5 w-12.5 rounded-full">
-                                        <img src="" alt="User" />
+                                        <img src="/images/user/user-07.png" />
                                     </div>
 
                                     <div>
                                         <h6 className="text-sm font-medium text-black dark:text-white">
                                             Mariya Desoja
                                         </h6>
-                                        <p className="text-sm">
-                                            I like your confidence 💪
-                                        </p>
+                                        <p className="text-sm">I like your confidence 💪</p>
                                         <p className="text-xs">2min ago</p>
                                     </div>
                                 </Link>
@@ -93,16 +86,14 @@ export const DropdownMessage = () => {
                                     to="/messages"
                                 >
                                     <div className="h-12.5 w-12.5 rounded-full">
-                                        <img src="" alt="User" />
+                                        <img src="/images/user/user-08.png" />
                                     </div>
 
                                     <div>
                                         <h6 className="text-sm font-medium text-black dark:text-white">
                                             Robert Jhon
                                         </h6>
-                                        <p className="text-sm">
-                                            Can you share your offer?
-                                        </p>
+                                        <p className="text-sm">Can you share your offer?</p>
                                         <p className="text-xs">10min ago</p>
                                     </div>
                                 </Link>
@@ -113,16 +104,14 @@ export const DropdownMessage = () => {
                                     to="/messages"
                                 >
                                     <div className="h-12.5 w-12.5 rounded-full">
-                                        <img src="" alt="User" />
+                                        <img src="/images/user/user-09.png" />
                                     </div>
 
                                     <div>
                                         <h6 className="text-sm font-medium text-black dark:text-white">
                                             Henry Dholi
                                         </h6>
-                                        <p className="text-sm">
-                                            I cam across your profile and...
-                                        </p>
+                                        <p className="text-sm">I cam across your profile and...</p>
                                         <p className="text-xs">1day ago</p>
                                     </div>
                                 </Link>
@@ -133,16 +122,14 @@ export const DropdownMessage = () => {
                                     to="/messages"
                                 >
                                     <div className="h-12.5 w-12.5 rounded-full">
-                                        <img src="" alt="User" />
+                                        <img src="/images/user/user-10.png" />
                                     </div>
 
                                     <div>
                                         <h6 className="text-sm font-medium text-black dark:text-white">
                                             Cody Fisher
                                         </h6>
-                                        <p className="text-sm">
-                                            I’m waiting for you response!
-                                        </p>
+                                        <p className="text-sm">I’m waiting for you response!</p>
                                         <p className="text-xs">5days ago</p>
                                     </div>
                                 </Link>
@@ -153,16 +140,14 @@ export const DropdownMessage = () => {
                                     to="/messages"
                                 >
                                     <div className="h-12.5 w-12.5 rounded-full">
-                                        <img src="" alt="User" />
+                                        <img src="/images/user/user-11.png" />
                                     </div>
 
                                     <div>
                                         <h6 className="text-sm font-medium text-black dark:text-white">
-                                            Mariya Desoja
+                                            Christian James
                                         </h6>
-                                        <p className="text-sm">
-                                            I like your confidence 💪
-                                        </p>
+                                        <p className="text-sm">I like your confidence 💪</p>
                                         <p className="text-xs">2min ago</p>
                                     </div>
                                 </Link>

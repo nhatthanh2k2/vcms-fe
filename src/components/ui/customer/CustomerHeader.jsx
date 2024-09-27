@@ -1,7 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export const CustomerHeader = () => {
+    const location = useLocation()
+
     return (
         <header className="w-full h-32 sticky top-0 z-50 bg-white border-b-2 rounded-b-xl shadow-lg font-semibold">
             <div className="flex flex-row items-center justify-center space-x-10 m-5">
@@ -9,11 +11,14 @@ export const CustomerHeader = () => {
                     <img className="h-20" src="/images/logo.png" alt="Logo" />
                 </Link>
 
-                <nav className="mx-auto flex flex-row space-x-10 text-xl">
+                {/* <nav className="mx-auto flex flex-row space-x-10 text-xl">
                     <div>
                         <Link
                             to="/trang-chu"
-                            className="text-gray-700 md:hover:text-blue-700  "
+                            
+                            className="text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-black 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500"
                         >
                             Trang chủ
                         </Link>
@@ -24,7 +29,9 @@ export const CustomerHeader = () => {
                             to={'/gioi-thieu'}
                             tabIndex={0}
                             role="button"
-                            className="text-gray-700   md:hover:text-blue-700  "
+                            className="text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-black 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500"
                         >
                             Giới thiệu
                         </Link>
@@ -42,10 +49,7 @@ export const CustomerHeader = () => {
                             </li>
 
                             <li>
-                                <Link
-                                    to={'/gioi-thieu/doi-ngu-bac-si'}
-                                    className="text-gray-700"
-                                >
+                                <Link to={'/gioi-thieu/doi-ngu-bac-si'} className="text-gray-700">
                                     Đội ngũ bác sĩ
                                 </Link>
                             </li>
@@ -57,7 +61,9 @@ export const CustomerHeader = () => {
                             to={'/goi-tiem'}
                             tabIndex={0}
                             role="button"
-                            className="text-gray-700   md:hover:text-blue-700  "
+                            className="text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-black 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500"
                         >
                             Gói tiêm
                         </Link>
@@ -66,58 +72,48 @@ export const CustomerHeader = () => {
                             className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-lg "
                         >
                             <li>
-                                <Link
-                                    to={'/goi-tiem/goi-tiem-tre-em'}
-                                    className="text-gray-700"
-                                >
+                                <Link to={'/goi-tiem/goi-tiem-tre-em'} className="text-gray-700">
                                     Gói tiêm trẻ em
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    to={'/goi-tiem/goi-tiem-nguoi-lon'}
-                                    className="text-gray-700"
-                                >
+                                <Link to={'/goi-tiem/goi-tiem-nguoi-lon'} className="text-gray-700">
                                     Gói tiêm người lớn
                                 </Link>
                             </li>
                         </ul>
                     </div>
 
-                    <div className="dropdown dropdown-hover">
-                        <Link
-                            to={'/cam-nang'}
-                            tabIndex={0}
-                            role="button"
-                            className="text-gray-700 md:hover:text-blue-700 "
-                        >
-                            Cẩm nang
-                        </Link>
+                
+                    <div className="dropdown dropdown-hover relative">
+                        <div className="relative group">
+                            <Link
+                                to={'/cam-nang'}
+                                tabIndex={0}
+                                role="button"
+                                className="text-gray-700 relative group-hover:text-blue-700 after:content-[''] after:absolute 
+            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-black 
+            after:scale-x-0 after:origin-left after:transition-transform after:duration-500 group-hover:after:scale-x-100"
+                            >
+                                Cẩm nang
+                            </Link>
+                        </div>
                         <ul
                             tabIndex={0}
-                            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg"
+                            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg relative mt-1"
                         >
                             <li>
-                                <Link
-                                    to={'/cam-nang/luu-y-truoc-tiem'}
-                                    className="text-gray-700"
-                                >
+                                <Link to={'/cam-nang/luu-y-truoc-tiem'} className="text-gray-700">
                                     Lưu ý trước tiêm
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    to={'/cam-nang/luu-y-sau-tiem'}
-                                    className="text-gray-700"
-                                >
+                                <Link to={'/cam-nang/luu-y-sau-tiem'} className="text-gray-700">
                                     Lưu ý sau tiêm
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    to={'/cam-nang/thong-tin-vac-xin'}
-                                    className="text-gray-700"
-                                >
+                                <Link to={'/cam-nang/thong-tin-vac-xin'} className="text-gray-700">
                                     Thông tin vắc xin
                                 </Link>
                             </li>
@@ -135,7 +131,9 @@ export const CustomerHeader = () => {
                     <div>
                         <Link
                             to={'/trang-chu/dang-ky-lich-tiem'}
-                            className="text-gray-700 md:hover:text-blue-700"
+                            className="text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-black 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500"
                         >
                             Đăng ký lịch tiêm
                         </Link>
@@ -144,7 +142,148 @@ export const CustomerHeader = () => {
                     <div>
                         <Link
                             to={'/trang-chu/dat-mua-vac-xin'}
-                            className="text-gray-700 md:hover:text-blue-700"
+                            className="text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-black 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500"
+                        >
+                            Đặt mua vắc xin
+                        </Link>
+                    </div>
+                </nav> */}
+
+                <nav className="mx-auto flex flex-row space-x-10 text-xl">
+                    <div>
+                        <Link
+                            to="/trang-chu"
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname === '/trang-chu' ? 'after:scale-x-100 text-blue-700' : ''
+                    }`}
+                        >
+                            Trang chủ
+                        </Link>
+                    </div>
+
+                    <div className="dropdown dropdown-hover">
+                        <Link
+                            to="/gioi-thieu"
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                                after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                                after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                                    location.pathname.startsWith('/gioi-thieu')
+                                        ? 'after:scale-x-100 text-blue-700'
+                                        : ''
+                                }`}
+                        >
+                            Giới thiệu
+                        </Link>
+                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg mt-1">
+                            <li>
+                                <Link
+                                    to="/gioi-thieu/trung-tam"
+                                    className="text-gray-700 text-nowrap"
+                                >
+                                    Về trung tâm
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/gioi-thieu/doi-ngu-bac-si" className="text-gray-700">
+                                    Đội ngũ bác sĩ
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className="dropdown dropdown-hover">
+                        <Link
+                            to="/goi-tiem"
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                                after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                                after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                                    location.pathname.startsWith('/goi-tiem')
+                                        ? 'after:scale-x-100 text-blue-700'
+                                        : ''
+                                }`}
+                        >
+                            Gói tiêm
+                        </Link>
+                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg mt-1">
+                            <li>
+                                <Link to="/goi-tiem/goi-tiem-tre-em" className="text-gray-700">
+                                    Gói tiêm trẻ em
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/goi-tiem/goi-tiem-nguoi-lon" className="text-gray-700">
+                                    Gói tiêm người lớn
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className="dropdown dropdown-hover relative">
+                        <Link
+                            to="/cam-nang"
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname.startsWith('/cam-nang')
+                            ? 'after:scale-x-100 text-blue-700'
+                            : ''
+                    }`}
+                        >
+                            Cẩm nang
+                        </Link>
+                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg mt-1">
+                            <li>
+                                <Link to="/cam-nang/luu-y-truoc-tiem" className="text-gray-700">
+                                    Lưu ý trước tiêm
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/cam-nang/luu-y-sau-tiem" className="text-gray-700">
+                                    Lưu ý sau tiêm
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/cam-nang/thong-tin-vac-xin" className="text-gray-700">
+                                    Thông tin vắc xin
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/cam-nang/tra-cuu-lich-su-tiem" className="text-gray-700">
+                                    Tra cứu lịch sử tiêm
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <Link
+                            to="/trang-chu/dang-ky-lich-tiem"
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname === '/trang-chu/dang-ky-lich-tiem'
+                            ? 'after:scale-x-100 text-blue-700'
+                            : ''
+                    }`}
+                        >
+                            Đăng ký lịch tiêm
+                        </Link>
+                    </div>
+
+                    <div>
+                        <Link
+                            to="/trang-chu/dat-mua-vac-xin"
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname === '/trang-chu/dat-mua-vac-xin'
+                            ? 'after:scale-x-100 text-blue-700'
+                            : ''
+                    }`}
                         >
                             Đặt mua vắc xin
                         </Link>

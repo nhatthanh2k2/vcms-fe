@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { BackToTopButton, CustomerHeader, CustomerFooter } from '../ui'
 

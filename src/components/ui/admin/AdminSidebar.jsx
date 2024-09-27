@@ -11,9 +11,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
     const storedSidebarExpanded = localStorage.getItem('sidebar-expanded')
     const [sidebarExpanded, setSidebarExpanded] = useState(
-        storedSidebarExpanded === null
-            ? false
-            : storedSidebarExpanded === 'true'
+        storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
     )
 
     // close on click outside
@@ -60,19 +58,17 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
         >
             {/* <!-- SIDEBAR HEADER --> */}
             <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-                <img src="" alt="Logo" className="" />
+                <img className=" w-50" src="/images/logo2.png"></img>
 
                 <button
                     ref={trigger}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                     aria-controls="sidebar"
                     aria-expanded={sidebarOpen}
-                    className="block lg:hidden"
+                    className="block lg:hidden "
                 >
                     <svg
-                        className="fill-current"
-                        width="20"
-                        height="18"
+                        className="fill-current w-4 h-4"
                         viewBox="0 0 20 18"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -91,17 +87,12 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
                     {/* <!-- Menu Group --> */}
                     <div>
-                        <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-                            MENU
-                        </h3>
+                        <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">MENU</h3>
 
                         <ul className="mb-6 flex flex-col gap-1.5">
                             {/* <!-- Menu Item Dashboard --> */}
                             <SidebarLinkGroup
-                                activeCondition={
-                                    pathname === '/' ||
-                                    pathname.includes('dashboard')
-                                }
+                                activeCondition={pathname === '/' || pathname.includes('dashboard')}
                             >
                                 {(handleClick, open) => {
                                     return (
@@ -110,18 +101,14 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                 to="#"
                                                 className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                                     (pathname === '/' ||
-                                                        pathname.includes(
-                                                            'dashboard'
-                                                        )) &&
+                                                        pathname.includes('dashboard')) &&
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     sidebarExpanded
                                                         ? handleClick()
-                                                        : setSidebarExpanded(
-                                                              true
-                                                          )
+                                                        : setSidebarExpanded(true)
                                                 }}
                                             >
                                                 <svg
@@ -178,12 +165,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             eCommerce
@@ -230,8 +214,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 <NavLink
                                     to="/profile"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('profile') &&
-                                        'bg-graydark dark:bg-meta-4'
+                                        pathname.includes('profile') && 'bg-graydark dark:bg-meta-4'
                                     }`}
                                 >
                                     <svg
@@ -259,8 +242,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                             {/* <!-- Menu Item Forms --> */}
                             <SidebarLinkGroup
                                 activeCondition={
-                                    pathname === '/forms' ||
-                                    pathname.includes('forms')
+                                    pathname === '/forms' || pathname.includes('forms')
                                 }
                             >
                                 {(handleClick, open) => {
@@ -270,18 +252,14 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                 to="#"
                                                 className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                                     (pathname === '/forms' ||
-                                                        pathname.includes(
-                                                            'forms'
-                                                        )) &&
+                                                        pathname.includes('forms')) &&
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     sidebarExpanded
                                                         ? handleClick()
-                                                        : setSidebarExpanded(
-                                                              true
-                                                          )
+                                                        : setSidebarExpanded(true)
                                                 }}
                                             >
                                                 <svg
@@ -342,12 +320,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/forms/form-elements"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             Form Elements
@@ -356,12 +331,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/forms/form-layout"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             Form Layout
@@ -381,8 +353,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 <NavLink
                                     to="/tables"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('tables') &&
-                                        'bg-graydark dark:bg-meta-4'
+                                        pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
                                     }`}
                                 >
                                     <svg
@@ -462,9 +433,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
                     {/* <!-- Others Group --> */}
                     <div>
-                        <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-                            OTHERS
-                        </h3>
+                        <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">OTHERS</h3>
 
                         <ul className="mb-6 flex flex-col gap-1.5">
                             {/* <!-- Menu Item Chart --> */}
@@ -472,8 +441,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 <NavLink
                                     to="/chart"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('chart') &&
-                                        'bg-graydark dark:bg-meta-4'
+                                        pathname.includes('chart') && 'bg-graydark dark:bg-meta-4'
                                     }`}
                                 >
                                     <svg
@@ -512,10 +480,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
                             {/* <!-- Menu Item Ui Elements --> */}
                             <SidebarLinkGroup
-                                activeCondition={
-                                    pathname === '/ui' ||
-                                    pathname.includes('ui')
-                                }
+                                activeCondition={pathname === '/ui' || pathname.includes('ui')}
                             >
                                 {(handleClick, open) => {
                                     return (
@@ -524,18 +489,14 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                 to="#"
                                                 className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                                     (pathname === '/ui' ||
-                                                        pathname.includes(
-                                                            'ui'
-                                                        )) &&
+                                                        pathname.includes('ui')) &&
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     sidebarExpanded
                                                         ? handleClick()
-                                                        : setSidebarExpanded(
-                                                              true
-                                                          )
+                                                        : setSidebarExpanded(true)
                                                 }}
                                             >
                                                 <svg
@@ -600,12 +561,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/ui/alerts"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             Alerts
@@ -614,12 +572,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/ui/buttons"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             Buttons
@@ -636,10 +591,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
                             {/* <!-- Menu Item Auth Pages --> */}
                             <SidebarLinkGroup
-                                activeCondition={
-                                    pathname === '/auth' ||
-                                    pathname.includes('auth')
-                                }
+                                activeCondition={pathname === '/auth' || pathname.includes('auth')}
                             >
                                 {(handleClick, open) => {
                                     return (
@@ -648,18 +600,14 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                 to="#"
                                                 className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                                     (pathname === '/auth' ||
-                                                        pathname.includes(
-                                                            'auth'
-                                                        )) &&
+                                                        pathname.includes('auth')) &&
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     sidebarExpanded
                                                         ? handleClick()
-                                                        : setSidebarExpanded(
-                                                              true
-                                                          )
+                                                        : setSidebarExpanded(true)
                                                 }}
                                             >
                                                 <svg
@@ -720,12 +668,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/auth/signin"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             Sign In
@@ -734,12 +679,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/auth/signup"
-                                                            className={({
-                                                                isActive,
-                                                            }) =>
+                                                            className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive &&
-                                                                    '!text-white')
+                                                                (isActive && '!text-white')
                                                             }
                                                         >
                                                             Sign Up

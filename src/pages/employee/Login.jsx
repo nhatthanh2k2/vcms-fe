@@ -1,34 +1,45 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-// import { useAuth } from '../../context/AuthContext';
-import { MyToast } from '../toast'
+import { MyToast } from '@/components'
+import { authService } from '@/services'
+import { jwtDecode } from 'jwt-decode'
 
 export const Login = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [account, setAccount] = useState({
+        username: '',
+        password: '',
+    })
     const navigate = useNavigate()
 
-    //const { login } = useAuth()
+    const handleInputChange = (event) => {
+        const { name, value } = event.target
+        setAccount((prev) => ({ ...prev, [name]: value }))
+    }
 
-    const handleLogin = (e) => {
-        e.preventDefault()
+    const handleLogin = async (event) => {
+        event.preventDefault()
 
         const authEmployeeDTO = {
-            username,
-            password,
+            username: account.username,
+            password: account.password,
         }
-        //console.log(authEmployeeDTO);
-        try {
-            //login(authEmployeeDTO);
-            const employee = JSON.parse(localStorage.getItem('employee'))
 
-            if (employee != null) {
-                MyToast('success', 'Đăng Nhập Thành Công')
-                //setTimeout(() => navigate('/admin'), 2000)
-            } else {
-                MyToast('error', 'Đăng Nhập Thất Bại')
-            }
+        try {
+            const response = await authService.login(authEmployeeDTO)
+            const { token } = response.data.result
+            sessionStorage.setItem('employee', JSON.stringify({ token }))
+
+            MyToast('success', 'Đăng Nhập Thành Công')
+
+            const decodedToken = jwtDecode(token)
+            const role = decodedToken.scope
+
+            setTimeout(() => {
+                if (role === 'ADMIN') navigate('/admin')
+                else if (role === 'RECEPTIONIST') navigate('/nhan-vien/le-tan')
+                else navigate('/dang-nhap')
+            }, 2000)
         } catch (error) {
             MyToast('error', 'Đăng Nhập Thất Bại')
         }
@@ -42,10 +53,7 @@ export const Login = () => {
                         <div className="p-6 sm:p-16">
                             <div className="space-y-4">
                                 <div className="grid grid-cols-2">
-                                    <img
-                                        src="/images/logo.png"
-                                        className="h-20 grid-cols-1 "
-                                    ></img>
+                                    <img src="/images/logo.png" className="h-20 grid-cols-1 "></img>
                                     <img
                                         src="/icon.svg"
                                         loading="lazy"
@@ -70,10 +78,7 @@ export const Login = () => {
                                         fill="none"
                                         xmlns="http://www.w3.org/2000/svg"
                                     >
-                                        <g
-                                            id="SVGRepo_bgCarrier"
-                                            strokeWidth="0"
-                                        ></g>
+                                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                                         <g
                                             id="SVGRepo_tracerCarrier"
                                             strokeLinecap="round"
@@ -107,10 +112,8 @@ export const Login = () => {
                                         name="username"
                                         id="username"
                                         placeholder="Mã nhân viên"
-                                        value={username}
-                                        onChange={(e) =>
-                                            setUsername(e.target.value)
-                                        }
+                                        value={account.username}
+                                        onChange={(e) => handleInputChange(e)}
                                     />
                                 </div>
 
@@ -124,10 +127,7 @@ export const Login = () => {
                                         fill="none"
                                         xmlns="http://www.w3.org/2000/svg"
                                     >
-                                        <g
-                                            id="SVGRepo_bgCarrier"
-                                            strokeWidth="0"
-                                        ></g>
+                                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                                         <g
                                             id="SVGRepo_tracerCarrier"
                                             strokeLinecap="round"
@@ -155,10 +155,8 @@ export const Login = () => {
                                         name="password"
                                         id="password"
                                         placeholder="Mật khẩu"
-                                        value={password}
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
+                                        value={account.password}
+                                        onChange={(e) => handleInputChange(e)}
                                     />
                                 </div>
 
@@ -170,7 +168,7 @@ export const Login = () => {
 
                                 <button
                                     onClick={handleLogin}
-                                    className="h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 group
+                                    className="h-12 px-6 border-2 border-graydark rounded-full transition duration-300 group
                                          hover:border-blue-500 focus:bg-blue-50 "
                                 >
                                     <div className="relative flex items-center space-x-4 justify-center">

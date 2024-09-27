@@ -6,7 +6,7 @@ import { appointmentService, batchDetailService } from '@/services'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MyToast } from '../toast'
+import { MyToast } from '../common'
 import { disabledDoB, formatCurrency, disabledPastDate } from '@/utils'
 
 const appointmentSchema = z.object({
