@@ -1,9 +1,22 @@
-import React, { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import { AppointmentSchedule, BookVaccination, CustomerLookup, PrintVaccinationRecord } from '../ui'
+import { batchDetailService, vaccinePackageService } from '@/services'
 
 export const EmployeeLayout = () => {
     const [activeTab, setActiveTab] = useState('customerLookup')
+    const [batchDetailList, setBatchDetailList] = useState([])
+    const [vaccinePackageList, setVaccinePackageList] = useState([])
+    useEffect(() => {
+        batchDetailService
+            .getDetail()
+            .then((response) => setBatchDetailList(response.data.result))
+            .catch((err) => console.log('Get Batch Detail Failed!'))
+
+        vaccinePackageService
+            .getAllPackages()
+            .then((response) => setVaccinePackageList(response.data.result))
+            .catch((err) => console.log('Get Vaccine Package Failed!'))
+    }, [])
 
     const renderContent = () => {
         switch (activeTab) {
@@ -12,7 +25,12 @@ export const EmployeeLayout = () => {
             case 'appointmentSchedule':
                 return <AppointmentSchedule />
             case 'bookVaccination':
-                return <BookVaccination />
+                return (
+                    <BookVaccination
+                        batchDetailList={batchDetailList}
+                        vaccinePackageList={vaccinePackageList}
+                    />
+                )
             case 'printVaccinationRecord':
                 return <PrintVaccinationRecord />
             default:
@@ -21,22 +39,26 @@ export const EmployeeLayout = () => {
     }
 
     return (
-        <body class=" bg-employee overflow-hidden  flex items-start">
-            <aside class="w-1/5 bg-white shadow-md h-screen ">
-                <div class="flex flex-col justify-between h-full">
-                    <div class="flex-grow">
-                        <div class="px-4 py-6 text-center ">
-                            <div class="text-3xl font-bold leading-tight ">
-                                <span class="inline text-blue-700 rounded">T-Vax</span> Company
+        <div className=" bg-employee overflow-hidden flex items-start min-h-screen">
+            <aside className="w-1/5 bg-white shadow-md h-screen ">
+                <div className="flex flex-col justify-between h-full">
+                    <div className="flex-grow">
+                        <div className="px-4 py-6 text-center ">
+                            <div className="text-3xl font-bold leading-tight ">
+                                <span className="inline text-blue-700 rounded">T-Vax</span> Company
                             </div>
                         </div>
                         <div className="border-2 border-orange-400"></div>
-                        <div class="p-4">
-                            <ul class="space-y-1">
+                        <div className="p-4">
+                            <ul className="space-y-1">
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('customerLookup')}
-                                        class="flex items-center cursor-pointer hover:bg-yellow-50 hover:text-black rounded-xl font-bold text-sm text-black py-3 px-4"
+                                        className={`flex items-center cursor-pointer hover:bg-yellow-50 hover:text-black rounded-xl font-bold text-sm py-3 px-4 ${
+                                            activeTab === 'customerLookup'
+                                                ? 'bg-yellow-50'
+                                                : 'bg-white'
+                                        }`}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +74,11 @@ export const EmployeeLayout = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('appointmentSchedule')}
-                                        class="flex bg-white cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm text-black py-3 px-4"
+                                        className={`flex cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm py-3 px-4 ${
+                                            activeTab === 'appointmentSchedule'
+                                                ? 'bg-yellow-50'
+                                                : 'bg-white'
+                                        }`}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +100,11 @@ export const EmployeeLayout = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('bookVaccination')}
-                                        class="flex bg-white cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm text-black py-3 px-4"
+                                        className={`flex cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm py-3 px-4 ${
+                                            activeTab === 'bookVaccination'
+                                                ? 'bg-yellow-50'
+                                                : 'bg-white'
+                                        }`}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -90,13 +120,17 @@ export const EmployeeLayout = () => {
                                                 d="M3 9h18m-9 9v-6m3 3.001L9 15M7 3v2m10-2v2M6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8V8.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 5 18.92 5 17.8 5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.52 3 7.08 3 8.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21Z"
                                             />
                                         </svg>
-                                        Đặt lịch tiêm
+                                        Đăng ký vắc xin
                                     </div>
                                 </li>
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('printVaccinationRecord')}
-                                        class="flex bg-white cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm text-black py-3 px-4"
+                                        className={`flex cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm py-3 px-4 ${
+                                            activeTab === 'printVaccinationRecord'
+                                                ? 'bg-yellow-50'
+                                                : 'bg-white'
+                                        }`}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -128,9 +162,9 @@ export const EmployeeLayout = () => {
                             </ul>
                         </div>
                     </div>
-                    <div class="p-4 flex flex-col">
+                    <div className="p-4 flex flex-col">
                         <div>
-                            <div class="flex bg-white cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm text-black py-3 px-4">
+                            <div className="flex bg-white cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm text-black py-3 px-4">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="w-6 h-6 text-lg mr-4"
@@ -145,26 +179,25 @@ export const EmployeeLayout = () => {
                         <div className="flex items-center">
                             <button
                                 type="button"
-                                class="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
+                                className="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="1em"
                                     height="1em"
                                     fill="currentColor"
-                                    class=""
                                     viewBox="0 0 16 16"
                                 >
                                     <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
                                 </svg>
                             </button>{' '}
-                            <span class="font-bold text-sm ml-2">Logout</span>
+                            <span className="font-bold text-sm ml-2">Logout</span>
                         </div>
                     </div>
                 </div>
             </aside>
 
-            <main class="mx-16 mt-16 w-4/5 h-full overflow-auto ">{renderContent()}</main>
-        </body>
+            <main className="mx-16 mt-16 w-4/5 h-full overflow-auto ">{renderContent()}</main>
+        </div>
     )
 }

@@ -777,6 +777,7 @@ export const OrderForm = () => {
                             <div className="mt-5">
                                 {payment === '' ? null : payment === 'paypal' ? (
                                     <PayPalButton
+                                        className="z-1"
                                         amount={convertVNDToUSD(totalAmount)}
                                         onSuccess={(details, data) => {
                                             const orderDataWithCustCode = {

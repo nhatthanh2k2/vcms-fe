@@ -8,12 +8,11 @@ export const PrintVaccinationRecord = () => {
     ])
 
     const handlePrint = (id) => {
-        // In a real application, this would generate a printable invoice
         console.log(`Printing invoice for ID: ${id}`)
     }
 
     return (
-        <div className="bg-white rounded-lg shadow p-6">
+        <section className="bg-white rounded-lg shadow p-6">
             <h2 className="text-2xl font-bold mb-4">Print Invoices</h2>
             <table className="w-full">
                 <thead>
@@ -42,6 +41,6 @@ export const PrintVaccinationRecord = () => {
                     ))}
                 </tbody>
             </table>
-        </div>
+        </section>
     )
 }
