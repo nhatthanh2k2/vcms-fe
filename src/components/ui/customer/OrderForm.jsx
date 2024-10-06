@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { DatePicker, Pagination } from 'antd'
-import { batchDetailService, orderService } from '@/services'
-import { convertVNDToUSD, disabledDoB, formatCurrency, disabledPastDate } from '@/utils'
-import { PayPalButton } from 'react-paypal-button-v2'
+import { Alert, DatePicker, Pagination } from 'antd'
+import { batchDetailService, orderService, vaccinePackageService } from '@/services'
+import {
+    convertVNDToUSD,
+    disabledDoB,
+    formatCurrency,
+    disabledPastDate,
+    convertPackageType,
+} from '@/utils'
+
 import { addressService } from '@/services/addressService'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -10,7 +16,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { QRCode } from 'antd'
 import dayjs from 'dayjs'
 import { customerService } from '@/services/customerService'
-import { MyToast } from '../common'
+import { AlertModal, ModalTransfer, MyToast } from '../common'
+import { PayPalCheckOut } from '.'
 
 const orderSchema = z.object({
     orderCustomerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
@@ -19,7 +26,9 @@ const orderSchema = z.object({
         message: 'SĐT phải bắt đầu bằng 0 và có 10 chữ số',
     }),
     orderCustomerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
-    orderCustomerGender: z.enum(['MALE', 'FEMALE'], { message: 'Giới tính là bắt buộc' }),
+    orderCustomerGender: z.enum(['MALE', 'FEMALE'], {
+        message: 'Giới tính là bắt buộc',
+    }),
     orderCustomerProvince: z.string().min(1, { message: 'Tỉnh/Thành là bắt buộc' }),
     orderCustomerDistrict: z.string().min(1, { message: 'Quận/Huyện là bắt buộc' }),
     orderCustomerWard: z.string().min(1, { message: 'Xã/Phường là bắt buộc' }),
@@ -39,50 +48,73 @@ const lookupSchema = z.object({
 })
 
 export const OrderForm = () => {
-    const [hasUserData, setHasUserData] = useState('')
     const [showForm, setShowForm] = useState(false)
+    const [packageList, setPackageList] = useState([])
     const [batchDetailList, setBatchDetailList] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 9
     const startIndex = (currentPage - 1) * pageSize
     const currentBatchDetails = batchDetailList.slice(startIndex, startIndex + pageSize)
 
+    const [batchDetailSelectedList, setBatchDetailSelectedList] = useState([])
+    const [totalAmount, setTotalAmount] = useState(0)
+    const [payment, setPayment] = useState('')
+    const [injectionDate, setInjectionDate] = useState(null)
+    const [vaccinePackageSelectedList, setVaccinePackageSelectedList] = useState([])
+    const [orderType, setOrderType] = useState('')
+
     useEffect(() => {
         batchDetailService
             .getDetail()
             .then((response) => setBatchDetailList(response.data.result))
             .catch((err) => console.log('Get Batch Detail Failed!'))
+        vaccinePackageService
+            .getDefaultPackages()
+            .then((response) => setPackageList(response.data.result))
+            .catch((err) => console.log('Get Vaccine Package Failed!'))
     }, [])
 
     const handlePageChange = (page) => {
         setCurrentPage(page)
     }
 
-    const [selectedBatchDetails, setSelectedBatchDetails] = useState([])
-
     const handleSelectVaccine = (batchDetail) => {
-        if (!selectedBatchDetails.find((b) => b.batchDetailId === batchDetail.batchDetailId)) {
-            setSelectedBatchDetails([...selectedBatchDetails, batchDetail])
+        if (!batchDetailSelectedList.find((b) => b.batchDetailId === batchDetail.batchDetailId)) {
+            setBatchDetailSelectedList([...batchDetailSelectedList, batchDetail])
         }
     }
 
     const handleRemoveVaccine = (batchDetailId) => {
-        setSelectedBatchDetails(
-            selectedBatchDetails.filter((b) => b.batchDetailId !== batchDetailId)
+        setBatchDetailSelectedList(
+            batchDetailSelectedList.filter((b) => b.batchDetailId !== batchDetailId)
         )
     }
 
-    const [totalAmount, setTotalAmount] = useState(0)
+    const handleSelectPackage = (pack) => {
+        if (!vaccinePackageSelectedList.find((p) => p.vaccinePackageId === pack.vaccinePackageId)) {
+            setVaccinePackageSelectedList([...vaccinePackageSelectedList, pack])
+        }
+    }
+
+    const handleRemovePackage = (packageId) => {
+        setVaccinePackageSelectedList(
+            vaccinePackageSelectedList.filter((p) => p.vaccinePackageId !== packageId)
+        )
+    }
 
     useEffect(() => {
-        const total = selectedBatchDetails.reduce(
+        const totalVaccinePrice = batchDetailSelectedList.reduce(
             (acc, batchDetail) => acc + batchDetail.batchDetailVaccinePrice,
             0
         )
-        setTotalAmount(total)
-    }, [selectedBatchDetails])
 
-    const [payment, setPayment] = useState('')
+        const totalPackagePrice = vaccinePackageSelectedList.reduce(
+            (acc, pack) => acc + pack.vaccinePackagePrice,
+            0
+        )
+        const total = totalVaccinePrice + totalPackagePrice
+        setTotalAmount(total)
+    }, [batchDetailSelectedList, vaccinePackageSelectedList])
 
     const handlePayment = (e) => {
         setPayment(e.target.value)
@@ -142,6 +174,27 @@ export const OrderForm = () => {
         }
     }, [selectedDistrict])
 
+    useEffect(() => {
+        addressService
+            .getProvinceByCode(selectedProvince)
+            .then((response) => setProvinceData(response.data.name))
+            .catch((err) => console.log('Get Province Failed!'))
+    }, [selectedProvince])
+
+    useEffect(() => {
+        addressService
+            .getDistrictByCode(selectedDistrict)
+            .then((response) => setDistrictData(response.data.name))
+            .catch((err) => console.log('Get District Failed!'))
+    }, [selectedDistrict])
+
+    useEffect(() => {
+        addressService
+            .getWardByCode(selectedWard)
+            .then((response) => setWardData(response.data.name))
+            .catch((err) => console.log('Get Ward Failed!'))
+    }, [selectedWard])
+
     const {
         register,
         handleSubmit,
@@ -194,65 +247,18 @@ export const OrderForm = () => {
         if (response.data.code === 1005) {
             document.getElementById('modal_no_info').showModal()
             setShowForm(true)
+            setOrderType('NOCODE')
         }
 
         if (response.data.code === 1000) {
             document.getElementById('modal_info').showModal()
             setExistsCustomer(response.data.result)
+            setOrderType('CODE')
             setShowForm(false)
         }
     }
 
-    useEffect(() => {
-        addressService
-            .getProvinceByCode(selectedProvince)
-            .then((response) => setProvinceData(response.data.name))
-            .catch((err) => console.log('Get Province Failed!'))
-    }, [selectedProvince])
-
-    useEffect(() => {
-        addressService
-            .getDistrictByCode(selectedDistrict)
-            .then((response) => setDistrictData(response.data.name))
-            .catch((err) => console.log('Get District Failed!'))
-    }, [selectedDistrict])
-
-    useEffect(() => {
-        addressService
-            .getWardByCode(selectedWard)
-            .then((response) => setWardData(response.data.name))
-            .catch((err) => console.log('Get Ward Failed!'))
-    }, [selectedWard])
-
-    const [hasCustomer, setHasCustomer] = useState()
-    useEffect(() => {
-        if (showForm) {
-            setHasCustomer(0)
-        }
-        setHasCustomer(1)
-    }, [showForm])
-
-    const handleCreateOrder = async (request) => {
-        const response = await orderService.createOrder(request)
-        if (response.data.code === 1000) {
-            MyToast('success', 'Đặt Hàng Thành Công')
-        }
-        if (response.data.code === 1008) {
-            MyToast('error', 'Đặt hàng không thành công')
-        }
-    }
-
-    const [injectionDate, setInjectionDate] = useState(null)
-
-    const handleCreateOrderWithCustomerCode = async (request) => {
-        const response = await orderService.createOrderWithCustomerCode(request)
-        if (response.data.code === 1000) {
-            MyToast('success', 'Đặt Hàng Thành Công')
-        }
-        if (response.data.code === 1008) {
-            MyToast('error', 'Đặt hàng không thành công')
-        }
-    }
+    const orderData = watch()
 
     return (
         <div className="bg-gray-2 pt-10">
@@ -589,78 +595,159 @@ export const OrderForm = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col mt-5">
-                        <div className="flex flex-wrap gap-4 flex-grow">
-                            {currentBatchDetails.map((batchDetail, index) => {
-                                const isSelected = selectedBatchDetails.find(
-                                    (v) => v.batchDetailId === batchDetail.batchDetailId
-                                )
+                    <div className="flex flex-col ">
+                        <div role="tablist" className="tabs tabs-lifted mt-10">
+                            <input
+                                type="radio"
+                                name="my_tabs_2"
+                                role="tab"
+                                className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
+                                aria-label="Vắc xin lẻ"
+                                defaultChecked
+                            />
+                            <div
+                                role="tabpanel"
+                                className="tab-content bg-base-100 border-base-300 rounded-box p-6 "
+                            >
+                                <div className="flex flex-wrap gap-4 flex-grow">
+                                    {currentBatchDetails.map((batchDetail, index) => {
+                                        const isVaccineSelected = batchDetailSelectedList.find(
+                                            (v) => v.batchDetailId === batchDetail.batchDetailId
+                                        )
 
-                                return (
-                                    <div
-                                        className="card card-compact bg-base-100 w-75 shadow-xl"
-                                        key={index}
-                                    >
-                                        <figure>
-                                            <img
-                                                src={
-                                                    import.meta.env.VITE_VCMS_IMAGE +
-                                                    '/vaccines/' +
-                                                    batchDetail.vaccineResponse.vaccineImage
-                                                }
-                                                alt={batchDetail.vaccineResponse.vaccineName}
-                                            />
-                                        </figure>
-                                        <div className="card-body">
-                                            <h2 className="card-title">
-                                                {batchDetail.vaccineResponse.vaccineName}
-                                            </h2>
-                                            <p>Phòng: {batchDetail.diseaseResponse.diseaseName}</p>
-                                            <p>
-                                                Giá chỉ:{' '}
-                                                {formatCurrency(
-                                                    batchDetail.batchDetailVaccinePrice
-                                                )}
-                                            </p>
-                                            <div className="card-actions justify-end">
-                                                {isSelected ? (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleRemoveVaccine(
-                                                                batchDetail.batchDetailId
-                                                            )
-                                                        }
-                                                        className="btn btn-outline btn-accent"
-                                                    >
-                                                        Đã Chọn
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleSelectVaccine(batchDetail)
-                                                        }
-                                                        className="btn btn-outline btn-primary"
-                                                    >
-                                                        Chọn
-                                                    </button>
-                                                )}
+                                        return (
+                                            <div
+                                                className="card card-compact bg-base-100 w-70 shadow-xl"
+                                                key={index}
+                                            >
+                                                <div className="card-body">
+                                                    <h2 className="card-title">
+                                                        {batchDetail.vaccineResponse.vaccineName}
+                                                    </h2>
+                                                    <p>
+                                                        Phòng:{' '}
+                                                        {batchDetail.diseaseResponse.diseaseName}
+                                                    </p>
+                                                    <p>
+                                                        Giá chỉ:{' '}
+                                                        {formatCurrency(
+                                                            batchDetail.batchDetailVaccinePrice
+                                                        )}
+                                                    </p>
+                                                    <div className="card-actions justify-end">
+                                                        {isVaccineSelected ? (
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleRemoveVaccine(
+                                                                        batchDetail.batchDetailId
+                                                                    )
+                                                                }
+                                                                className="btn btn-outline btn-accent"
+                                                            >
+                                                                Đã Chọn
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleSelectVaccine(batchDetail)
+                                                                }
+                                                                className="btn btn-outline btn-info"
+                                                            >
+                                                                Chọn
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
+                                        )
+                                    })}
+                                </div>
 
-                        {batchDetailList.length > pageSize && (
-                            <div className="pagination mx-auto mt-5">
-                                <Pagination
-                                    current={currentPage}
-                                    pageSize={pageSize}
-                                    total={batchDetailList.length}
-                                    onChange={handlePageChange}
-                                />
+                                {batchDetailList.length > pageSize && (
+                                    <div className="pagination flex  mt-5 justify-center">
+                                        <Pagination
+                                            current={currentPage}
+                                            pageSize={pageSize}
+                                            total={batchDetailList.length}
+                                            onChange={handlePageChange}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        )}
+
+                            <input
+                                type="radio"
+                                name="my_tabs_2"
+                                role="tab"
+                                className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
+                                aria-label="Gói vắc xin"
+                            />
+                            <div
+                                role="tabpanel"
+                                className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                            >
+                                <div className="flex flex-col ">
+                                    <div className="flex flex-wrap gap-2 flex-grow">
+                                        {packageList.map((pack, index) => {
+                                            const isPackageSelected =
+                                                vaccinePackageSelectedList.find(
+                                                    (p) =>
+                                                        p.vaccinePackageId === pack.vaccinePackageId
+                                                )
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="card bg-base-100 w-70 shadow-xl flex-shrink-0 "
+                                                >
+                                                    <div className="card-body">
+                                                        <h2 className="card-title ">
+                                                            {pack.vaccinePackageName}{' '}
+                                                            {convertPackageType(
+                                                                pack.vaccinePackageType
+                                                            )}
+                                                        </h2>
+
+                                                        <p>
+                                                            Giá:{' '}
+                                                            {formatCurrency(
+                                                                pack.vaccinePackagePrice
+                                                            )}
+                                                        </p>
+                                                        <div className="card-actions justify-end">
+                                                            <div className="card-actions justify-end">
+                                                                {isPackageSelected ? (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleRemovePackage(
+                                                                                pack.vaccinePackageId
+                                                                            )
+                                                                        }
+                                                                        className="btn btn-outline btn-accent"
+                                                                    >
+                                                                        Đã Chọn
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleSelectPackage(
+                                                                                pack
+                                                                            )
+                                                                        }
+                                                                        className="btn btn-outline btn-info"
+                                                                    >
+                                                                        Chọn
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -713,56 +800,100 @@ export const OrderForm = () => {
                         <div className="border-b border-green-500 "></div>
 
                         <div className="mt-5">
-                            {selectedBatchDetails.length === 0 ? (
+                            {batchDetailSelectedList.length === 0 &&
+                            vaccinePackageSelectedList.length === 0 ? (
                                 <div className="text-xl text-blue-600 text-center">
                                     Danh sách trống
                                 </div>
                             ) : (
-                                selectedBatchDetails.map((batchDetail) => (
-                                    <div
-                                        key={batchDetail.batchDetailId}
-                                        className="border-b border-red-100 p-5"
-                                    >
-                                        <div className="flex flex-row items-center justify-between">
-                                            <div className="flex flex-col space-y-2">
-                                                <span className=" uppercase text-xl font-bold text-black">
-                                                    {batchDetail.vaccineResponse.vaccineName}
-                                                </span>
+                                <>
+                                    {batchDetailSelectedList.map((batchDetail) => (
+                                        <div
+                                            key={batchDetail.batchDetailId}
+                                            className="border-b border-red-100 p-5"
+                                        >
+                                            <div className="flex flex-row items-center justify-between">
+                                                <div className="flex flex-col space-y-2">
+                                                    <span className=" uppercase text-xl font-bold text-black">
+                                                        {batchDetail.vaccineResponse.vaccineName}
+                                                    </span>
 
-                                                <span>
-                                                    Nguồn gốc:{' '}
-                                                    {batchDetail.vaccineResponse.vaccineOrigin}
-                                                </span>
-                                                <span className="text-lg font-bold text-blue-800">
-                                                    {formatCurrency(
-                                                        batchDetail.batchDetailVaccinePrice
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <button
-                                                onClick={() =>
-                                                    handleRemoveVaccine(batchDetail.batchDetailId)
-                                                }
-                                                className="btn btn-square btn-sm"
-                                            >
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-6 w-6"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke="currentColor"
+                                                    <span>
+                                                        Nguồn gốc:{' '}
+                                                        {batchDetail.vaccineResponse.vaccineOrigin}
+                                                    </span>
+                                                    <span className="text-lg font-bold text-blue-800">
+                                                        {formatCurrency(
+                                                            batchDetail.batchDetailVaccinePrice
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                <button
+                                                    onClick={() =>
+                                                        handleRemoveVaccine(
+                                                            batchDetail.batchDetailId
+                                                        )
+                                                    }
+                                                    className="btn btn-square btn-sm"
                                                 >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M6 18L18 6M6 6l12 12"
-                                                    />
-                                                </svg>
-                                            </button>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="h-6 w-6"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
+                                    ))}
+                                    {vaccinePackageSelectedList.map((pack) => (
+                                        <div
+                                            key={pack.vaccinePackageId}
+                                            className="border-b border-red-100 p-5 flex flex-col space-y-2"
+                                        >
+                                            <div className="flex flex-row items-center justify-between">
+                                                <div className="flex flex-col space-y-2">
+                                                    <span className=" uppercase text-xl font-bold text-black">
+                                                        {pack.vaccinePackageName}
+                                                    </span>
+
+                                                    <span className="text-lg font-bold text-blue-800">
+                                                        {formatCurrency(pack.vaccinePackagePrice)}
+                                                    </span>
+                                                </div>
+                                                <button
+                                                    onClick={() =>
+                                                        handleRemovePackage(pack.vaccinePackageId)
+                                                    }
+                                                    className="btn btn-square btn-sm"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="h-6 w-6"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </>
                             )}
                         </div>
                     </div>
@@ -776,56 +907,15 @@ export const OrderForm = () => {
                             </div>
                             <div className="mt-5">
                                 {payment === '' ? null : payment === 'paypal' ? (
-                                    <PayPalButton
-                                        className="z-1"
-                                        amount={convertVNDToUSD(totalAmount)}
-                                        onSuccess={(details, data) => {
-                                            const orderDataWithCustCode = {
-                                                orderPayment: payment,
-                                                orderTotal: totalAmount,
-                                                customerCode: existsCustomer.customerCode,
-                                                customerPhone: existsCustomer.customerPhone,
-                                                injectionDate: injectionDate,
-                                                orderItemList: selectedBatchDetails.map(
-                                                    (batchDetail) => batchDetail.batchDetailId
-                                                ),
-                                            }
-                                            const orderData = {
-                                                orderTotal: totalAmount,
-                                                orderPayment: payment,
-                                                orderItemIdList: selectedBatchDetails.map(
-                                                    (batchDetail) => batchDetail.batchDetailId
-                                                ),
-                                                orderCustomerFullName:
-                                                    getValues('orderCustomerFullName'),
-                                                orderCustomerEmail: getValues('orderCustomerEmail'),
-                                                orderCustomerPhone: getValues('orderCustomerPhone'),
-                                                orderCustomerDob: dayjs(
-                                                    getValues('orderCustomerDob')
-                                                ).format('DD-MM-YYYY'),
-                                                orderCustomerGender:
-                                                    getValues('orderCustomerGender'),
-                                                orderCustomerProvince: provinceData,
-                                                orderCustomerDistrict: districtData,
-                                                orderCustomerWard: wardData,
-                                                orderInjectionDate: dayjs(
-                                                    getValues('orderInjectionDate')
-                                                ).format('DD-MM-YYYY'),
-                                            }
-                                            if (showForm) {
-                                                handleCreateOrder(orderData)
-                                            } else {
-                                                handleCreateOrderWithCustomerCode(
-                                                    orderDataWithCustCode
-                                                )
-                                            }
-                                        }}
-                                        onCancel={(data, actions) => {
-                                            MyToast('error', 'Thanh toán bị huỷ')
-                                        }}
-                                        onError={(data, actions) => {
-                                            MyToast('error', 'Lỗi thanh toán')
-                                        }}
+                                    <PayPalCheckOut
+                                        BatchDetailIdList={batchDetailSelectedList}
+                                        VaccinePackageIdList={vaccinePackageSelectedList}
+                                        Total={totalAmount}
+                                        Payment={payment}
+                                        InjectionDate={injectionDate}
+                                        customer={existsCustomer}
+                                        orderType={orderType}
+                                        orderInfo={orderData}
                                     />
                                 ) : (
                                     <div className="flex justify-center">
@@ -858,92 +948,19 @@ export const OrderForm = () => {
                 </div>
             </div>
 
-            <dialog id="modal_transfer" className="modal w-full h-full">
-                <div className="modal-box max-w-xl mx-auto">
-                    <form method="dialog">
-                        {/* Close button */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                        </button>
-                    </form>
-                    <div className="flex flex-col items-center justify-center h-full mt-8">
-                        <QRCode
-                            errorLevel="H"
-                            value="https://ant.design/"
-                            icon="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
-                            size={400} // Adjust size if needed
-                        />
-                        <p className="text-center mt-4 text-black">Quét mã chuyển khoản đơn hàng</p>
-                    </div>
-                </div>
-            </dialog>
+            <ModalTransfer />
 
-            <dialog id="modal_no_info" className="modal">
-                <div className="modal-box">
-                    <form method="dialog">
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                        </button>
-                    </form>
-                    <div className="flex items-center gap-2">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-8 h-8"
-                            viewBox="0 0 24 24"
-                        >
-                            <path fill="#2980b9" d="M22 13a10 10 0 1 1-20 0 10 10 0 1 1 20 0z" />
-                            <path fill="#3498db" d="M22 12a10 10 0 1 1-20 0 10 10 0 1 1 20 0z" />
-                            <path
-                                fill="#2980b9"
-                                d="M11 7v2h2V7h-2zm-1 4-1 1h2v6H9v1h6v-1h-2v-7h-3z"
-                            />
-                            <path
-                                fill="#ecf0f1"
-                                d="M11 6v2h2V6h-2zm-1 4-1 1h2v6H9v1h6v-1h-2v-7h-3z"
-                            />
-                        </svg>
-                        <span className=" font-bold text-lg">Thông báo</span>
-                    </div>
+            <AlertModal
+                modalId={'modal_no_info'}
+                message={
+                    'Bạn chưa có thông tin khách hàng tại trung tâm. Mời bạn nhập thông tin bên dưới để đặt mua!'
+                }
+            />
 
-                    <p className="py-5 text-xl text-blue-600">
-                        Bạn chưa có thông tin khách hàng tại trung tâm. Mời bạn nhập thông tin bên
-                        dưới để đặt mua!
-                    </p>
-                </div>
-            </dialog>
-
-            <dialog id="modal_info" className="modal">
-                <div className="modal-box">
-                    <form method="dialog">
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                        </button>
-                    </form>
-                    <div className="flex items-center gap-2">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-8 h-8"
-                            viewBox="0 0 24 24"
-                        >
-                            <path fill="#2980b9" d="M22 13a10 10 0 1 1-20 0 10 10 0 1 1 20 0z" />
-                            <path fill="#3498db" d="M22 12a10 10 0 1 1-20 0 10 10 0 1 1 20 0z" />
-                            <path
-                                fill="#2980b9"
-                                d="M11 7v2h2V7h-2zm-1 4-1 1h2v6H9v1h6v-1h-2v-7h-3z"
-                            />
-                            <path
-                                fill="#ecf0f1"
-                                d="M11 6v2h2V6h-2zm-1 4-1 1h2v6H9v1h6v-1h-2v-7h-3z"
-                            />
-                        </svg>
-                        <span className=" font-bold text-lg">Thông báo</span>
-                    </div>
-
-                    <p className="py-5 text-xl text-blue-600">
-                        Bạn là khách hàng của trung tâm. Mời bạn chọn vắc xin muốn mua!
-                    </p>
-                </div>
-            </dialog>
+            <AlertModal
+                modalId={'modal_info'}
+                message={'Bạn là khách hàng của trung tâm. Mời bạn chọn vắc xin muốn mua!'}
+            />
         </div>
     )
 }

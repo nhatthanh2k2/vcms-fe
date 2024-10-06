@@ -1,46 +1,62 @@
 import React, { useState } from 'react'
 
 export const PrintVaccinationRecord = () => {
-    const [invoices, setInvoices] = useState([
-        { id: 1, customerName: 'Alice Johnson', amount: 150, date: '2023-06-15' },
-        { id: 2, customerName: 'Bob Williams', amount: 200, date: '2023-06-16' },
-        { id: 3, customerName: 'Charlie Brown', amount: 100, date: '2023-06-17' },
-    ])
+    const initialVaccines = [
+        { id: 1, name: 'Vaccine A' },
+        { id: 2, name: 'Vaccine B' },
+        { id: 3, name: 'Vaccine C' },
+    ]
 
-    const handlePrint = (id) => {
-        console.log(`Printing invoice for ID: ${id}`)
+    // State cho danh sách vắc xin đã chọn (trong gói) và chưa chọn (ngoài gói)
+    const [selectedVaccines, setSelectedVaccines] = useState([])
+    const [availableVaccines, setAvailableVaccines] = useState(initialVaccines)
+
+    // Hàm thêm vắc xin vào gói
+    const addVaccineToPackage = (vaccine) => {
+        setSelectedVaccines([...selectedVaccines, vaccine]) // Thêm vào danh sách đã chọn
+        setAvailableVaccines(availableVaccines.filter((v) => v.id !== vaccine.id)) // Xóa khỏi danh sách ngoài gói
+    }
+
+    // Hàm xóa vắc xin khỏi gói
+    const removeVaccineFromPackage = (vaccine) => {
+        setAvailableVaccines([...availableVaccines, vaccine]) // Thêm lại vào danh sách ngoài gói
+        setSelectedVaccines(selectedVaccines.filter((v) => v.id !== vaccine.id)) // Xóa khỏi danh sách đã chọn
     }
 
     return (
-        <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4">Print Invoices</h2>
-            <table className="w-full">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="p-2 text-left">Customer Name</th>
-                        <th className="p-2 text-left">Amount</th>
-                        <th className="p-2 text-left">Date</th>
-                        <th className="p-2 text-left">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {invoices.map((invoice) => (
-                        <tr key={invoice.id} className="border-b">
-                            <td className="p-2">{invoice.customerName}</td>
-                            <td className="p-2">${invoice.amount}</td>
-                            <td className="p-2">{invoice.date}</td>
-                            <td className="p-2">
-                                <button
-                                    onClick={() => handlePrint(invoice.id)}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-                                >
-                                    Print
+        <div className="vaccine-package">
+            <h2>Gói Vaccine</h2>
+            <div className="flex">
+                {/* Danh sách các vắc xin chưa có trong gói */}
+                <div className="available-vaccines flex-1">
+                    <h3>Danh sách vắc xin có sẵn</h3>
+                    <ul>
+                        {availableVaccines.map((vaccine) => (
+                            <li key={vaccine.id}>
+                                {vaccine.name}
+                                <button onClick={() => addVaccineToPackage(vaccine)}>
+                                    Thêm vào gói
                                 </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </section>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Danh sách các vắc xin đã được chọn trong gói */}
+                <div className="selected-vaccines flex-1">
+                    <h3>Danh sách vắc xin trong gói</h3>
+                    <ul>
+                        {selectedVaccines.map((vaccine) => (
+                            <li key={vaccine.id}>
+                                {vaccine.name}
+                                <button onClick={() => removeVaccineFromPackage(vaccine)}>
+                                    Xóa khỏi gói
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </div>
     )
 }

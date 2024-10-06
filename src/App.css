@@ -8,10 +8,22 @@
     opacity: 0.5; 
   }
   
-  .ant-carousel .slick-dots li.slick-active button {
+.ant-carousel .slick-dots li.slick-active button {
     opacity: 1;
     background: #008000; 
   }
 
- 
+.btn:focus {
+    outline: none; 
+}
+
+.even-row {
+  background-color: #e3f2fd; 
+}
+
+.odd-row {
+  background-color: #ffffff; 
+}
+
+
 

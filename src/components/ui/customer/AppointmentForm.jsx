@@ -7,7 +7,13 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyToast } from '../common'
-import { disabledDoB, formatCurrency, disabledPastDate, convertPackageType } from '@/utils'
+import {
+    disabledDoB,
+    formatCurrency,
+    disabledPastDate,
+    convertPackageType,
+    convertVaccineType,
+} from '@/utils'
 
 const appointmentSchema = z.object({
     appointmentCustomerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
@@ -133,7 +139,7 @@ export const AppointmentForm = () => {
             .catch((err) => console.log('Get Batch Detail Failed!'))
 
         vaccinePackageService
-            .getAllPackages()
+            .getDefaultPackages()
             .then((response) => setPackageList(response.data.result))
             .catch((err) => console.log('Get Vaccine Package Failed!'))
     }, [])
@@ -197,14 +203,9 @@ export const AppointmentForm = () => {
                 appointmentBatchDetailId: batchDetailSelected,
                 appointmentVaccinePackageId: vaccinePackageSelected,
             }
-            console.log(request)
 
-            var response
-            if (injectionType === 'SINGLE') {
-                response = await appointmentService.createAppointmentWithOutCustCode(request)
-            } else if (injectionType === 'PACKAGE') {
-                response = await appointmentService.createAppointmentWithOutCustCode(request)
-            }
+            const response = await appointmentService.createAppointmentWithOutCustCode(request)
+
             console.log(response.data)
             if (response.data.code === 1000) {
                 MyToast('success', 'Đăng Ký Thành Công')
@@ -699,7 +700,10 @@ export const AppointmentForm = () => {
                                                             <h2 className="card-title ">
                                                                 {batchDetail.vaccineResponse
                                                                     ?.vaccineName ||
-                                                                    'Không có dữ liệu'}
+                                                                    'Không có dữ liệu'}{' '}
+                                                                {convertVaccineType(
+                                                                    batchDetail.vaccineType
+                                                                )}
                                                             </h2>
                                                             <input
                                                                 type="radio"

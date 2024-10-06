@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { AppointmentSchedule, BookVaccination, CustomerLookup, PrintVaccinationRecord } from '../ui'
-import { batchDetailService, vaccinePackageService } from '@/services'
+import {
+    AppointmentSchedule,
+    BookVaccination,
+    CustomerLookup,
+    CustomizableVaccinePackage,
+    PrintVaccinationRecord,
+} from '../ui'
+import { batchDetailService, vaccinePackageService, vaccineService } from '@/services'
 
 export const EmployeeLayout = () => {
     const [activeTab, setActiveTab] = useState('customerLookup')
     const [batchDetailList, setBatchDetailList] = useState([])
     const [vaccinePackageList, setVaccinePackageList] = useState([])
+    const [vaccineList, setVaccineList] = useState([])
+
     useEffect(() => {
         batchDetailService
             .getDetail()
@@ -13,9 +21,14 @@ export const EmployeeLayout = () => {
             .catch((err) => console.log('Get Batch Detail Failed!'))
 
         vaccinePackageService
-            .getAllPackages()
+            .getDefaultPackages()
             .then((response) => setVaccinePackageList(response.data.result))
             .catch((err) => console.log('Get Vaccine Package Failed!'))
+
+        vaccineService
+            .getAllVaccines()
+            .then((response) => setVaccineList(response.data.result))
+            .catch((err) => console.log('Get Vaccine Failed!'))
     }, [])
 
     const renderContent = () => {
@@ -29,10 +42,19 @@ export const EmployeeLayout = () => {
                     <BookVaccination
                         batchDetailList={batchDetailList}
                         vaccinePackageList={vaccinePackageList}
+                        vaccineList={vaccineList}
                     />
                 )
             case 'printVaccinationRecord':
                 return <PrintVaccinationRecord />
+            case 'CustomizableVaccinePackage':
+                return (
+                    <CustomizableVaccinePackage
+                        vaccinePackageList={vaccinePackageList}
+                        vaccineList={vaccineList}
+                        batchDetailList={batchDetailList}
+                    />
+                )
             default:
                 return null
         }
@@ -121,6 +143,32 @@ export const EmployeeLayout = () => {
                                             />
                                         </svg>
                                         Đăng ký vắc xin
+                                    </div>
+                                </li>
+                                <li>
+                                    <div
+                                        onClick={() => setActiveTab('CustomizableVaccinePackage')}
+                                        className={`flex cursor-pointer hover:bg-yellow-50 rounded-xl font-bold text-sm py-3 px-4 ${
+                                            activeTab === 'CustomizableVaccinePackage'
+                                                ? 'bg-yellow-50'
+                                                : 'bg-white'
+                                        }`}
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="w-6 h-6 text-lg mr-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke="#000"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M3 9h18m-9 9v-6m3 3.001L9 15M7 3v2m10-2v2M6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8V8.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 5 18.92 5 17.8 5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.52 3 7.08 3 8.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21Z"
+                                            />
+                                        </svg>
+                                        Đặt gói theo yêu cầu
                                     </div>
                                 </li>
                                 <li>

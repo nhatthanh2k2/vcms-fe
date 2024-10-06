@@ -6,13 +6,14 @@ import { addressService, customerService } from '@/services'
 import { useForm } from 'react-hook-form'
 import { DatePicker, Table, Modal } from 'antd'
 import { disabledDoB, disabledPastDate } from '@/utils'
+import { MyToast } from '../common'
 
 const phoneNumberPattern = /^0[3-9]\d{8}$/
 
 const lookupSchema = z.object({
     lookupCustomerCode: z
         .string()
-        .min(10, { message: 'Mã KH tối thiểu 10 ký tự' })
+        .min(10, { message: 'Mã KH hoặc SĐT tối thiểu 10 ký tự' })
         .refine((value) => phoneNumberPattern.test(value) || value.length > 5, {
             message: 'Mã KH hoặc SĐT không hợp lệ',
         }),
@@ -231,7 +232,11 @@ export const CustomerLookup = () => {
             customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
         const response = await customerService.createCustomer(customerData)
-        console.log(response)
+        if (response.data.code === 1000) {
+            MyToast('success', 'Thêm khách hàng thành công')
+        } else {
+            MyToast('error', 'Thêm khách hàng thành công')
+        }
     }
 
     // modal them khach hang
@@ -250,7 +255,7 @@ export const CustomerLookup = () => {
         <section className="flex-col">
             <div className=" bg-base-100 shadow-md flex gap-10">
                 <div className="p-4">
-                    <span className="text-2xl text-blue-600 uppercase font-bold">
+                    <span className="text-2xl text-orange-500 uppercase font-bold">
                         Tra cứu thông tin khách hàng
                     </span>
                     <form
@@ -297,11 +302,11 @@ export const CustomerLookup = () => {
                     </form>
                 </div>
                 <div className="flex flex-col space-y-4 justify-center items-center">
-                    <button onClick={showModal} className="btn btn-outline btn-info text-blue-500">
+                    <button onClick={showModal} className="btn btn-outline btn-info">
                         Thêm khách hàng mới
                     </button>
                     <button
-                        className="btn btn-outline btn-accent "
+                        className="btn btn-outline btn-accent"
                         type="button"
                         onClick={handleLookupCustomer}
                     >
@@ -315,7 +320,7 @@ export const CustomerLookup = () => {
                     type="radio"
                     name="my_tabs_2"
                     role="tab"
-                    className="tab font-bold text-base text-blue-600 text-nowrap"
+                    className="tab font-bold text-base text-orange-500 text-nowrap"
                     aria-label="Thông tin khách hàng"
                     defaultChecked
                 />
@@ -372,11 +377,7 @@ export const CustomerLookup = () => {
                             <label className="font-semibold">Ngày sinh:</label>
                             <input
                                 readOnly
-                                value={
-                                    customer?.customerDob
-                                        ? dayjs(customer.customerDob).format('DD-MM-YYYY')
-                                        : ''
-                                }
+                                value={customer?.customerDob}
                                 type="text"
                                 className="input input-bordered input-success w-full input-sm"
                             />
@@ -451,7 +452,7 @@ export const CustomerLookup = () => {
                     type="radio"
                     name="my_tabs_2"
                     role="tab"
-                    className="tab font-bold text-base text-blue-600 text-nowrap"
+                    className="tab font-bold text-base text-orange-500 text-nowrap"
                     aria-label="Lịch sử tiêm chủng"
                 />
                 <div

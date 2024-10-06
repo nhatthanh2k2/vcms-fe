@@ -1,62 +1,211 @@
 import React, { useState } from 'react'
-import { DatePicker, Select } from 'antd'
-import { convertPackageType, convertVaccineType } from '@/utils'
-const { Option } = Select
+import { DatePicker, Modal, Select, Table } from 'antd'
+import {
+    convertPackageType,
+    convertVaccineType,
+    disabledDoB,
+    disabledPastDate,
+    formatCurrency,
+} from '@/utils'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import dayjs from 'dayjs'
+import { employeeService, vaccinePackageService } from '@/services'
+import { MyToast } from '../common'
 
-export const BookVaccination = ({ batchDetailList, vaccinePackageList }) => {
+const phoneNumberPattern = /^0[3-9]\d{8}$/
+
+const bookVaccineSchema = z.object({
+    customerCode: z
+        .string()
+        .min(10, { message: 'Mã KH hoặc SĐT tối thiểu 10 ký tự' })
+        .refine((value) => phoneNumberPattern.test(value) || value.length > 5, {
+            message: 'Mã KH hoặc SĐT không hợp lệ',
+        }),
+    injectionDate: z.date({
+        invalid_type_error: 'Ngày tiêm không hợp lệ',
+        message: 'Ngày tiêm không hợp lệ',
+    }),
+    customerDob: z.date({
+        invalid_type_error: 'Ngày sinh không hợp lệ',
+        message: 'Ngày sinh không hợp lệ',
+    }),
+})
+
+const columns = [
+    {
+        title: 'Tên vắc xin',
+        dataIndex: ['vaccineResponse', 'vaccineName'],
+        key: 'vaccineName',
+        render: (text) => <span className="font-semibold">{text}</span>,
+    },
+    {
+        title: 'Phòng bệnh',
+        dataIndex: ['diseaseResponse', 'diseaseName'],
+        key: 'diseaseName',
+        render: (text) => <span className="font-semibold">{text}</span>,
+    },
+    {
+        title: 'Số mũi tiêm',
+        dataIndex: 'doseCount',
+        key: 'doseCount',
+        render: (text) => <span className="font-semibold">{text}</span>,
+    },
+]
+
+export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineList }) => {
     const [injectionType, setInjectionType] = useState('SINGLE')
-    const [vaccineSelected, setVaccineSelected] = useState(null)
+    const [batchDetailSelected, setBatchDetailSelected] = useState(null)
     const [packageSelected, setPackageSelected] = useState(null)
-    const [packageCustomList, setPackageCustomList] = useState([])
-
-    const [formData, setFormData] = useState({
-        customerName: '',
-        vaccinationType: '',
-        date: '',
-        time: '',
-    })
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        console.log('Submitted:', formData)
-
-        setFormData({ customerName: '', vaccinationType: '', date: '', time: '' })
-    }
+    const [detailPackage, setDetailPackage] = useState([])
+    const [actionType, setActionType] = useState('')
+    const [payment, setPayment] = useState('')
 
     const handleChoseVaccine = (option) => {
-        setVaccineSelected(option)
+        setBatchDetailSelected(option)
         setPackageSelected(null)
     }
 
     const handleChosePackage = (option) => {
         setPackageSelected(option)
-        setVaccineSelected(null)
+        setBatchDetailSelected(null)
     }
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue,
+        clearErrors,
+        reset,
+    } = useForm({
+        resolver: zodResolver(bookVaccineSchema),
+        defaultValues: {
+            customerCode: '',
+            injectionDate: null,
+            customerDob: null,
+        },
+    })
+
+    const onSubmit = async (data) => {
+        const request = {
+            ...data,
+            injectionDate: data.injectionDate
+                ? dayjs(data.injectionDate).format('DD-MM-YYYY')
+                : null,
+            customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
+            injectionType: injectionType,
+            batchDetailSelected: batchDetailSelected,
+            packageSelected: packageSelected,
+            payment: payment,
+            actionType: actionType,
+        }
+        console.log(request)
+        const response = await employeeService.bookVaccination(request)
+        console.log(response.data)
+        if (response.data.code === 1000) {
+            MyToast('success', 'Đặt vắc xin thành công')
+        } else {
+            MyToast('error', 'Đặt vắc xin thất bại')
+        }
+    }
+
+    // xem goi
+    const [open, setOpen] = useState(false)
+
+    const showModal = () => {
+        setOpen(true)
+    }
+
+    const handleCancel = () => {
+        setOpen(false)
+    }
+
+    const handleViewPackage = async () => {
+        const response = await vaccinePackageService.getDetailsOfPackage(packageSelected)
+        setDetailPackage(response.data.result)
+        showModal()
+    }
+
+    const totalDoseCount = detailPackage.reduce((total, item) => total + item.doseCount, 0)
+
+    const findPriceById = (id) => {
+        const foundPackage = vaccinePackageList.find((pkg) => pkg.vaccinePackageId === id)
+        return foundPackage ? foundPackage.vaccinePackagePrice : ''
+    }
+
+    const dataSourceWithTotal = [
+        ...detailPackage,
+        {
+            vaccinePkgDetailId: 'Tổng',
+            vaccineResponse: { vaccineName: 'Tổng' },
+            diseaseResponse: { diseaseName: formatCurrency(findPriceById(packageSelected)) },
+            doseCount: totalDoseCount,
+        },
+    ]
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4">Đăng ký vắc xin</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex w-full ">
-                    <div className="flex-1">
-                        <label htmlFor="customerName" className="block mb-1 font-medium">
-                            Mã khách hàng / Số điện thoại
-                        </label>
+            <h2 className="text-2xl font-bold mb-4 text-orange-500">Đăng ký vắc xin</h2>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex space-x-5">
+                    <div className="flex-1 flex flex-col">
+                        <label className="block mb-1 font-medium">Mã KH / SĐT:</label>
                         <input
+                            {...register('customerCode')}
                             type="text"
                             className="input input-bordered input-info w-full max-w-sm"
                         />
+                        {errors.customerCode && (
+                            <span className="w-fit text-red-500 text-sm">
+                                {errors.customerCode.message}
+                            </span>
+                        )}
                     </div>
-                    <div className="flex-1">
-                        <label htmlFor="date" className="block mb-1 font-medium">
-                            Ngày mong muốn tiêm:
-                        </label>
-                        <DatePicker className="h-12" format={'DD-MM-YYYY'} />
+
+                    <div className="flex flex-col flex-1">
+                        <label className="block mb-1 font-medium">Ngày tháng năm sinh:</label>
+                        <DatePicker
+                            {...register('customerDob', {
+                                valueAsDate: true,
+                            })}
+                            format="DD-MM-YYYY"
+                            disabledDate={disabledDoB}
+                            onChange={(date) => {
+                                setValue('customerDob', date?.toDate() || null, {
+                                    shouldValidate: true,
+                                })
+                            }}
+                            style={{ height: '48px' }}
+                        />
+                        {errors.customerDob && (
+                            <span className="w-fit text-red-500 text-sm">
+                                {errors.customerDob.message}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col flex-1">
+                        <label className="block mb-1 font-medium">Ngày tiêm:</label>
+                        <DatePicker
+                            {...register('injectionDate', {
+                                valueAsDate: true,
+                            })}
+                            format="DD-MM-YYYY"
+                            disabledDate={disabledPastDate}
+                            onChange={(date) => {
+                                setValue('injectionDate', date?.toDate() || null, {
+                                    shouldValidate: true,
+                                })
+                            }}
+                            style={{ height: '48px' }}
+                        />
+                        {errors.injectionDate && (
+                            <span className="w-fit text-red-500 text-sm">
+                                {errors.injectionDate.message}
+                            </span>
+                        )}
                     </div>
                 </div>
 
@@ -69,7 +218,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList }) => {
                         <label htmlFor="">Vắc xin lẻ</label>
                         <input
                             type="radio"
-                            name="radio-7"
+                            name="vaccinationType" // Sử dụng name duy nhất cho nhóm vắc xin
                             className="radio radio-info"
                             onChange={() => setInjectionType('SINGLE')}
                             checked={injectionType === 'SINGLE'}
@@ -80,7 +229,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList }) => {
                         <label htmlFor="">Vắc xin gói</label>
                         <input
                             type="radio"
-                            name="radio-7"
+                            name="vaccinationType" // Sử dụng name duy nhất cho nhóm vắc xin
                             className="radio radio-info"
                             checked={injectionType === 'PACKAGE'}
                             onChange={() => setInjectionType('PACKAGE')}
@@ -92,7 +241,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList }) => {
                     {injectionType === 'SINGLE' ? (
                         <div>
                             <Select
-                                value={vaccineSelected}
+                                value={batchDetailSelected}
                                 onChange={handleChoseVaccine}
                                 placeholder="Chọn vắc xin"
                                 options={batchDetailList.map((batchDetail) => ({
@@ -105,32 +254,41 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList }) => {
                                     ),
                                 }))}
                                 style={{
-                                    width: 400,
+                                    width: 384,
+                                    height: 40,
                                 }}
                             />
                         </div>
                     ) : (
                         <div className="flex gap-5 ">
-                            <Select
-                                value={packageSelected}
-                                onChange={handleChosePackage}
-                                placeholder="Chọn gói vắc xin"
-                                options={vaccinePackageList.map((pack) => ({
-                                    value: pack.vaccinePackageId,
-                                    label: (
-                                        <span>
-                                            {pack.vaccinePackageName}{' '}
-                                            {convertPackageType(pack.vaccinePackageType)}
-                                        </span>
-                                    ),
-                                }))}
-                                style={{
-                                    width: 400,
-                                }}
-                            />
-                            <div>
-                                <button class="bg-white text-gray-800 font-bold rounded border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
-                                    <span class="mr-2">Chỉnh sửa gói</span>
+                            <div className="flex-1">
+                                <Select
+                                    value={packageSelected}
+                                    onChange={handleChosePackage}
+                                    placeholder="Chọn gói vắc xin"
+                                    options={vaccinePackageList.map((pack) => ({
+                                        value: pack.vaccinePackageId,
+                                        label: (
+                                            <span>
+                                                {pack.vaccinePackageName}{' '}
+                                                {convertPackageType(pack.vaccinePackageType)}
+                                            </span>
+                                        ),
+                                    }))}
+                                    style={{
+                                        width: 384,
+                                        height: 40,
+                                    }}
+                                />
+                            </div>
+
+                            <div className="flex gap-5 flex-1">
+                                <button
+                                    type="button"
+                                    onClick={handleViewPackage}
+                                    className="bg-white text-gray-800 font-bold rounded border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                                >
+                                    <span className="mr-2">Xem gói</span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -138,51 +296,108 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList }) => {
                                         viewBox="0 0 24 24"
                                     >
                                         <path
-                                            fill="currentcolor"
-                                            d="M3 21v-3.75l10.606-10.606a1.2 1.2 0 0 1 1.697 0l2.646 2.646a1.2 1.2 0 0 1 0 1.697L7.342 21H3zm12.057-10.057-2.646-2.646 1.057-1.057 2.646 2.646-1.057 1.057zm-11.45 9.121 7.607-7.607 1.057 1.057-7.607 7.607H3v-.75h.607zm14.95-14.95a1.2 1.2 0 0 0-1.697 0l-2.646 2.646a1.2 1.2 0 0 0 0 1.697l2.646 2.646a1.2 1.2 0 0 0 1.697 0l2.646-2.646a1.2 1.2 0 0 0 0-1.697l-2.646-2.646z"
-                                        ></path>
+                                            fill="currentColor"
+                                            d="M12 5c-7.633 0-11.599 6.211-11.946 6.789a1 1 0 0 0 0 .422C.401 12.789 4.367 19 12 19s11.599-6.211 11.946-6.789a1 1 0 0 0 0-.422C23.599 11.211 19.633 5 12 5zm0 12c-4.83 0-8.216-3.89-9.523-5 1.307-1.11 4.693-5 9.523-5 4.83 0 8.216 3.89 9.523 5-1.307 1.11-4.693 5-9.523 5zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"
+                                        />
                                     </svg>
                                 </button>
                             </div>
                         </div>
                     )}
                 </div>
+
+                <div className="flex gap-5">
+                    <label className="block mb-1 font-medium">
+                        Chọn hình thức thanh toán (nếu là đặt mua):
+                    </label>
+
+                    <div className="flex gap-2">
+                        <label>Tiền mặt</label>
+                        <input
+                            type="radio"
+                            name="paymentType"
+                            className="radio radio-info"
+                            onChange={() => setPayment('CASH')}
+                        />
+                    </div>
+
+                    <div className="flex gap-2">
+                        <label>Chuyển khoản</label>
+                        <input
+                            type="radio"
+                            name="paymentType" // Sử dụng name duy nhất cho nhóm thanh toán
+                            className="radio radio-info"
+                            onChange={() => setPayment('TRANSFER')}
+                        />
+                    </div>
+                </div>
+
+                <div className=" flex gap-5 items-center justify-center mt-5">
+                    <div className="m-3">
+                        <button
+                            type="submit"
+                            onClick={() => setActionType('APPT')}
+                            className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                        >
+                            <span className="mr-2">Đặt lịch hẹn</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V8h14v13zm-6-11h-2v2H9v2h2v2h2v-2h2v-2h-2z"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div className="m-3">
+                        <button
+                            type="submit"
+                            onClick={() => setActionType('ORDER')}
+                            className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                        >
+                            <span className="mr-2">Đặt Mua Vắc Xin</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    fill="currentcolor"
+                                    d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.1 15.1h9.9c.8 0 1.54-.5 1.84-1.23l3.02-6.63A1 1 0 0 0 21 6H5.21l-.94-2H1v2h2.17l3.61 7.59-1.35 2.44C4.79 16.3 5.42 17 6.24 17H19v-2H7.1l1.1-2z"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </form>
 
-            <div className=" flex gap-5">
-                <div class="m-3">
-                    <button class="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
-                        <span class="mr-2">Đặt Lịch Hẹn</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                fill="currentcolor"
-                                d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="m-3">
-                    <button class="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
-                        <span class="mr-2">Đặt Mua</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                fill="currentcolor"
-                                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.1 15.1h9.9c.8 0 1.54-.5 1.84-1.23l3.02-6.63A1 1 0 0 0 21 6H5.21l-.94-2H1v2h2.17l3.61 7.59-1.35 2.44C4.79 16.3 5.42 17 6.24 17H19v-2H7.1l1.1-2z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            <Modal
+                title={<div className="text-center font-bold text-xl">Thông tin gói vắc xin</div>}
+                open={open}
+                onCancel={handleCancel}
+                footer={false}
+                width={1200}
+                style={{ top: 50, maxHeight: '80vh' }}
+                styles={{
+                    body: {
+                        overflowY: 'auto',
+                        maxHeight: '70vh',
+                        height: '70vh',
+                    },
+                }}
+            >
+                <Table
+                    columns={columns}
+                    dataSource={dataSourceWithTotal.map((item, index) => ({ ...item, key: index }))}
+                    pagination={false}
+                    rowClassName={(record, index) => (index % 2 === 0 ? 'even-row' : 'odd-row')}
+                />
+            </Modal>
         </section>
     )
 }

@@ -21,3 +21,18 @@ export const convertVaccineType = (type) => {
             return type
     }
 }
+
+export const convertAppointmentStatus = (status) => {
+    switch (status) {
+        case 'PENDING':
+            return 'Đang chờ'
+        case 'CONFIRMED':
+            return 'Xác nhận'  
+        case 'COMPLETED':
+            return 'Hoàn thành'
+        case 'CANCELLED':
+            return 'Hủy lịch'
+        default:
+            break;
+    }
+}
