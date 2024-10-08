@@ -242,19 +242,34 @@ export const OrderForm = () => {
                 : null,
         }
 
-        const response = await customerService.lookupCustomer(lookupdata)
+        try {
+            const response = await customerService.lookupCustomer(lookupdata)
 
-        if (response.data.code === 1005) {
-            document.getElementById('modal_no_info').showModal()
-            setShowForm(true)
-            setOrderType('NOCODE')
-        }
-
-        if (response.data.code === 1000) {
-            document.getElementById('modal_info').showModal()
-            setExistsCustomer(response.data.result)
-            setOrderType('CODE')
-            setShowForm(false)
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    document.getElementById('modal_info').showModal()
+                    setExistsCustomer(response.data.result)
+                    setOrderType('CODE')
+                    setShowForm(false)
+                } else {
+                    document.getElementById('modal_no_info').showModal()
+                    setShowForm(true)
+                    setOrderType('NOCODE')
+                }
+            }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    document.getElementById('modal_no_info').showModal()
+                    setShowForm(true)
+                    setOrderType('NOCODE')
+                    console.error('Customer not found: ', error.response.data.message)
+                } else {
+                    MyToast('error', 'Đã có lỗi xảy ra')
+                }
+            } else {
+                MyToast('error', 'Đã có lỗi xảy ra')
+            }
         }
     }
 

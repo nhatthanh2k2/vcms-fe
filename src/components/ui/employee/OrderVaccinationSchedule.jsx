@@ -1,46 +1,7 @@
-import React, { useState } from 'react'
-import { Table, DatePicker, Select } from 'antd'
-import 'antd/dist/reset.css'
-import dayjs from 'dayjs'
-import { appointmentService } from '@/services'
+import React from 'react'
+import { Table, DatePicker } from 'antd'
 
-const options = [
-    {
-        value: 'PENDING',
-        label: 'Đang chờ',
-    },
-    {
-        value: 'CONFIRMED',
-        label: 'Đã xác nhận',
-    },
-    {
-        value: 'COMPLETED',
-        label: 'Hoàn thành',
-    },
-    {
-        value: 'CANCELLED',
-        label: 'Hủy',
-    },
-]
-
-export const AppointmentSchedule = () => {
-    const [currentDate, setCurrentDate] = useState()
-    const [appointmentList, setAppointmentList] = useState([])
-    const [status, setStatus] = useState('')
-
-    const handleDateChange = async (date) => {
-        const selectedDate = date
-            ? dayjs(date).format('YYYY-MM-DD')
-            : dayjs(new Date()).format('YYYY-MM-DD')
-        try {
-            const response = await appointmentService.getAppointmentListByDate(selectedDate)
-            console.log(response.data)
-            setAppointmentList(response.data.result)
-        } catch (error) {
-            console.error('Error fetching appointment list:', error)
-        }
-    }
-
+export const OrderVaccinationSchedule = () => {
     const columns = [
         {
             title: 'Họ và tên',
@@ -79,12 +40,11 @@ export const AppointmentSchedule = () => {
             ),
         },
         {
-            title: 'Cập nhật trạng thái',
+            title: '',
             key: 'updateStatus',
             render: (text, record) => (
                 <button
                     type="button"
-                    onClick={(e) => handleUpdateStatus(e, record.appointmentId, status)}
                     className="text-base rounded-md border-l-0 border-r-0 hover:scale-110 focus:outline-none flex justify-center px-4 py-2  font-bold cursor-pointer 
                         hover:bg-yellow-500 hover:text-white  bg-yellow-300   text-yellow-800 border duration-200 ease-in-out  border-yellow-500 transition"
                 >
@@ -110,36 +70,16 @@ export const AppointmentSchedule = () => {
             ),
         },
     ]
-
-    const handleChooseStatus = (value) => {
-        setStatus(value)
-    }
-
-    const handleUpdateStatus = (e, appointmentId, status) => {
-        e.preventDefault()
-        const updateStatusRequest = {
-            appointmentId: appointmentId,
-            appointmentStatus: status,
-        }
-        console.log(updateStatusRequest)
-    }
-
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4 text-orange-500">Lịch hẹn tiêm</h2>
+            <h2 className="text-2xl font-bold mb-4 text-orange-500">Lịch tiêm từ đơn hàng</h2>
             <div className="flex items-center mb-4">
-                <span>Chọn ngày muốn xem lịch hẹn:</span>
-                <DatePicker
-                    isClearable
-                    format="DD-MM-YYYY"
-                    className="mx-4"
-                    onChange={(date) => handleDateChange(date)}
-                />
+                <span>Chọn ngày muốn xem:</span>
+                <DatePicker isClearable format="DD-MM-YYYY" className="mx-4" />
             </div>
             <div className="w-full">
                 <Table
                     columns={columns}
-                    dataSource={appointmentList}
                     locale={{
                         emptyText: (
                             <div className="flex flex-col items-center justify-center">

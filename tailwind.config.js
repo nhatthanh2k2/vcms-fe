@@ -236,16 +236,14 @@ module.exports = {
       opacity: {
         65: ".65"
       },
-      backgroundImage: {
-        video: "url('../images/video/video.png')"
-      },
       backgroundImage:{
                 'banner': "url('/images/banner.png')",
-                'slide1': "url('/images/slide1.jpg')",
-                'slide2': "url('/images/slide2.jpg')",
-                'slide3': "url('/images/slide3.jpg')",
+                'slider': "url('/images/slider.jpg')",
+                'slider2': "url('/images/slider2.jpg')",
+                'slider3': "url('/images/slider3.jpg')",
                 'bg-vaccination': "url('/images/bg-vaccination.png')",
                 'order-vaccine-list': "url('/images/order-vaccine-list.jpg')",
+                'modal': "url('/images/bg-modal.jpg')",
       },
       content: {
         "icon-copy": 'url("../images/icon/icon-copy-alt.svg")'

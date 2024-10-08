@@ -17,7 +17,7 @@ import { MyToast } from '../common'
 const phoneNumberPattern = /^0[3-9]\d{8}$/
 
 const bookVaccineSchema = z.object({
-    customerCode: z
+    customerIdentifier: z
         .string()
         .min(10, { message: 'Mã KH hoặc SĐT tối thiểu 10 ký tự' })
         .refine((value) => phoneNumberPattern.test(value) || value.length > 5, {
@@ -82,7 +82,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
     } = useForm({
         resolver: zodResolver(bookVaccineSchema),
         defaultValues: {
-            customerCode: '',
+            customerIdentifier: '',
             injectionDate: null,
             customerDob: null,
         },
@@ -153,13 +153,13 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                     <div className="flex-1 flex flex-col">
                         <label className="block mb-1 font-medium">Mã KH / SĐT:</label>
                         <input
-                            {...register('customerCode')}
+                            {...register('customerIdentifier')}
                             type="text"
                             className="input input-bordered input-info w-full max-w-sm"
                         />
-                        {errors.customerCode && (
+                        {errors.customerIdentifier && (
                             <span className="w-fit text-red-500 text-sm">
-                                {errors.customerCode.message}
+                                {errors.customerIdentifier.message}
                             </span>
                         )}
                     </div>
@@ -307,56 +307,60 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                 </div>
 
                 <div className="flex gap-5">
-                    <label className="block mb-1 font-medium">
-                        Chọn hình thức thanh toán (nếu là đặt mua):
-                    </label>
+                    <label className="block mb-1 font-medium">Đặt lịch hẹn Hoặc Đặt mua:</label>
 
                     <div className="flex gap-2">
-                        <label>Tiền mặt</label>
+                        <label>Đặt lịch hẹn</label>
                         <input
                             type="radio"
-                            name="paymentType"
-                            className="radio radio-info"
-                            onChange={() => setPayment('CASH')}
+                            name="actionType"
+                            className="radio radio-accent"
+                            onChange={() => setActionType('APPT')}
                         />
                     </div>
 
                     <div className="flex gap-2">
-                        <label>Chuyển khoản</label>
+                        <label>Mua Vắc xin</label>
                         <input
                             type="radio"
-                            name="paymentType" // Sử dụng name duy nhất cho nhóm thanh toán
-                            className="radio radio-info"
-                            onChange={() => setPayment('TRANSFER')}
+                            name="actionType"
+                            className="radio radio-accent"
+                            onChange={() => setActionType('ORDER')}
                         />
                     </div>
                 </div>
+                {actionType === 'ORDER' && (
+                    <div className="flex gap-5">
+                        <label className="block mb-1 font-medium">
+                            Chọn hình thức thanh toán :
+                        </label>
+
+                        <div className="flex gap-2">
+                            <label>Tiền mặt</label>
+                            <input
+                                type="radio"
+                                name="paymentType"
+                                className="radio radio-info"
+                                onChange={() => setPayment('CASH')}
+                            />
+                        </div>
+
+                        <div className="flex gap-2">
+                            <label>Chuyển khoản</label>
+                            <input
+                                type="radio"
+                                name="paymentType"
+                                className="radio radio-info"
+                                onChange={() => setPayment('TRANSFER')}
+                            />
+                        </div>
+                    </div>
+                )}
 
                 <div className=" flex gap-5 items-center justify-center mt-5">
                     <div className="m-3">
                         <button
                             type="submit"
-                            onClick={() => setActionType('APPT')}
-                            className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
-                        >
-                            <span className="mr-2">Đặt lịch hẹn</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    fill="currentColor"
-                                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V8h14v13zm-6-11h-2v2H9v2h2v2h2v-2h2v-2h-2z"
-                                ></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div className="m-3">
-                        <button
-                            type="submit"
-                            onClick={() => setActionType('ORDER')}
                             className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
                             <span className="mr-2">Đặt Mua Vắc Xin</span>

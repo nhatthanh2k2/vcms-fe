@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import { MyToast } from '@/components'
+import { ForgotPasswordModal, MyToast } from '@/components'
 import { authService } from '@/services'
 import { jwtDecode } from 'jwt-decode'
 
@@ -27,9 +26,13 @@ export const Login = () => {
 
         try {
             const response = await authService.login(authEmployeeDTO)
-            const { token } = response.data.result
-            sessionStorage.setItem('employee', JSON.stringify({ token }))
-
+            console.log(response.data)
+            const { token, employeeResponse } = response.data.result
+            const employeeProfile = {
+                ...employeeResponse,
+            }
+            sessionStorage.setItem('token', JSON.stringify({ token }))
+            sessionStorage.setItem('employeeProfile', JSON.stringify({ employeeProfile }))
             MyToast('success', 'Đăng Nhập Thành Công')
 
             const decodedToken = jwtDecode(token)
@@ -45,8 +48,18 @@ export const Login = () => {
         }
     }
 
+    const [isOpenForgetPasswordModal, setIsOpenForgetPasswordModal] = useState(false)
+
+    const handleOpenForgotPasswordModal = () => {
+        setIsOpenForgetPasswordModal(true)
+    }
+
+    const handleCloseForgotPasswordModal = () => {
+        setIsOpenForgetPasswordModal(false)
+    }
+
     return (
-        <div className="relative py-8 min-h-screen bg-gradient-to-br from-sky-50 to-gray-200">
+        <div className="relative py-8 min-h-screen bg-modal bg-cover from-sky-50 to-gray-200">
             <div className="relative container m-auto px-6 md:px-12 xl:px-40">
                 <div className="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">
                     <div className="rounded-xl bg-white shadow-xl">
@@ -67,7 +80,7 @@ export const Login = () => {
                                 </h2>
                             </div>
 
-                            <div className="mt-14 grid space-y-4">
+                            <div className="mt-14 flex flex-col space-y-4">
                                 <div
                                     className="flex items-center border-2 h-12 p-4 rounded-2xl mb-4 transition duration-300 
                                      hover:border-blue-500 focus:bg-blue-50"
@@ -161,9 +174,12 @@ export const Login = () => {
                                 </div>
 
                                 <div className="flex space-x-4 justify-end">
-                                    <Link className="  text-blue-700 text-sm hover:text-blue-700">
+                                    <span
+                                        onClick={handleOpenForgotPasswordModal}
+                                        className="text-blue-600 text-sm hover:text-blue-700 cursor-pointer"
+                                    >
                                         Bạn quên mật khẩu?
-                                    </Link>
+                                    </span>
                                 </div>
 
                                 <button
@@ -180,20 +196,16 @@ export const Login = () => {
                             </div>
 
                             <div className="mt-24 space-y-4 text-black text-center sm:-mb-8">
-                                <p className="text-xs">
-                                    © Bản quyền thuộc về{' '}
-                                    <Link
-                                        to={'/'}
-                                        className=" text-blue-500 underline hover:text-blue-500"
-                                    >
-                                        T-Vax Company
-                                    </Link>
-                                </p>
+                                <p className="text-xs">© Bản quyền thuộc về T-Vax Company</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <ForgotPasswordModal
+                visibleForgotPasswordModal={isOpenForgetPasswordModal}
+                handleCloseForgotPasswordModal={handleCloseForgotPasswordModal}
+            />
         </div>
     )
 }

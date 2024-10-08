@@ -85,13 +85,35 @@ export const CustomizableVaccinePackage = ({
             ),
             doseCountList: packageDetailList.map((packageDetail) => packageDetail.doseCount),
         }
-        const response = await employeeService.bookCustomPackage(request)
-        if (response.data.code === 1000) {
-            MyToast('success', 'Đặt Gói Vắc Xin Thành Công')
-        } else {
-            MyToast('error', 'Đặt Gói Vắc Xin Không Thành Công')
+        // const response = await employeeService.bookCustomPackage(request)
+
+        // if (response.data.code === 1000) {
+        //     MyToast('success', 'Đặt Gói Vắc Xin Thành Công')
+        // } else {
+        //     MyToast('success', 'Đặt Gói Vắc Xin Thành Công')
+        // }
+
+        try {
+            const response = await employeeService.bookCustomPackage(request)
+
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    MyToast('success', 'Đặt Gói Vắc Xin Thành Công')
+                } else {
+                    MyToast('error', 'Đặt Gói Vắc Xin Không Thành Công')
+                }
+            }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    MyToast('error', 'Không Tìm Thấy Khách Hàng')
+                } else {
+                    MyToast('error', 'Xảy ra lỗi')
+                }
+            } else {
+                MyToast('error', 'Xảy ra lỗi')
+            }
         }
-        console.log(response.data)
     }
 
     const addVaccineToPackage = (batchDetailId) => {

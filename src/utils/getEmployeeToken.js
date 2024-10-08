@@ -1,10 +1,10 @@
 export const getEmployeeToken = () => {
-    const employeeData = sessionStorage.getItem("employee");
+    const employeeToken = sessionStorage.getItem("token");
   
-    if (employeeData) {
+    if (employeeToken) {
       try {
-        const parsedEmployee = JSON.parse(employeeData);
-        return parsedEmployee?.token || "";  
+        const parsedToken = JSON.parse(employeeToken);
+        return parsedToken?.token || "";  
       } catch (error) {
         console.error("Error parsing employee data from sessionStorage:", error);
         return ""; 
