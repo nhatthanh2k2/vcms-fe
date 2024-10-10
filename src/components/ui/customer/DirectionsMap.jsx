@@ -4,77 +4,19 @@ import 'leaflet/dist/leaflet.css' // Import CSS cho Leaflet
 import 'leaflet-routing-machine' // Import thư viện chỉ đường
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
 
-// export const DirectionsMap = () => {
-//     const mapRef = useRef(null)
-//     const userMarkerRef = useRef(null) // Lưu marker của người dùng
+const centerIcon = L.icon({
+    iconUrl: '/images/center-location.png',
+    iconSize: [40, 40], // Kích thước icon hiển thị trên bản đồ
+    iconAnchor: [20, 40], // Điểm neo để đảm bảo icon đúng vị trí
+    popupAnchor: [0, -40], // Vị trí popup
+})
 
-//     useEffect(() => {
-//         // Tạo bản đồ Leaflet
-//         mapRef.current = L.map('map', {
-//             center: [10.0140164, 105.7656461], // Tọa độ trung tâm
-//             zoom: 15,
-//         })
-
-//         // Thêm lớp bản đồ từ OpenStreetMap
-//         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//             maxZoom: 19,
-//         }).addTo(mapRef.current)
-
-//         // Thêm marker cho trung tâm tiêm chủng
-//         const centerMarker = L.marker([10.0140164, 105.7656461]).addTo(mapRef.current)
-//         centerMarker.bindPopup('Trung tâm tiêm chủng').openPopup()
-
-//         // Thêm nút tìm đường
-//         var findPathBtn = L.control({ position: 'topleft' })
-//         findPathBtn.onAdd = function () {
-//             var div = L.DomUtil.create('div', 'findpath')
-//             div.innerHTML = '<button id="find-path">Find Path</button>'
-//             return div
-//         }
-//         findPathBtn.addTo(mapRef.current)
-
-//         // Xử lý sự kiện khi nhấn nút tìm đường
-//         const handleFindPath = () => {
-//             // Xóa nút tìm đường
-//             mapRef.current.removeControl(findPathBtn)
-
-//             // Lấy vị trí người dùng
-//             navigator.geolocation.getCurrentPosition((position) => {
-//                 const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude)
-
-//                 // Hiển thị marker của người dùng
-//                 if (userMarkerRef.current) {
-//                     mapRef.current.removeLayer(userMarkerRef.current) // Xóa marker cũ nếu có
-//                 }
-//                 userMarkerRef.current = L.marker(userLatLng)
-//                     .addTo(mapRef.current)
-//                     .bindPopup('Vị trí của bạn')
-//                     .openPopup()
-
-//                 const centerLatLng = L.latLng(10.0140164, 105.7656461) // Tọa độ trung tâm
-
-//                 // Tạo đường chỉ dẫn
-//                 L.Routing.control({
-//                     waypoints: [userLatLng, centerLatLng],
-//                     routeWhileDragging: false,
-//                 }).addTo(mapRef.current)
-//             })
-//         }
-
-//         // Thêm sự kiện click cho nút tìm đường
-//         document.getElementById('find-path').onclick = handleFindPath
-
-//         return () => {
-//             mapRef.current.remove() // Dọn dẹp khi component bị unmount
-//         }
-//     }, [])
-
-//     return (
-//         <div>
-//             <div id="map" style={{ height: '500px' }}></div>
-//         </div>
-//     )
-// }
+const userIcon = L.icon({
+    iconUrl: '/images/user-location.png',
+    iconSize: [40, 40], // Kích thước icon hiển thị trên bản đồ
+    iconAnchor: [20, 40], // Điểm neo để đảm bảo icon đúng vị trí
+    popupAnchor: [0, -40], // Vị trí popup
+})
 
 export const DirectionsMap = () => {
     const mapRef = useRef(null)
@@ -94,7 +36,9 @@ export const DirectionsMap = () => {
         }).addTo(mapRef.current)
 
         // Thêm marker cho trung tâm tiêm chủng
-        const centerMarker = L.marker([10.016027, 105.764018]).addTo(mapRef.current)
+        const centerMarker = L.marker([10.016027, 105.764018], { icon: centerIcon }).addTo(
+            mapRef.current
+        )
         centerMarker.bindPopup('Trung tâm tiêm chủng').openPopup()
 
         // Thêm nút tìm đường
@@ -126,7 +70,7 @@ export const DirectionsMap = () => {
                 if (userMarkerRef.current) {
                     mapRef.current.removeLayer(userMarkerRef.current) // Xóa marker cũ nếu có
                 }
-                userMarkerRef.current = L.marker(userLatLng)
+                userMarkerRef.current = L.marker(userLatLng, { icon: userIcon })
                     .addTo(mapRef.current)
                     .bindPopup('Vị trí của bạn')
                     .openPopup()
