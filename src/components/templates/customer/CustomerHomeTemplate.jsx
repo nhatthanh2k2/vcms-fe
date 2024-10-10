@@ -1,6 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { CarouselIntroduction, CarouselDoctor, CarouselVaccine } from '@/components/ui/customer'
+import {
+    CarouselIntroduction,
+    CarouselDoctor,
+    CarouselVaccine,
+    DirectionsMap,
+} from '@/components/ui/customer'
 
 export const CustomerHomeTemplate = () => {
     return (
@@ -79,6 +84,10 @@ export const CustomerHomeTemplate = () => {
                             Tiêm trọn gói cho trẻ em
                         </span>
                     </div>
+                </div>
+
+                <div className="mt-5 z-10">
+                    <DirectionsMap />
                 </div>
             </div>
         </div>

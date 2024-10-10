@@ -1,12 +1,49 @@
 import React from 'react'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const changePasswordSchema = z
+    .object({
+        currentPassword: z.string().min(1, { message: 'Mật khẩu hiện tại không được trống' }),
+        newPassword: z
+            .string()
+            .min(8, { message: 'Mật khẩu mới phải có ít nhất 8 ký tự.' })
+            .regex(/[A-Z]/, { message: 'Mật khẩu phải chứa ít nhất 1 chữ cái in hoa.' })
+            .regex(/[a-z]/, { message: 'Mật khẩu phải chứa ít nhất 1 chữ cái thường.' })
+            .regex(/[0-9]/, { message: 'Mật khẩu phải chứa ít nhất 1 chữ số.' })
+            .regex(/[\W_]/, { message: 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt.' }),
+        confirmPassword: z.string(),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: 'Xác nhận mật khẩu không khớp.',
+        path: ['confirmPassword'],
+    })
 
 export const ChangePasswordTab = () => {
+    const {
+        register: registerChange,
+        handleSubmit: handleSubmitChange,
+        formState: { errors: errorsChange },
+    } = useForm({
+        resolver: zodResolver(changePasswordSchema),
+        defaultValues: {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: '',
+        },
+    })
+
+    const onSubmitChange = (data) => {
+        console.log(data)
+    }
+
     return (
         <div className="flex flex-row justify-center gap-5 items-center ">
             <div>
                 <img src="/images/change-password.jpg" />
             </div>
-            <form className="flex flex-col gap-5">
+            <form className="flex flex-col gap-5" onSubmit={handleSubmitChange(onSubmitChange)}>
                 <label className="input input-bordered  flex items-center gap-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -23,8 +60,18 @@ export const ChangePasswordTab = () => {
                             <path d="M17.885 8.294a2.2 2.2 0 0 1-2.204 2.195 2.2 2.2 0 0 1-2.205-2.195 2.2 2.2 0 0 1 2.205-2.196 2.2 2.2 0 0 1 2.204 2.196Z" />
                         </g>
                     </svg>
-                    <input type="password" className="grow" placeholder="Mật khẩu hiện tại" />
+                    <input
+                        {...registerChange('currentPassword')}
+                        type="password"
+                        className="grow"
+                        placeholder="Mật khẩu hiện tại"
+                    />
                 </label>
+                {errorsChange.currentPassword && (
+                    <span className="w-fit text-red-500 text-sm">
+                        {errorsChange.currentPassword.message}
+                    </span>
+                )}
 
                 <label className="input input-bordered  flex items-center gap-2">
                     <svg
@@ -37,8 +84,18 @@ export const ChangePasswordTab = () => {
                             data-name="Path 64"
                         />
                     </svg>
-                    <input type="password" className="grow" placeholder="Mật khẩu mới" />
+                    <input
+                        {...registerChange('newPassword')}
+                        type="password"
+                        className="grow"
+                        placeholder="Mật khẩu mới"
+                    />
                 </label>
+                {errorsChange.newPassword && (
+                    <span className="w-fit text-red-500 text-sm">
+                        {errorsChange.newPassword.message}
+                    </span>
+                )}
 
                 <label className="input input-bordered  flex items-center gap-2">
                     <svg
@@ -51,8 +108,16 @@ export const ChangePasswordTab = () => {
                             data-name="Path 64"
                         />
                     </svg>
-                    <input type="password" className="grow" placeholder="Nhập lại mật khẩu mới" />
+                    <input
+                        {...registerChange('confirmPassword')}
+                        type="password"
+                        className="grow"
+                        placeholder="Nhập lại mật khẩu mới"
+                    />
                 </label>
+                {errorsChange.confirmPassword && (
+                    <span className="text-red-500">{errorsChange.confirmPassword.message}</span>
+                )}
 
                 <div className="flex justify-center">
                     <button className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-white shadow-md  h-12">
