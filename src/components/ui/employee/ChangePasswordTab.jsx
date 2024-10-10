@@ -7,7 +7,7 @@ export const ChangePasswordTab = () => {
                 <img src="/images/change-password.jpg" />
             </div>
             <form className="flex flex-col gap-5">
-                <label className="input input-bordered input-warning flex items-center gap-2">
+                <label className="input input-bordered  flex items-center gap-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-8 w-8 opacity-70"
@@ -26,7 +26,7 @@ export const ChangePasswordTab = () => {
                     <input type="password" className="grow" placeholder="Mật khẩu hiện tại" />
                 </label>
 
-                <label className="input input-bordered input-warning flex items-center gap-2">
+                <label className="input input-bordered  flex items-center gap-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-8 w-8 opacity-70"
@@ -40,7 +40,7 @@ export const ChangePasswordTab = () => {
                     <input type="password" className="grow" placeholder="Mật khẩu mới" />
                 </label>
 
-                <label className="input input-bordered input-warning flex items-center gap-2">
+                <label className="input input-bordered  flex items-center gap-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-8 w-8 opacity-70"
@@ -55,7 +55,7 @@ export const ChangePasswordTab = () => {
                 </label>
 
                 <div className="flex justify-center">
-                    <button className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md  h-12">
+                    <button className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-white shadow-md  h-12">
                         Đổi mật khẩu
                     </button>
                 </div>

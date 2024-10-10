@@ -9,8 +9,10 @@ import {
     OrderVaccinationSchedule,
     SettingProfileModal,
 } from '@/components/ui'
+import { useNavigate } from 'react-router-dom'
 
 export const EmployeeHomeTemplate = () => {
+    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('customerLookup')
     const [batchDetailList, setBatchDetailList] = useState([])
     const [vaccinePackageList, setVaccinePackageList] = useState([])
@@ -32,6 +34,13 @@ export const EmployeeHomeTemplate = () => {
             .then((response) => setVaccineList(response.data.result))
             .catch((err) => console.log('Get Vaccine Failed!'))
     }, [])
+
+    // useEffect(() => {
+    //     const user = sessionStorage.getItem('employeeProfile')
+    //     if (!user) {
+    //         navigate('/dang-nhap')
+    //     }
+    // }, [])
 
     const renderContent = () => {
         switch (activeTab) {

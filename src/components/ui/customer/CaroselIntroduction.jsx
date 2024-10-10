@@ -2,116 +2,72 @@ import React from 'react'
 import { Carousel } from 'antd'
 
 export const CarouselIntroduction = () => {
-    // const sliderData = [
-    //     {
-    //         bg: 'slider2',
-    //         title: 'We Provide Medical Services That You Can Trust!',
-    //         description:
-    //             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed nisl pellentesque, faucibus libero eu, gravida quam.',
-    //         button1: 'Get Appointment',
-    //         button2: 'Learn More',
-    //     },
-    //     {
-    //         bg: 'slider',
-    //         title: 'We Provide Medical Services That You Can Trust!',
-    //         description:
-    //             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed nisl pellentesque, faucibus libero eu, gravida quam.',
-    //         button1: 'Get Appointment',
-    //         button2: 'About Us',
-    //     },
-    //     {
-    //         bg: 'slider3',
-    //         title: 'We Provide Medical Services That You Can Trust!',
-    //         description:
-    //             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed nisl pellentesque, faucibus libero eu, gravida quam.',
-    //         button1: 'Get Appointment',
-    //         button2: 'Contact Now',
-    //     },
-
     return (
         <section className="slider">
             <Carousel autoplay arrows>
-                <div className="single-slider bg-cover bg-center bg-no-repeat h-[600px] bg-slider">
+                <div className=" bg-cover bg-center bg-no-repeat h-[600px] bg-slider">
                     <div className="container mx-auto h-full">
-                        <div className="row flex items-center h-full">
-                            <div className="col-lg-7">
-                                <div className="text mt-[120px]">
+                        <div className=" flex mt-30 h-full">
+                            <div className="">
+                                <div>
                                     <h1 className="text-[#2C2D3F] text-[38px] font-bold leading-[42px]">
-                                        Day la 1
+                                        Tiêm chủng hôm nay, bảo vệ sức khỏe ngày mai.
                                     </h1>
-                                    <p className="text-[#2C2D3F] mt-[27px] font-normal">xin chao</p>
-                                    <div className="button mt-[30px]">
-                                        <a
-                                            href="#"
-                                            className="btn bg-[#1a76d1] text-white font-medium inline-block mr-[10px] px-4 py-2"
-                                        >
-                                            btn 1
-                                        </a>
-                                        <a
-                                            href="#"
-                                            className="btn primary bg-[#2C2D3F] text-white inline-block px-4 py-2"
-                                        >
-                                            btn2
-                                        </a>
-                                    </div>
+                                    <p className="text-[#2C2D3F] mt-[27px] font-normal text-lg">
+                                        Hãy đầu tư cho sức khỏe tương lai của bản thân và gia đình
+                                        bằng cách tiêm chủng đầy đủ và đúng lịch.
+                                    </p>
+                                    <img
+                                        src="/images/slide-1.jpg"
+                                        className="h-70 object-cover rounded-full"
+                                        alt=""
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="single-slider bg-cover bg-center bg-no-repeat h-[600px] bg-slider2">
+                <div className=" bg-cover bg-center bg-no-repeat h-[600px] bg-slider2">
                     <div className="container mx-auto h-full">
-                        <div className="row flex items-center h-full">
-                            <div className="col-lg-7">
-                                <div className="text mt-[120px]">
+                        <div className="row flex mt-30 h-full">
+                            <div className="">
+                                <div>
                                     <h1 className="text-[#2C2D3F] text-[38px] font-bold leading-[42px]">
-                                        Day la 1
+                                        Sức khỏe mạnh mẽ từ mỗi mũi tiêm của bạn!
                                     </h1>
-                                    <p className="text-[#2C2D3F] mt-[27px] font-normal">xin chao</p>
-                                    <div className="button mt-[30px]">
-                                        <a
-                                            href="#"
-                                            className="btn bg-[#1a76d1] text-white font-medium inline-block mr-[10px] px-4 py-2"
-                                        >
-                                            btn 1
-                                        </a>
-                                        <a
-                                            href="#"
-                                            className="btn primary bg-[#2C2D3F] text-white inline-block px-4 py-2"
-                                        >
-                                            btn2
-                                        </a>
-                                    </div>
+                                    <p className="text-[#2C2D3F] mt-[27px] font-normal text-lg">
+                                        Tiêm chủng giúp bạn phòng tránh các bệnh nguy hiểm mà không
+                                        cần phải lo lắng về việc điều trị sau này.
+                                    </p>
+                                    <img
+                                        src="/images/slide-2.jpg"
+                                        className="h-70 object-cover rounded-full"
+                                        alt=""
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="single-slider bg-cover bg-center bg-no-repeat h-[600px] bg-slider3">
+                <div className=" bg-cover bg-center bg-no-repeat h-[600px] bg-slider3">
                     <div className="container mx-auto h-full">
-                        <div className="row flex items-center h-full">
-                            <div className="col-lg-7">
-                                <div className="text mt-[120px]">
+                        <div className="row flex mt-30 h-full">
+                            <div className="">
+                                <div className="">
                                     <h1 className="text-[#2C2D3F] text-[38px] font-bold leading-[42px]">
-                                        Day la 1
+                                        Một mũi tiêm, vạn lần an tâm.
                                     </h1>
-                                    <p className="text-[#2C2D3F] mt-[27px] font-normal">xin chao</p>
-                                    <div className="button mt-[30px]">
-                                        <a
-                                            href="#"
-                                            className="btn bg-[#1a76d1] text-white font-medium inline-block mr-[10px] px-4 py-2"
-                                        >
-                                            btn 1
-                                        </a>
-                                        <a
-                                            href="#"
-                                            className="btn primary bg-[#2C2D3F] text-white inline-block px-4 py-2"
-                                        >
-                                            btn2
-                                        </a>
-                                    </div>
+                                    <p className="text-[#2C2D3F] mt-[27px] font-normal text-lg">
+                                        Mỗi mũi tiêm giúp bạn và người thân ngăn ngừa bệnh tật và
+                                        sống khỏe mạnh hơn.
+                                    </p>
+                                    <img
+                                        src="/images/slide-3.jpg"
+                                        className="h-70 object-cover rounded-full"
+                                        alt=""
+                                    />
                                 </div>
                             </div>
                         </div>

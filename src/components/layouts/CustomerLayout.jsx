@@ -6,7 +6,7 @@ export const CustomerLayout = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <CustomerHeader />
-            <div className="flex-1 mb-5">
+            <div className="flex-1 pb-2">
                 <Outlet />
             </div>
             <CustomerFooter />

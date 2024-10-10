@@ -34,7 +34,6 @@ export const AppointmentVaccinationSchedule = () => {
             : dayjs(new Date()).format('YYYY-MM-DD')
         try {
             const response = await appointmentService.getAppointmentListByDate(selectedDate)
-            console.log(response.data)
             setAppointmentList(response.data.result)
         } catch (error) {
             console.error('Error fetching appointment list:', error)
@@ -42,6 +41,12 @@ export const AppointmentVaccinationSchedule = () => {
     }
 
     const columns = [
+        {
+            title: 'Mã khách hàng',
+            dataIndex: 'customerCode',
+            key: 'customerCode',
+            render: (text) => <span className="font-semibold">{text}</span>,
+        },
         {
             title: 'Họ và tên',
             dataIndex: 'appointmentCustomerFullName',
@@ -140,6 +145,7 @@ export const AppointmentVaccinationSchedule = () => {
                 <Table
                     columns={columns}
                     dataSource={appointmentList}
+                    rowKey={'appointmentId'}
                     locale={{
                         emptyText: (
                             <div className="flex flex-col items-center justify-center">

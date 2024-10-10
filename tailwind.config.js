@@ -244,6 +244,10 @@ module.exports = {
                 'bg-vaccination': "url('/images/bg-vaccination.png')",
                 'order-vaccine-list': "url('/images/order-vaccine-list.jpg')",
                 'modal': "url('/images/bg-modal.jpg')",
+                'vaccination-request': "url('/images/vaccination-request.jpg')",
+                'vaccination-pregnant': "url('/images/vaccination-pregnant.jpg')",
+                'vaccination-for-child': "url('/images/vaccination-for-child.jpg')",
+                'vaccination-for-adult': "url('/images/vaccination-for-adult.jpg')",
       },
       content: {
         "icon-copy": 'url("../images/icon/icon-copy-alt.svg")'
@@ -276,14 +280,24 @@ module.exports = {
         rotating: {
           "0%, 100%": { transform: "rotate(360deg)" },
           "50%": { transform: "rotate(0deg)" }
-        }
+        },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInDown: {
+          '0%': { opacity: '0', transform: 'translateY(-20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         "ping-once": "ping 5s cubic-bezier(0, 0, 0.2, 1)",
         rotating: "rotating 30s linear infinite",
         "spin-1.5": "spin 1.5s linear infinite",
         "spin-2": "spin 2s linear infinite",
-        "spin-3": "spin 3s linear infinite"
+        "spin-3": "spin 3s linear infinite",
+        fadeInUp: 'fadeInUp 1s both',
+        fadeInDown: 'fadeInDown 1s both',
       }
     }
   },

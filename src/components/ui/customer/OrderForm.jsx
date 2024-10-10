@@ -7,6 +7,7 @@ import {
     formatCurrency,
     disabledPastDate,
     convertPackageType,
+    phoneNumberPattern,
 } from '@/utils'
 
 import { addressService } from '@/services/addressService'
@@ -35,16 +36,14 @@ const orderSchema = z.object({
     orderInjectionDate: z.date({ invalid_type_error: 'Ngày tiêm không hợp lệ' }),
 })
 
-const phoneNumberPattern = /^0[3-9]\d{8}$/
-
 const lookupSchema = z.object({
-    lookupCustomerCode: z
+    customerIdentifier: z
         .string()
-        .min(10, { message: 'Mã KH tối thiểu 10 ký tự' })
+        .min(10, { message: 'Mã KH hoặc SĐT tối thiểu 10 ký tự' })
         .refine((value) => phoneNumberPattern.test(value) || value.length > 5, {
             message: 'Mã KH hoặc SĐT không hợp lệ',
         }),
-    lookupCustomerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
+    customerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
 })
 
 export const OrderForm = () => {
@@ -227,8 +226,8 @@ export const OrderForm = () => {
     } = useForm({
         resolver: zodResolver(lookupSchema),
         defaultValues: {
-            lookupCustomerCode: '',
-            lookupCustomerDob: null,
+            customerIdentifier: '',
+            customerDob: null,
         },
     })
 
@@ -237,9 +236,7 @@ export const OrderForm = () => {
     const onSubmitLookup = async (data) => {
         const lookupdata = {
             ...data,
-            lookupCustomerDob: data.lookupCustomerDob
-                ? dayjs(data.lookupCustomerDob).format('DD-MM-YYYY')
-                : null,
+            customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
 
         try {
@@ -277,64 +274,78 @@ export const OrderForm = () => {
 
     return (
         <div className="bg-gray-2 pt-10">
-            <div className="flex mx-10 space-x-4">
+            <div className="relative mx-10 ">
+                <div className="uppercase text-3xl text-blue-600 font-satoshi font-bold">
+                    Đặt mua vắc xin
+                </div>
+                <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
+            </div>
+
+            <div className="flex mx-10 space-x-4 mt-5">
                 <div className="flex flex-col w-2/3">
                     {!showForm && (
                         <div>
-                            <span className="text-2xl text-blue-600 uppercase font-bold">
-                                Tra cứu thông tin khách hàng
-                            </span>
                             <form
-                                className="flex flex-row gap-20 items-center mt-5"
+                                className="flex flex-row space-x-4 items-center font-semibold"
                                 onSubmit={handleSubmitLookup(onSubmitLookup)}
                             >
                                 <div
-                                    className="flex flex-col space-y-2"
+                                    className="flex flex-col space-y-2 flex-1"
                                     onSubmit={handleSubmitLookup(onSubmitLookup)}
                                 >
-                                    <label>Nhập SĐT hoặc Mã khách hàng</label>
-                                    <input
-                                        {...registerLookup('lookupCustomerCode')}
-                                        type="text"
-                                        placeholder="Số điện thoại / Mã KH"
-                                        className="input input-bordered input-info w-full max-w-xs"
-                                    />
-                                    {errorsLookup.lookupCustomerCode && (
-                                        <span className="w-fit text-red-500 text-sm">
-                                            {errorsLookup.lookupCustomerCode.message}
-                                        </span>
-                                    )}
+                                    <label className="block mb-1 font-medium">
+                                        Nhập Mã KH / SĐT:
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            {...registerLookup('customerIdentifier')}
+                                            type="text"
+                                            placeholder="Số điện thoại / Mã KH"
+                                            className="input input-bordered input-info w-full max-w-xs"
+                                        />
+                                        {errorsLookup.customerIdentifier && (
+                                            <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                                {errorsLookup.customerIdentifier.message}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="flex flex-col space-y-2">
-                                    <label>Ngày tháng năm sinh</label>
-                                    <DatePicker
-                                        {...registerLookup('lookupCustomerDob', {
-                                            valueAsDate: true,
-                                        })}
-                                        format="DD-MM-YYYY"
-                                        disabledDate={disabledDoB}
-                                        onChange={(date) =>
-                                            setValueLookup(
-                                                'lookupCustomerDob',
-                                                date?.toDate() || null,
-                                                {
-                                                    shouldValidate: true,
-                                                }
-                                            )
-                                        }
-                                        style={{ height: '48px' }}
-                                    />
-                                    {errorsLookup.lookupCustomerDob && (
-                                        <span className="w-fit text-red-500 text-sm">
-                                            {errorsLookup.lookupCustomerDob.message}
-                                        </span>
-                                    )}
+                                <div className="flex flex-col space-y-2 flex-1">
+                                    <label className="block mb-1 font-medium">Ngày sinh</label>
+                                    <div className="relative flex flex-col">
+                                        <DatePicker
+                                            {...registerLookup('customerDob', {
+                                                valueAsDate: true,
+                                            })}
+                                            format="DD-MM-YYYY"
+                                            disabledDate={disabledDoB}
+                                            onChange={(date) =>
+                                                setValueLookup(
+                                                    'customerDob',
+                                                    date?.toDate() || null,
+                                                    {
+                                                        shouldValidate: true,
+                                                    }
+                                                )
+                                            }
+                                            style={{ height: '48px' }}
+                                        />
+                                        {errorsLookup.customerDob && (
+                                            <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                                {errorsLookup.customerDob.message}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="">
-                                    <button className="btn btn-accent h-12" type="submit">
-                                        Tra cứu
+                                <div className="flex-1 mt-10">
+                                    <button
+                                        type="submit"
+                                        className="text-base rounded-full border-l-0 border-r-0 hover:scale-110 focus:outline-none flex justify-center px-4 py-2  font-bold cursor-pointer 
+                        hover:bg-green-500 hover:text-white  bg-green-300   text-green-800 border duration-200 ease-in-out  border-green-500 transition"
+                                    >
+                                        Tra cứu thông tin
                                     </button>
                                 </div>
                             </form>
@@ -582,7 +593,7 @@ export const OrderForm = () => {
                         </form>
                     )}
 
-                    <div className="flex flex-col space-y-4 mt-5">
+                    <div className="flex flex-col space-y-4 mt-8">
                         <span className="text-lg font-semibold">Chọn phương thức thanh toán:</span>
 
                         <div className="flex gap-4">

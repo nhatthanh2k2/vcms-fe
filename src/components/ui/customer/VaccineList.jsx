@@ -1,35 +1,139 @@
-import { vaccineService } from '@/services'
+import { diseaseService, vaccineService } from '@/services'
 import React, { useEffect, useState } from 'react'
+import { VaccineCard } from '.'
+import { Pagination, Row, Col, Select } from 'antd'
 
 export const VaccineList = () => {
     const [vaccineList, setVaccineList] = useState([])
+    const [diseaseList, setDiseaseList] = useState([])
+    const [diseaseSelected, setDiseaseSelected] = useState()
+    const [filteredVaccineList, setFilteredVaccineList] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
 
     useEffect(() => {
         vaccineService
             .getAllVaccines()
             .then((respone) => setVaccineList(respone.data.result))
             .catch((err) => console.log('Get vaccines failed!'))
+        diseaseService
+            .getAllDiseases()
+            .then((response) => setDiseaseList(response.data.result))
+            .catch((err) => console.log('Get disaeses failed!'))
     }, [])
 
-    return (
-        <div className="flex flex-col mt-10 mx-20">
-            <div className="text-xl font-semibold mb-4">Thông tin sản phẩm vắc xin</div>
+    const handleChoseDisease = (option) => {
+        setDiseaseSelected(option)
+    }
 
-            <div className="relative flex mb-6 w-72">
-                <input
-                    type="text"
-                    placeholder="Tìm kiếm sản phẩm..."
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 pr-10"
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-6 h-6 text-gray-500 hover:text-blue-500 transition-colors duration-200" // Change color on hover
-                        viewBox="0 0 24 24"
-                    >
-                        <path d="M15.716 4.354a8.031 8.031 0 1 0-2.7 13.138l3.58 3.581a3.164 3.164 0 0 0 4.477-4.473l-3.58-3.58a8.046 8.046 0 0 0-1.777-8.666Zm-5.682 11.715A6.033 6.033 0 1 1 14.3 14.3a6 6 0 0 1-4.266 1.769Zm9.625 1.943a1.165 1.165 0 0 1-1.647 1.647l-3.186-3.186a8.214 8.214 0 0 0 .89-.757 8.214 8.214 0 0 0 .757-.89Z" />
-                    </svg>
+    useEffect(() => {
+        if (diseaseSelected === 'all') {
+            vaccineService
+                .getAllVaccines()
+                .then((response) => setVaccineList(response.data.result))
+                .catch((err) => console.log('Get all vaccines failed!'))
+        } else {
+            diseaseService
+                .getVaccinesOfDisease(diseaseSelected)
+                .then((response) => setVaccineList(response.data.result))
+                .catch((err) => console.log('Get vaccines of disease failed!'))
+        }
+    }, [diseaseSelected])
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value)
+        const filteredList = vaccineList.filter(
+            (vaccine) =>
+                vaccine.vaccinePurpose &&
+                vaccine.vaccinePurpose.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        setFilteredVaccineList(filteredList)
+    }
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const pageSize = 12
+
+    const paginatedVaccines = vaccineList.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    )
+
+    return (
+        <div className="flex flex-col space-y-5">
+            <div className="flex flex-col items-center bg-bg-vaccination p-10">
+                <div className="text-2xl text-blue-700 font-bold mb-4">
+                    Thông tin sản phẩm vắc xin
                 </div>
+                <div className=" w-fit flex items-center p-6 space-x-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
+                    <div className="flex bg-gray-100 p-4 w-72 space-x-4 rounded-lg">
+                        <svg
+                            onClick={handleSearch}
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 opacity-30 cursor-pointer"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                        </svg>
+                        <input
+                            className="bg-gray-100 outline-none"
+                            type="text"
+                            placeholder="Tìm kiếm..."
+                            value={searchTerm}
+                            onChange={handleSearch}
+                        />
+                    </div>
+                    <div className="flex py-3 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer">
+                        <Select
+                            onChange={handleChoseDisease}
+                            placeholder="Chọn bệnh để xem vắc xin"
+                            options={[
+                                {
+                                    value: 'all',
+                                    label: <span>Tất cả</span>,
+                                },
+                                ...diseaseList.map((disease) => ({
+                                    value: disease.diseaseId,
+                                    label: <span>{disease.diseaseName}</span>,
+                                })),
+                            ]}
+                            style={{
+                                width: 384,
+                                height: 40,
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="mx-20">
+                <Row gutter={[16, 16]} style={{ display: 'flex', flexWrap: 'wrap' }}>
+                    {paginatedVaccines.map((vaccine, index) => (
+                        <Col
+                            key={index}
+                            xs={24}
+                            sm={12}
+                            md={8}
+                            style={{ display: 'flex', alignItems: 'stretch' }}
+                        >
+                            <VaccineCard vaccineDetail={vaccine} style={{ flex: 1 }} />
+                        </Col>
+                    ))}
+                </Row>
+
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={vaccineList.length}
+                    onChange={(page) => setCurrentPage(page)}
+                    showSizeChanger={false}
+                    style={{ marginTop: '20px', textAlign: 'center' }}
+                />
             </div>
         </div>
     )

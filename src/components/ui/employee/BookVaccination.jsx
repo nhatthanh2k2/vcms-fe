@@ -363,7 +363,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                             type="submit"
                             className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
-                            <span className="mr-2">Đặt Mua Vắc Xin</span>
+                            <span className="mr-2">Đặt Vắc Xin</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"

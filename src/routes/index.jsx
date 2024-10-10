@@ -8,12 +8,19 @@ import {
     MedicalTeamPage,
     Login,
     ReceptionPage,
+    VaccineDetailPage,
+    VaccineListPage,
+    PageNotFound,
+    VaccinationHistoryPage,
 } from '@/pages'
 import { PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
-import { VaccineListTemplate } from '@/components'
 
 export const router = [
+    {
+        path: '*',
+        element: <PageNotFound />,
+    },
     {
         path: '/',
         element: <Navigate to="/trang-chu" replace />,
@@ -71,22 +78,18 @@ export const router = [
         path: '/cam-nang',
         element: <CustomerLayout />,
         children: [
-            // {
-            //     path: PATH.preVaccination,
-            //     element: <Introduction />,
-            // },
-            // {
-            //     path: PATH.postVaccination,
-            //     element: <Introduction />,
-            // },
             {
-                path: PATH.vaccineInformation,
-                element: <VaccineListTemplate />,
+                path: PATH.vaccineList,
+                element: <VaccineListPage />,
             },
-            // {
-            //     path: PATH.vaccinationHistory,
-            //     element: <Introduction />,
-            // },
+            {
+                path: 'thong-tin-vac-xin/:vaccineCode',
+                element: <VaccineDetailPage />,
+            },
+            {
+                path: PATH.vaccinationHistory,
+                element: <VaccinationHistoryPage />,
+            },
         ],
     },
     {
@@ -100,6 +103,6 @@ export const router = [
     },
     {
         path: '/nhan-vien/le-tan',
-        element: <EmployeeLayout />,
+        element: <ReceptionPage />,
     },
 ]

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 export const CustomerHeader = () => {
@@ -15,8 +15,8 @@ export const CustomerHeader = () => {
                     <div>
                         <Link
                             to="/trang-chu"
-                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
-                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                     after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
                         location.pathname === '/trang-chu' ? 'after:scale-x-100 text-blue-700' : ''
                     }`}
@@ -28,8 +28,8 @@ export const CustomerHeader = () => {
                     <div className="dropdown dropdown-hover">
                         <Link
                             to="/gioi-thieu"
-                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
-                                after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                                after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                                 after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
                                     location.pathname.startsWith('/gioi-thieu')
                                         ? 'after:scale-x-100 text-blue-700'
@@ -38,17 +38,20 @@ export const CustomerHeader = () => {
                         >
                             Giới thiệu
                         </Link>
-                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg mt-1">
+                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow  text-base mt-1">
                             <li>
                                 <Link
                                     to="/gioi-thieu/trung-tam"
-                                    className="text-gray-700 text-nowrap"
+                                    className="text-black hover:text-black hover:bg-blue-100"
                                 >
                                     Về trung tâm
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/gioi-thieu/doi-ngu-bac-si" className="text-gray-700">
+                                <Link
+                                    to="/gioi-thieu/doi-ngu-bac-si"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Đội ngũ bác sĩ
                                 </Link>
                             </li>
@@ -58,8 +61,8 @@ export const CustomerHeader = () => {
                     <div className="dropdown dropdown-hover">
                         <Link
                             to="/goi-tiem"
-                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
-                                after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                                after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                                 after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
                                     location.pathname.startsWith('/goi-tiem')
                                         ? 'after:scale-x-100 text-blue-700'
@@ -68,14 +71,20 @@ export const CustomerHeader = () => {
                         >
                             Gói tiêm
                         </Link>
-                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg mt-1">
+                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-base mt-1">
                             <li>
-                                <Link to="/goi-tiem/goi-tiem-tre-em" className="text-gray-700">
+                                <Link
+                                    to="/goi-tiem/goi-tiem-tre-em"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Gói tiêm trẻ em
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/goi-tiem/goi-tiem-nguoi-lon" className="text-gray-700">
+                                <Link
+                                    to="/goi-tiem/goi-tiem-nguoi-lon"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Gói tiêm người lớn
                                 </Link>
                             </li>
@@ -85,8 +94,8 @@ export const CustomerHeader = () => {
                     <div className="dropdown dropdown-hover relative">
                         <Link
                             to="/cam-nang"
-                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
-                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                     after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
                         location.pathname.startsWith('/cam-nang')
                             ? 'after:scale-x-100 text-blue-700'
@@ -95,24 +104,36 @@ export const CustomerHeader = () => {
                         >
                             Cẩm nang
                         </Link>
-                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-lg mt-1">
+                        <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow text-gray-700 text-base mt-1">
                             <li>
-                                <Link to="/cam-nang/luu-y-truoc-tiem" className="text-gray-700">
+                                <Link
+                                    to="/cam-nang/luu-y-truoc-tiem"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Lưu ý trước tiêm
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/cam-nang/luu-y-sau-tiem" className="text-gray-700">
+                                <Link
+                                    to="/cam-nang/luu-y-sau-tiem"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Lưu ý sau tiêm
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/cam-nang/thong-tin-vac-xin" className="text-gray-700">
+                                <Link
+                                    to="/cam-nang/thong-tin-vac-xin"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Thông tin vắc xin
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/cam-nang/tra-cuu-lich-su-tiem" className="text-gray-700">
+                                <Link
+                                    to="/cam-nang/tra-cuu-lich-su-tiem"
+                                    className="text-black hover:text-black hover:bg-blue-100"
+                                >
                                     Tra cứu lịch sử tiêm
                                 </Link>
                             </li>
@@ -122,8 +143,8 @@ export const CustomerHeader = () => {
                     <div>
                         <Link
                             to="/trang-chu/dang-ky-lich-tiem"
-                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
-                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                     after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
                         location.pathname === '/trang-chu/dang-ky-lich-tiem'
                             ? 'after:scale-x-100 text-blue-700'
@@ -137,8 +158,8 @@ export const CustomerHeader = () => {
                     <div>
                         <Link
                             to="/trang-chu/dat-mua-vac-xin"
-                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute 
-                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-orange-600
+                            className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                     after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
                         location.pathname === '/trang-chu/dat-mua-vac-xin'
                             ? 'after:scale-x-100 text-blue-700'

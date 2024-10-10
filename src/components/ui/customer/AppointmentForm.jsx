@@ -38,6 +38,7 @@ const appointmentSchema = z.object({
 
 const apptCodeSchema = z.object({
     appointmentCustomerCode: z.string().min(1, { message: 'Mã khách hàng là bắt buộc' }),
+    appointmentCustomerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
     appointmentInjectionDate: z.date({ invalid_type_error: 'Ngày tiêm không hợp lệ' }),
 })
 
@@ -182,6 +183,7 @@ export const AppointmentForm = () => {
         resolver: zodResolver(apptCodeSchema),
         defaultValues: {
             appointmentCustomerCode: '',
+            appointmentCustomerDob: null,
             appointmentInjectionDate: null,
         },
     })
@@ -206,7 +208,7 @@ export const AppointmentForm = () => {
 
             const response = await appointmentService.createAppointmentWithOutCustCode(request)
 
-            console.log(response.data)
+            //console.log(response.data)
             if (response.data.code === 1000) {
                 MyToast('success', 'Đăng Ký Thành Công')
             } else {
@@ -222,6 +224,9 @@ export const AppointmentForm = () => {
         try {
             const request = {
                 appointmentCustomerCode: data.appointmentCustomerCode,
+                appointmentCustomerDob: data.appointmentCustomerDob
+                    ? dayjs(data.appointmentCustomerDob).format('DD-MM-YYYY')
+                    : null,
                 appointmentInjectionDate: data.appointmentInjectionDate
                     ? dayjs(data.appointmentInjectionDate).format('DD-MM-YYYY')
                     : null,
@@ -252,12 +257,19 @@ export const AppointmentForm = () => {
 
     return (
         <div>
-            <div className="mt-4 flex flex-col">
+            <div className="relative">
+                <div className="uppercase text-3xl text-blue-600 font-satoshi font-bold">
+                    Đăng ký lịch tiêm chủng
+                </div>
+                <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
+            </div>
+
+            <div className="mt-5 flex flex-col">
                 <div className="flex items-center mb-2">
                     <input
                         type="radio"
-                        name="radio-2"
-                        className="radio radio-primary mr-4"
+                        name="isCustomer"
+                        className="radio radio-accent mr-4"
                         onChange={() => setIsCustomer(1)}
                         checked={isCustomer === 1}
                     />
@@ -267,8 +279,8 @@ export const AppointmentForm = () => {
                 <div className="flex items-center">
                     <input
                         type="radio"
-                        name="radio-2"
-                        className="radio radio-primary mr-4"
+                        name="isCustomer"
+                        className="radio radio-accent mr-4"
                         onChange={() => setIsCustomer(0)}
                         checked={isCustomer === 0}
                     />
@@ -626,6 +638,34 @@ export const AppointmentForm = () => {
                                     {errorsWithCode.appointmentCustomerCode && (
                                         <span className="w-70 text-red-500 text-sm">
                                             {errorsWithCode.appointmentCustomerCode.message}
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="relative z-0 w-full mb-5 group mt-5">
+                                    <div>
+                                        <label>Ngày sinh: </label>
+                                        <DatePicker
+                                            {...registerWithCode('appointmentCustomerDob', {
+                                                valueAsDate: true,
+                                            })}
+                                            format="DD-MM-YYYY"
+                                            disabledDate={disabledDoB}
+                                            onChange={(date) =>
+                                                setValueWithCode(
+                                                    'appointmentCustomerDob',
+                                                    date?.toDate() || null,
+                                                    {
+                                                        shouldValidate: true,
+                                                    }
+                                                )
+                                            }
+                                        />
+                                    </div>
+
+                                    {errorsWithCode.appointmentCustomerDob && (
+                                        <span className="w-50 text-red-500 text-sm">
+                                            {errorsWithCode.appointmentCustomerDob.message}
                                         </span>
                                     )}
                                 </div>

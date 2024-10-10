@@ -8,7 +8,7 @@ export const PATH = {
     listVaccineForAdults: 'goi-tiem-nguoi-lon',
     preVaccination: 'luu-y-truoc-tiem',
     postVaccination: 'luu-y-sau-tiem',
-    vaccineInformation: 'thong-tin-vac-xin',
+    vaccineList: 'thong-tin-vac-xin',
     vaccinationHistory: 'tra-cuu-lich-su-tiem',
     login: 'dang-nhap',
     reception: 'le-tan',

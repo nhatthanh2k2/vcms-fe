@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export const CustomerFooter = () => {
     return (
-        <footer className="border-t-2 mt-auto">
+        <footer className="border-t-2 border-base-300 mx-5">
             <div>
                 <div className="flex flex-row justify-center items-center space-x-10 space-y-10">
                     <div className="">
@@ -57,18 +57,12 @@ export const CustomerFooter = () => {
                             </h3>
                             <ul className="space-y-1">
                                 <li>
-                                    <a
-                                        rel="noopener noreferrer"
-                                        href="/luu-y-truoc-khi-tiem"
-                                    >
+                                    <a rel="noopener noreferrer" href="/luu-y-truoc-khi-tiem">
                                         Lưu ý trước khi tiêm
                                     </a>
                                 </li>
                                 <li>
-                                    <a
-                                        rel="noopener noreferrer"
-                                        href="/luu-y-sau-khi-tiem"
-                                    >
+                                    <a rel="noopener noreferrer" href="/luu-y-sau-khi-tiem">
                                         Lưu ý sau khi tiêm
                                     </a>
                                 </li>
@@ -88,12 +82,7 @@ export const CustomerFooter = () => {
                                         fill="none"
                                         viewBox="0 0 32 32"
                                     >
-                                        <circle
-                                            cx={16}
-                                            cy={16}
-                                            r={14}
-                                            fill="url(#a)"
-                                        />
+                                        <circle cx={16} cy={16} r={14} fill="url(#a)" />
                                         <path
                                             fill="#fff"
                                             d="m21.214 20.282.622-3.952h-3.89v-2.563c0-1.081.542-2.136 2.284-2.136H22V8.267S20.395 8 18.86 8c-3.205 0-5.298 1.893-5.298 5.318v3.012H10v3.952h3.562v9.552a14.468 14.468 0 0 0 4.383 0v-9.552h3.269Z"
@@ -108,10 +97,7 @@ export const CustomerFooter = () => {
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stopColor="#18ACFE" />
-                                                <stop
-                                                    offset={1}
-                                                    stopColor="#0163E0"
-                                                />
+                                                <stop offset={1} stopColor="#0163E0" />
                                             </linearGradient>
                                         </defs>
                                     </svg>
@@ -142,10 +128,7 @@ export const CustomerFooter = () => {
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="w-12 h-12"
                                     >
-                                        <g
-                                            id="SVGRepo_bgCarrier"
-                                            strokeWidth="0"
-                                        ></g>
+                                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                                         <g
                                             id="SVGRepo_tracerCarrier"
                                             strokeLinecap="round"
@@ -209,10 +192,7 @@ export const CustomerFooter = () => {
                                                         offset="0.79309"
                                                         stopColor="#C62F94"
                                                     ></stop>{' '}
-                                                    <stop
-                                                        offset="1"
-                                                        stopColor="#8A3AC8"
-                                                    ></stop>{' '}
+                                                    <stop offset="1" stopColor="#8A3AC8"></stop>{' '}
                                                 </radialGradient>{' '}
                                                 <radialGradient
                                                     id="paint1_radial_87_7153"

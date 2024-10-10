@@ -5,20 +5,18 @@ import { z } from 'zod'
 import { addressService, customerService } from '@/services'
 import { useForm } from 'react-hook-form'
 import { DatePicker, Table, Modal } from 'antd'
-import { disabledDoB, disabledPastDate } from '@/utils'
+import { disabledDoB, disabledPastDate, phoneNumberPattern } from '@/utils'
 import { AlertModal, MyToast } from '../common'
 import { AddCustomerModal } from '.'
 
-const phoneNumberPattern = /^0[3-9]\d{8}$/
-
 const lookupSchema = z.object({
-    lookupCustomerCode: z
+    customerIdentifier: z
         .string()
         .min(10, { message: 'Mã KH hoặc SĐT tối thiểu 10 ký tự' })
         .refine((value) => phoneNumberPattern.test(value) || value.length > 5, {
             message: 'Mã KH hoặc SĐT không hợp lệ',
         }),
-    lookupCustomerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
+    customerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
 })
 
 const columns = [
@@ -70,8 +68,8 @@ export const CustomerLookup = () => {
     } = useForm({
         resolver: zodResolver(lookupSchema),
         defaultValues: {
-            lookupCustomerCode: '',
-            lookupCustomerDob: null,
+            customerIdentifier: '',
+            customerDob: null,
         },
     })
 
@@ -82,9 +80,7 @@ export const CustomerLookup = () => {
     const onSubmitLookup = async (data) => {
         const lookupdata = {
             ...data,
-            lookupCustomerDob: data.lookupCustomerDob
-                ? dayjs(data.lookupCustomerDob).format('DD-MM-YYYY')
-                : null,
+            customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
 
         try {
@@ -132,14 +128,14 @@ export const CustomerLookup = () => {
                         <div className="flex flex-col space-y-2 font-semibold flex-1">
                             <label className="block mb-1 font-medium">Nhập Mã KH / SĐT:</label>
                             <input
-                                {...registerLookup('lookupCustomerCode')}
+                                {...registerLookup('customerIdentifier')}
                                 type="text"
                                 placeholder="Số điện thoại / Mã KH"
                                 className="input input-bordered input-info w-full  h-12"
                             />
-                            {errorsLookup.lookupCustomerCode && (
+                            {errorsLookup.customerIdentifier && (
                                 <span className="w-fit text-red-500 text-sm">
-                                    {errorsLookup.lookupCustomerCode.message}
+                                    {errorsLookup.customerIdentifier.message}
                                 </span>
                             )}
                         </div>
@@ -147,21 +143,21 @@ export const CustomerLookup = () => {
                         <div className="flex flex-col space-y-2 font-semibold flex-1">
                             <label className="block mb-1 font-medium">Ngày/tháng/năm sinh:</label>
                             <DatePicker
-                                {...registerLookup('lookupCustomerDob', {
+                                {...registerLookup('customerDob', {
                                     valueAsDate: true,
                                 })}
                                 format="DD-MM-YYYY"
                                 disabledDate={disabledDoB}
                                 onChange={(date) =>
-                                    setValueLookup('lookupCustomerDob', date?.toDate() || null, {
+                                    setValueLookup('customerDob', date?.toDate() || null, {
                                         shouldValidate: true,
                                     })
                                 }
                                 style={{ height: '48px' }} // Căn chỉnh chiều cao của DatePicker
                             />
-                            {errorsLookup.lookupCustomerDob && (
+                            {errorsLookup.customerDob && (
                                 <span className="w-fit text-red-500 text-sm">
-                                    {errorsLookup.lookupCustomerDob.message}
+                                    {errorsLookup.customerDob.message}
                                 </span>
                             )}
                         </div>

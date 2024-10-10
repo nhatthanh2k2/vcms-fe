@@ -11,6 +11,9 @@ export const employeeService =  {
     getAllEmployees: () => {
         return axios.get(api_url + "/employees/all")
     },
+    getDoctorAndNurse: () => {
+        return axios.get(api_url + "/employees/getDoctorAndNurse")
+    },
     bookVaccination: (request) => {
         return api.post("/employees/book/vaccination", request)
     },

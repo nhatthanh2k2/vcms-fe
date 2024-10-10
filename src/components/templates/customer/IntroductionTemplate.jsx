@@ -2,11 +2,11 @@ import React from 'react'
 
 export const IntroductionTemplate = () => {
     return (
-        <div className="mt-10">
+        <div>
             <div className=" bg-bg-vaccination">
-                <div className="mx-32 flex flex-col">
+                <div className="mx-32 flex flex-col pt-5">
                     <span className="text-blue-700 mx-auto my-5 text-3xl uppercase font-bold">
-                        "Sức khỏe của bạn, sứ mệnh của chúng tôi!"
+                        "Sức khỏe của bạn - sứ mệnh của chúng tôi!"
                     </span>
                     <span className="text-justify">
                         Là 1 trong những đơn vị dẫn đầu ngành tiêm chủng vắc xin dịch vụ tại Việt
