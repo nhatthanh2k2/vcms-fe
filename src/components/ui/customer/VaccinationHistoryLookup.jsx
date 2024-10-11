@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { DatePicker } from 'antd'
-import { disabledDoB, phoneNumberPattern } from '@/utils'
+import { calculateAge, disabledDoB, phoneNumberPattern } from '@/utils'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyToast } from '../common'
-import { customerService } from '@/services'
+import { customerService, vaccinePackageService } from '@/services'
 import dayjs from 'dayjs'
+import { VaccinationHistoryTable } from '.'
 
 const lookupSchema = z.object({
     customerIdentifier: z
@@ -19,6 +20,54 @@ const lookupSchema = z.object({
 })
 
 export const VaccinationHistoryLookup = () => {
+    const [customer, setCustomer] = useState()
+    const [vaccinationRecordList, setVaccinationRecordList] = useState([])
+    const [vaccinePackageList, setVaccinePackageList] = useState([])
+    const [packageSelected, setPackageSelected] = useState(0)
+    const [packageDetailList, setPackageDetailList] = useState([])
+    const [filteredPackageDetailList, setFilteredPackageDetailList] = useState([])
+
+    useEffect(() => {
+        vaccinePackageService
+            .getDefaultPackages()
+            .then((response) => setVaccinePackageList(response.data.result))
+            .catch((error) => console.log('Get defaultpackage failed!'))
+    }, [])
+
+    useEffect(() => {
+        if (customer?.customerDob) {
+            const customerAge = calculateAge(customer.customerDob)
+
+            if (customerAge <= 2) {
+                setPackageSelected(8)
+            } else if (customerAge > 2 && customerAge <= 9) {
+                setPackageSelected(4)
+            } else if (customerAge > 9 && customerAge <= 18) {
+                setPackageSelected(3)
+            } else {
+                setPackageSelected(1)
+            }
+        }
+    }, [customer])
+
+    useEffect(() => {
+        if (packageSelected) {
+            vaccinePackageService
+                .getDetailsOfPackage(packageSelected)
+                .then((response) => setPackageDetailList(response.data.result))
+                .catch((error) => console.log('Get detail of package failed!'))
+        }
+        setFilteredPackageDetailList(
+            packageDetailList.filter((detail) => {
+                const vaccineId = detail.vaccineResponse.vaccineId
+                const isInVaccinationRecordList = vaccinationRecordList.some(
+                    (record) => record.vaccineResponse.vaccineId === vaccineId
+                )
+                return !isInVaccinationRecordList
+            })
+        )
+    }, [packageSelected])
+
     const {
         register,
         handleSubmit,
@@ -32,6 +81,24 @@ export const VaccinationHistoryLookup = () => {
         },
     })
 
+    const getMyRecords = async (request) => {
+        try {
+            const response = await customerService.getMyVaccinationHistory(request)
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    setVaccinationRecordList(response.data.result)
+                    if (vaccinationRecordList.length === 0) {
+                        MyToast('info', 'Bạn chưa có dữ liệu tiêm chủng tại trung tâm')
+                    } else {
+                        MyToast('success', 'Lấy lịch sử tiêm thành công')
+                    }
+                }
+            }
+        } catch (error) {
+            MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+        }
+    }
+
     const onSubmit = async (data) => {
         const lookupdata = {
             ...data,
@@ -40,12 +107,15 @@ export const VaccinationHistoryLookup = () => {
 
         try {
             const response = await customerService.lookupCustomer(lookupdata)
+            console.log(response.data)
 
             if (response.status === 200) {
                 if (response.data.code === 1000) {
-                    MyToast('success', 'Tra cứu thành công')
+                    MyToast('success', 'Tra cứu thông tin khách hàng thành công')
+                    setCustomer(response.data.result)
+                    await getMyRecords(lookupdata)
                 } else {
-                    MyToast('error', 'Tra cứu không thành công')
+                    MyToast('error', 'Tra cứu thông tin khách hàng không thành công')
                 }
             }
         } catch (error) {
@@ -65,7 +135,7 @@ export const VaccinationHistoryLookup = () => {
         <div className="flex flex-col mx-20 mt-10">
             <div className="relative">
                 <div className="uppercase text-2xl text-blue-600 font-satoshi font-bold">
-                    Lịch sử tiêm chủng
+                    Tra cứu lịch sử tiêm chủng
                 </div>
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
@@ -123,6 +193,78 @@ export const VaccinationHistoryLookup = () => {
                         </button>
                     </div>
                 </form>
+            </div>
+
+            <div>
+                <span className="text-xl font-bold text-blue-600">Thông tin khách hàng</span>
+                <div className="flex space-x-5 mt-2">
+                    <input
+                        value={customer?.customerFullName}
+                        readOnly
+                        type="text"
+                        placeholder="Họ và tên"
+                        className="input input-bordered input-success input-sm w-full max-w-xs"
+                    />
+
+                    <input
+                        value={customer?.customerPhone}
+                        readOnly
+                        type="text"
+                        placeholder="Số điện thoại:"
+                        className="input input-bordered input-success input-sm w-full max-w-xs"
+                    />
+
+                    <input
+                        value={
+                            customer?.customerProvince &&
+                            customer?.customerDistrict &&
+                            customer?.customerWard
+                                ? customer.customerWard +
+                                  ', ' +
+                                  customer.customerDistrict +
+                                  ', ' +
+                                  customer.customerProvince
+                                : ''
+                        }
+                        readOnly
+                        type="text"
+                        placeholder="Địa chỉ:"
+                        className="input input-bordered input-success input-sm w-full max-w-lg"
+                    />
+                </div>
+            </div>
+
+            {vaccinationRecordList.length === 0 ? (
+                <div className="mt-5">
+                    <span className="text-xl font-bold text-blue-600">Vắc xin bạn nên tiêm</span>
+                    <div className="flex flex-wrap">
+                        {packageDetailList.map((detail, index) => (
+                            <div key={index} className="w-1/4 p-2">
+                                <div className="border rounded-lg p-4">
+                                    <h3>{detail.vaccineResponse.vaccineName}</h3>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                <div className="mt-5">
+                    <span className="text-xl font-bold text-blue-600">Vắc xin bạn nên tiêm 2</span>
+                    <div className="flex flex-wrap">
+                        {filteredPackageDetailList.map((detail, index) => (
+                            <div key={index} className="w-1/4 p-2">
+                                <div className="border rounded-lg p-4">
+                                    <h3>{detail.vaccineResponse.vaccineName}</h3>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <div className="mt-5">
+                <span className="text-xl font-bold text-blue-600 mb-2">Bảng vắc xin đã tiêm</span>
+                <VaccinationHistoryTable vaccinationRecordList={vaccinationRecordList} />
             </div>
         </div>
     )

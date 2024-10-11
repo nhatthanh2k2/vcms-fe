@@ -1,8 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-export const UpdateEmployeeAvatarTab = () => {
-    const employee = JSON.parse(sessionStorage.getItem('employeeProfile'))
-
+export const UpdateEmployeeAvatarTab = ({ employee }) => {
     return (
         <div className="flex flex-row">
             <div>

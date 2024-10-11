@@ -1,2 +1,2 @@
 export * from './Login'
-export * from './ReceptionPage'
+export * from './EmployeeHomePage'

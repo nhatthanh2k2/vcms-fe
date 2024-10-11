@@ -9,7 +9,7 @@ export const convertPackageType = (type) => {
         case '24-MONTH':
             return '(Gói 24 tháng)'
         default:
-            return '' // Hoặc return một giá trị mặc định nào đó
+            return '' 
     }
 }
 
@@ -34,5 +34,18 @@ export const convertAppointmentStatus = (status) => {
             return 'Hủy lịch'
         default:
             break;
+    }
+}
+
+export const convertQualification = (qual) => {
+    switch (qual) {
+        case 'BS':
+            return 'Bác sĩ'
+        case 'ĐD':
+            return 'Điều dưỡng'
+        case 'ĐH':
+            return 'Đại học'
+        default:
+            return qual
     }
 }

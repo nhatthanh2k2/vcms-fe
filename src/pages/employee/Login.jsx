@@ -26,7 +26,6 @@ export const Login = () => {
 
         try {
             const response = await authService.login(authEmployeeDTO)
-            console.log(response.data)
             const { token, employeeResponse } = response.data.result
             const employeeProfile = {
                 ...employeeResponse,
@@ -40,11 +39,10 @@ export const Login = () => {
 
             setTimeout(() => {
                 if (role === 'ADMIN') navigate('/admin')
-                else if (role === 'RECEPTIONIST') navigate('/nhan-vien/le-tan')
-                else navigate('/dang-nhap')
+                else navigate('/nhan-vien')
             }, 2000)
         } catch (error) {
-            MyToast('error', 'Đăng Nhập Thất Bại')
+            MyToast('error', 'Đăng Nhập Không Thành Công')
         }
     }
 

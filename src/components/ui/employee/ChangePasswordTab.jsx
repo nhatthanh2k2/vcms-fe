@@ -2,6 +2,8 @@ import React from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { employeeService } from '@/services'
+import { MyToast } from '../common'
 
 const changePasswordSchema = z
     .object({
@@ -20,7 +22,7 @@ const changePasswordSchema = z
         path: ['confirmPassword'],
     })
 
-export const ChangePasswordTab = () => {
+export const ChangePasswordTab = ({ employee }) => {
     const {
         register: registerChange,
         handleSubmit: handleSubmitChange,
@@ -34,8 +36,32 @@ export const ChangePasswordTab = () => {
         },
     })
 
-    const onSubmitChange = (data) => {
-        console.log(data)
+    const onSubmitChange = async (data) => {
+        const changeData = {
+            employeeUsername: employee.employeeProfile.employeeUsername,
+            employeePassword: data.currentPassword,
+            newPassword: data.newPassword,
+        }
+        try {
+            const response = await employeeService.changePassword(changeData)
+            if (response.status === 200) {
+                if (response.data.code == 1000) {
+                    MyToast('success', 'Đổi mật khẩu thành công')
+                } else {
+                    MyToast('success', 'Có lỗi xảy ra khi đổi mật khẩu')
+                }
+            } else {
+                MyToast('success', 'Đổi mật khẩu không thành công')
+            }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    MyToast('error', 'Không tìm thấy người dùng')
+                } else if (error.response.status === 400) {
+                    MyToast('error', 'Mật khẩu hiện tại không khớp')
+                }
+            }
+        }
     }
 
     return (

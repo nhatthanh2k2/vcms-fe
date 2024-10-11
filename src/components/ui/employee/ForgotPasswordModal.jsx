@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { DatePicker, Modal } from 'antd'
 import dayjs from 'dayjs'
 import weekday from 'dayjs/plugin/weekday'
-import localeData from 'dayjs/plugin/localeData' // Import plugin localeData
+import localeData from 'dayjs/plugin/localeData'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { MyToast } from '../common'
+import { employeeService } from '@/services'
 
 dayjs.extend(localeData)
 dayjs.extend(weekday)
@@ -54,6 +56,7 @@ export const ForgotPasswordModal = ({
         handleSubmit,
         formState: { errors },
         clearErrors,
+        reset,
     } = useForm({
         resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
@@ -64,9 +67,31 @@ export const ForgotPasswordModal = ({
         },
     })
 
-    const onSubmit = (data) => {
-        console.log('Form Data:', data) // Kiểm tra dữ liệu form
+    const onSubmit = async (data) => {
+        const resetData = {
+            employeeUsername: data.employeeUsername,
+            employeeEmail: data.employeeEmail,
+            newPassword: data.newPassword,
+        }
+        try {
+            const response = await employeeService.resetPassword(resetData)
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    MyToast('success', 'Làm mới mật khẩu thành công')
+                    reset()
+                } else {
+                    MyToast('error', 'Xảy ra lỗi trong quá trình làm mới mật khẩu')
+                }
+            } else MyToast('error', 'Làm mới mật khẩu không thành công')
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    MyToast('error', 'Tài khoản không tồn tại')
+                }
+            }
+        }
     }
+
     return (
         <Modal
             title={

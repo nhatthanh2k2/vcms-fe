@@ -36,12 +36,24 @@ export const CustomizableVaccinePackage = ({
     const [packageDetailList, setPackageDetailList] = useState([])
     const [filteredVaccineList, setFilteredVaccineList] = useState([])
     const [payment, setPayment] = useState('')
+    const [packagePrice, setPackagePrice] = useState(0)
+
+    // console.log('Package Selected:', packageSelected)
+    //console.log('Package Detail List:', packageDetailList)
+    //console.log('Filtered Vaccine List:', filteredVaccineList)
+    // console.log('Payment:', payment)
+    //console.log(vaccinePackageList)
 
     const handleChosePackage = async (option) => {
         setPackageSelected(option)
         const response = await vaccinePackageService.getDetailsOfPackage(option)
         setPackageDetailList(response.data.result)
     }
+
+    useEffect(() => {
+        const pack = vaccinePackageList.find((p) => p.vaccinePackageId === packageSelected)
+        if (pack) setPackagePrice(pack.vaccinePackagePrice)
+    }, [packageSelected])
 
     useEffect(() => {
         const filteredData = batchDetailList.filter(
@@ -53,9 +65,6 @@ export const CustomizableVaccinePackage = ({
         )
         setFilteredVaccineList(filteredData)
     }, [packageDetailList])
-
-    //console.log(batchDetailList)
-    //console.log(packageDetailList)
 
     const {
         register,
@@ -122,10 +131,18 @@ export const CustomizableVaccinePackage = ({
         )
 
         if (batchDetailToAdd) {
+            console.log('Batch Detail:', batchDetailToAdd)
             const doseCount =
                 packageSelected <= 3
                     ? batchDetailToAdd.vaccineResponse.vaccineAdultDoseCount
                     : batchDetailToAdd.vaccineResponse.vaccineChildDoseCount
+
+            const vaccinePrice = batchDetailToAdd.batchDetailVaccinePrice
+
+            // console.log('Dose Count:', doseCount)
+            // console.log('Vaccine Price:', vaccinePrice)
+
+            setPackagePrice((prevPrice) => prevPrice + doseCount * vaccinePrice)
 
             setPackageDetailList((prev) => [
                 ...prev,
@@ -149,10 +166,21 @@ export const CustomizableVaccinePackage = ({
         )
 
         if (vaccineToRemove) {
+            const { doseCount } = vaccineToRemove
+
+            const batchDetail = batchDetailList.find(
+                (detail) => detail.vaccineResponse.vaccineId === vaccineId
+            )
+
+            if (batchDetail) {
+                const vaccinePrice = batchDetail.batchDetailVaccinePrice
+                setPackagePrice((prevPrice) => prevPrice - doseCount * vaccinePrice)
+            }
+
             setFilteredVaccineList((prev) => [
                 ...prev,
                 {
-                    vaccineResponse: vaccineToRemove,
+                    vaccineResponse: vaccineToRemove.vaccineResponse,
                 },
             ])
 
@@ -312,10 +340,10 @@ export const CustomizableVaccinePackage = ({
                             value={packageSelected}
                             onChange={handleChosePackage}
                             placeholder="Chọn gói vắc xin"
-                            options={vaccinePackageList.map((pack) => ({
+                            options={vaccinePackageList.map((pack, index) => ({
                                 value: pack.vaccinePackageId,
                                 label: (
-                                    <span>
+                                    <span key={index}>
                                         {pack.vaccinePackageName}{' '}
                                         {convertPackageType(pack.vaccinePackageType)}
                                     </span>
@@ -348,6 +376,11 @@ export const CustomizableVaccinePackage = ({
                                 rowClassName={(record, index) =>
                                     index % 2 === 0 ? 'even-row' : 'odd-row'
                                 }
+                                footer={() => (
+                                    <div className="text-center text-xl font-semibold">
+                                        Tổng giá: {packagePrice.toLocaleString()} VND
+                                    </div>
+                                )}
                             />
                         </div>
 

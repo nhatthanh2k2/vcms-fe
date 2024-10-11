@@ -1,5 +1,5 @@
 import React from 'react'
-import { AdminLayout, CustomerLayout, EmployeeLayout } from '@/components/layouts'
+import { AdminLayout, CustomerLayout } from '@/components/layouts'
 import {
     OrderPage,
     AppointmentPage,
@@ -7,11 +7,11 @@ import {
     IntroductionPage,
     MedicalTeamPage,
     Login,
-    ReceptionPage,
     VaccineDetailPage,
     VaccineListPage,
     PageNotFound,
     VaccinationHistoryPage,
+    EmplyeeHomePage,
 } from '@/pages'
 import { PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -102,7 +102,7 @@ export const router = [
         children: [],
     },
     {
-        path: '/nhan-vien/le-tan',
-        element: <ReceptionPage />,
+        path: '/nhan-vien',
+        element: <EmplyeeHomePage />,
     },
 ]

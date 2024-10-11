@@ -74,6 +74,8 @@ button:focus-visible {
   color: #1890ff;
 }
 
+
+
 .limited-text {
   display: -webkit-box;          /* Để sử dụng tính năng của flexbox */
   -webkit-box-orient: vertical; /* Để chỉ định hướng */
@@ -84,3 +86,4 @@ button:focus-visible {
   line-height: 1.5;             /* Đặt chiều cao dòng */
   max-height: 4.5em;              /* Đặt chiều cao tối đa cho 2 dòng (2 * line-height) */
 }
+

@@ -19,6 +19,12 @@ export const employeeService =  {
     },
     bookCustomPackage: (request) => {
         return api.post("/employees/book/custom-package", request)
+    },
+    resetPassword: (request) => {
+        return axios.post(api_url + "/employees/reset-password", request)
+    },
+    changePassword: (request) => {
+        return api.post("/employees/change-password", request)
     }
     
 }

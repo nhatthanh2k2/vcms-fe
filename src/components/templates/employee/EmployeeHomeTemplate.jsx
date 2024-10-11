@@ -284,7 +284,7 @@ export const EmployeeHomeTemplate = () => {
                 </div>
             </aside>
 
-            <main className="mx-16 mt-8 w-4/5 h-full overflow-auto ">{renderContent()}</main>
+            <main className="mx-10 mt-8 w-4/5 h-full overflow-auto ">{renderContent()}</main>
 
             <SettingProfileModal
                 handleCloseModal={handleCloseProfileModal}

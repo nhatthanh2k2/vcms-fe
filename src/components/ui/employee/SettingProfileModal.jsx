@@ -3,6 +3,7 @@ import { Modal } from 'antd'
 import { ChangePasswordTab, EmployeeProfileTab, UpdateEmployeeAvatarTab } from '.'
 
 export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) => {
+    const employee = JSON.parse(sessionStorage.getItem('employeeProfile'))
     return (
         <Modal
             title={<div className="text-center font-bold text-xl">Cài đặt hồ sơ cá nhân</div>}
@@ -28,7 +29,7 @@ export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) =
                     role="tabpanel"
                     className="tab-content bg-base-100 border-base-300 rounded-box p-6"
                 >
-                    <EmployeeProfileTab />
+                    <EmployeeProfileTab employee={employee} />
                 </div>
 
                 <input
@@ -42,7 +43,7 @@ export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) =
                     role="tabpanel"
                     className="tab-content bg-base-100 border-base-300 rounded-box p-6"
                 >
-                    <UpdateEmployeeAvatarTab />
+                    <UpdateEmployeeAvatarTab employee={employee} />
                 </div>
 
                 <input
@@ -56,7 +57,7 @@ export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) =
                     role="tabpanel"
                     className="tab-content bg-base-100 border-base-300 rounded-box p-6"
                 >
-                    <ChangePasswordTab />
+                    <ChangePasswordTab employee={employee} />
                 </div>
             </div>
         </Modal>
