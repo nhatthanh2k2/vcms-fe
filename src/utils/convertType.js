@@ -49,3 +49,16 @@ export const convertQualification = (qual) => {
             return qual
     }
 }
+
+export const convertPaymentType = (payment) => {
+    switch (payment) {
+        case 'PAYPAL':
+            return 'Paypal'
+        case 'TRANSFER':
+            return 'Tiền mặt'
+        case 'CASH':
+            return 'Chuyển khoản'
+        default:
+            return payment
+    }
+}

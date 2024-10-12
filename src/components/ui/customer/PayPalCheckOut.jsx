@@ -3,6 +3,7 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
 import dayjs from 'dayjs'
 import { addressService, orderService } from '@/services'
 import { MyToast } from '../common'
+import { convertVNDToUSD } from '@/utils'
 
 const initialOptions = {
     clientId: 'AVFgZHMR6yUFprkAP0XZhbGYzIjYLLcqI8ozAxD4HV4k_giJyLZ62-Jove471Fqd0bSRnenNVfU11dQx',
@@ -21,7 +22,7 @@ export const PayPalCheckOut = ({
     orderInfo,
 }) => {
     // console.log('BatchDetailIdList:', BatchDetailIdList)
-    // console.log('VaccinePackageIdList:', VaccinePackageIdList)
+    console.log('VaccinePackageIdList:', VaccinePackageIdList)
     // console.log('Total:', Total)
     // console.log('Payment:', Payment)
     // console.log('InjectionDate:', InjectionDate)
@@ -90,7 +91,7 @@ export const PayPalCheckOut = ({
                                 purchase_units: [
                                     {
                                         amount: {
-                                            value: (Total / 24000).toFixed(2),
+                                            value: convertVNDToUSD(Total),
                                             currency_code: 'USD',
                                         },
                                         shipping: {
@@ -128,8 +129,8 @@ export const PayPalCheckOut = ({
                             // Kiểm tra orderType
                             if (orderType === 'CODE') {
                                 const orderWithCodeData = {
-                                    customerCode: customer.customerCode,
-                                    customerPhone: customer.customerPhone,
+                                    customerIdentifier: customer.customerCode,
+                                    customerDob: customer.customerDob,
                                     orderTotal: Total,
                                     orderPayment: Payment,
                                     orderInjectionDate: InjectionDate,

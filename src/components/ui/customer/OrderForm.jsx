@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Alert, DatePicker, Pagination } from 'antd'
-import { batchDetailService, orderService, vaccinePackageService } from '@/services'
+import { batchDetailService, vaccinePackageService } from '@/services'
 import {
-    convertVNDToUSD,
     disabledDoB,
     formatCurrency,
     disabledPastDate,
@@ -598,24 +597,24 @@ export const OrderForm = () => {
 
                         <div className="flex gap-4">
                             <input
-                                value="transfer"
+                                value="TRANSFER"
                                 type="radio"
                                 name="radio-5"
                                 className="radio radio-success"
                                 onChange={handlePayment}
-                                checked={payment === 'transfer'}
+                                checked={payment === 'TRANSFER'}
                             />
                             <span>Thanh toán chuyển khoản</span>
                         </div>
 
                         <div className="flex gap-4">
                             <input
-                                value="paypal"
+                                value="PAYPAL"
                                 type="radio"
                                 name="radio-5"
                                 className="radio radio-success"
                                 onChange={handlePayment}
-                                checked={payment === 'paypal'}
+                                checked={payment === 'PAYPAL'}
                             />
                             <span>Thanh toán Paypal</span>
                         </div>
@@ -932,7 +931,7 @@ export const OrderForm = () => {
                                 </span>
                             </div>
                             <div className="mt-5">
-                                {payment === '' ? null : payment === 'paypal' ? (
+                                {payment === '' ? null : payment === 'PAYPAL' ? (
                                     <PayPalCheckOut
                                         BatchDetailIdList={batchDetailSelectedList}
                                         VaccinePackageIdList={vaccinePackageSelectedList}

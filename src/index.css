@@ -74,7 +74,9 @@ button:focus-visible {
   color: #1890ff;
 }
 
-
+.custom-tooltip{
+  z-index: 9999;
+}
 
 .limited-text {
   display: -webkit-box;          /* Để sử dụng tính năng của flexbox */

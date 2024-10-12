@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { batchDetailService, vaccinePackageService, vaccineService } from '@/services'
+import { authService, batchDetailService, vaccinePackageService, vaccineService } from '@/services'
 import {
     CustomerLookup,
     CustomizableVaccinePackage,
@@ -8,6 +8,7 @@ import {
     PrintVaccinationRecord,
     OrderVaccinationSchedule,
     SettingProfileModal,
+    MyToast,
 } from '@/components/ui'
 import { useNavigate } from 'react-router-dom'
 
@@ -82,6 +83,22 @@ export const EmployeeHomeTemplate = () => {
     const handleCloseProfileModal = () => {
         setIsOpenProfileModal(false)
     }
+
+    const handleLogout = async () => {
+        const token = JSON.parse(sessionStorage.getItem('token'))
+
+        try {
+            const response = await authService.logout(token)
+            if (response.status === 200) {
+                MyToast('success', 'Đăng xuất thành công')
+                sessionStorage.clear()
+                navigate('/dang-nhap')
+            }
+        } catch (error) {
+            MyToast('error', 'Xảy ra lỗi khi đăng xuất')
+        }
+    }
+
     return (
         <div className=" bg-employee overflow-hidden flex items-start min-h-screen">
             <aside className="w-1/5 bg-white shadow-md h-screen ">
@@ -92,15 +109,15 @@ export const EmployeeHomeTemplate = () => {
                                 <span className="inline text-blue-700 rounded">T-Vax</span> Company
                             </div>
                         </div>
-                        <div className="border-2 border-orange-400"></div>
+                        <div className="border-2 border-yellow-500"></div>
                         <div className="p-4">
                             <ul className="space-y-1">
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('customerLookup')}
-                                        className={`flex items-center cursor-pointer hover:bg-blue-300 hover:text-black rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex items-center cursor-pointer hover:bg-blue-200 hover:text-black rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'customerLookup'
-                                                ? 'bg-blue-300'
+                                                ? 'bg-blue-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -120,9 +137,9 @@ export const EmployeeHomeTemplate = () => {
                                         onClick={() =>
                                             setActiveTab('AppointmentVaccinationSchedule')
                                         }
-                                        className={`flex cursor-pointer hover:bg-blue-300 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'AppointmentVaccinationSchedule'
-                                                ? 'bg-blue-300'
+                                                ? 'bg-blue-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -142,9 +159,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('OrderVaccinationSchedule')}
-                                        className={`flex cursor-pointer hover:bg-blue-300 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'OrderVaccinationSchedule'
-                                                ? 'bg-blue-300'
+                                                ? 'bg-blue-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -164,9 +181,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('bookVaccination')}
-                                        className={`flex cursor-pointer hover:bg-blue-300 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'bookVaccination'
-                                                ? 'bg-blue-300'
+                                                ? 'bg-blue-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -186,9 +203,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('CustomizableVaccinePackage')}
-                                        className={`flex cursor-pointer hover:bg-blue-300 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'CustomizableVaccinePackage'
-                                                ? 'bg-blue-300'
+                                                ? 'bg-blue-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -210,9 +227,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('printVaccinationRecord')}
-                                        className={`flex cursor-pointer hover:bg-blue-300 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'printVaccinationRecord'
-                                                ? 'bg-blue-300'
+                                                ? 'bg-blue-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -250,7 +267,7 @@ export const EmployeeHomeTemplate = () => {
                     <div className="p-4 flex flex-col">
                         <div
                             onClick={handleOpenProfileModal}
-                            className="flex bg-white cursor-pointer hover:bg-blue-300 rounded-xl font-bold text-sm text-black py-3 px-4"
+                            className="flex bg-white cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm text-black py-3 px-4"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -265,8 +282,9 @@ export const EmployeeHomeTemplate = () => {
 
                         <div className="flex items-center">
                             <button
+                                onClick={handleLogout}
                                 type="button"
-                                className="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
+                                className="inline-flex items-center justify-center hover:bg-blue-200 h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -277,8 +295,8 @@ export const EmployeeHomeTemplate = () => {
                                 >
                                     <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
                                 </svg>
-                            </button>{' '}
-                            <span className="font-bold text-sm ml-2">Logout</span>
+                                <span className="font-bold text-sm ml-2">Đăng xuất</span>
+                            </button>
                         </div>
                     </div>
                 </div>

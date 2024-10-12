@@ -25,6 +25,8 @@ export const employeeService =  {
     },
     changePassword: (request) => {
         return api.post("/employees/change-password", request)
-    }
+    },
+    
+    
     
 }

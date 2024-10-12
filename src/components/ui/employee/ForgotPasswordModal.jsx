@@ -43,13 +43,6 @@ export const ForgotPasswordModal = ({
             console.log('Ngày không hợp lệ')
         }
     }
-    {
-        /* <DatePicker
-                        defaultValue={selectedDate} // Giá trị ngày mặc định
-                        onChange={handleDateChange} // Cập nhật giá trị khi thay đổi
-                        format="DD-MM-YYYY" // Định dạng ngày hiển thị
-                    /> */
-    }
 
     const {
         register,

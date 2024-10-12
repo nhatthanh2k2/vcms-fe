@@ -14,9 +14,12 @@ export const appointmentService = {
     createAppointmentWithCustCode: (request) => {
         return axios.post(api_url + "/appointments/create-code", request)
     },
-    getAppointmentListByDate: (selectedDate) => {
-        return api.get("/appointments/list", {
+    getAppointmentListByInjectionDate: (selectedDate) => {
+        return api.get("/appointments/list/injection-date", {
             params: { selectedDate }
         });
+    },
+    updateAppointmentStatus: (request) => {
+        return api.put("/appointments/update/appointment-status", request)
     }
 }

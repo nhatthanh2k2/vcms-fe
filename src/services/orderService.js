@@ -1,6 +1,11 @@
 import axios from "axios"
+import { apiInstance } from "@/constant";
 
 const api_url = import.meta.env.VITE_VCMS_API
+
+const api = apiInstance({
+    baseURL: api_url,
+  });
 
 export const orderService = {
     createOrderWithCustomerCode: (requset) => {
@@ -8,5 +13,13 @@ export const orderService = {
     },
     createOrder: (request) => {
         return axios.post(api_url + "/orders/create", request)
+    },
+    getOrderListByInjectionDate: (selectedDate) => {
+        return api.get("/orders/list/injection-date", {
+            params: { selectedDate }
+        });
+    },
+    getAllOrderDetailByOrderId: (orderId) => {
+        return api.get(`/orders/detail/${orderId}`)
     }
 }

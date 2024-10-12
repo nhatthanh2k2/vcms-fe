@@ -235,7 +235,7 @@ export const VaccinationHistoryLookup = () => {
             </div>
 
             {vaccinationRecordList.length === 0 ? (
-                <div className="mt-5">
+                <div className="mt-2">
                     <span className="text-xl font-bold text-blue-600">Vắc xin bạn nên tiêm</span>
                     <div className="flex flex-wrap">
                         {packageDetailList.map((detail, index) => (
@@ -263,8 +263,10 @@ export const VaccinationHistoryLookup = () => {
             )}
 
             <div className="mt-5">
-                <span className="text-xl font-bold text-blue-600 mb-2">Bảng vắc xin đã tiêm</span>
-                <VaccinationHistoryTable vaccinationRecordList={vaccinationRecordList} />
+                <span className="text-xl font-bold text-blue-600">Bảng vắc xin đã tiêm</span>
+                <div className="mt-2">
+                    <VaccinationHistoryTable vaccinationRecordList={vaccinationRecordList} />
+                </div>
             </div>
         </div>
     )
