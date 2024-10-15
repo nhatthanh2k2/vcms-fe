@@ -9,6 +9,7 @@ import {
     OrderVaccinationSchedule,
     SettingProfileModal,
     MyToast,
+    AddCustomerModal,
 } from '@/components/ui'
 import { useNavigate } from 'react-router-dom'
 
@@ -99,9 +100,19 @@ export const EmployeeHomeTemplate = () => {
         }
     }
 
+    const [isOpenAddCustomerModal, SetIsOpenAddCustomerModal] = useState(false)
+
+    const handleOpenAddCustomerModal = () => {
+        SetIsOpenAddCustomerModal(true)
+    }
+
+    const handleCloseAddCustomerModal = () => {
+        SetIsOpenAddCustomerModal(false)
+    }
+
     return (
-        <div className=" bg-employee overflow-hidden flex items-start min-h-screen">
-            <aside className="w-1/5 bg-white shadow-md h-screen ">
+        <div className=" bg-employee overflow-hidden flex items-start min-h-screen ">
+            <aside className="w-1/5 bg-white shadow-md h-screen fixed top-0 left-0">
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex-grow">
                         <div className="px-4 py-6 text-center ">
@@ -130,6 +141,28 @@ export const EmployeeHomeTemplate = () => {
                                             <path d="M12 14v2a6 6 0 0 0-6 6H4a8 8 0 0 1 8-8zm0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm9.446 9.032 1.504 1.504-1.414 1.414-1.504-1.504a4 4 0 1 1 1.414-1.414zM18 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
                                         </svg>
                                         Tra cứu khách hàng
+                                    </div>
+                                </li>
+                                <li>
+                                    <div
+                                        onClick={handleOpenAddCustomerModal}
+                                        className="flex items-center cursor-pointer hover:bg-blue-200 hover:text-black rounded-xl font-bold text-sm py-3 px-4"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="w-6 h-6 text-lg mr-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <g
+                                                stroke="#000"
+                                                strokeLinecap="round"
+                                                strokeWidth={1.5}
+                                            >
+                                                <path d="M15 12h-3m0 0H9m3 0V9m0 3v3M7 3.338A9.954 9.954 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5" />
+                                            </g>
+                                        </svg>
+                                        Thêm khách hàng mới
                                     </div>
                                 </li>
                                 <li>
@@ -257,7 +290,7 @@ export const EmployeeHomeTemplate = () => {
                                                 />
                                             </g>
                                         </svg>
-                                        In phiếu tiêm
+                                        In phiếu
                                     </div>
                                 </li>
                             </ul>
@@ -302,11 +335,18 @@ export const EmployeeHomeTemplate = () => {
                 </div>
             </aside>
 
-            <main className="mx-10 mt-8 w-4/5 h-full overflow-auto ">{renderContent()}</main>
+            <main className="ml-[22%] mr-[2%] mt-8 w-4/5 h-full overflow-auto ">
+                {renderContent()}
+            </main>
 
             <SettingProfileModal
                 handleCloseModal={handleCloseProfileModal}
                 visibleProfileModal={isOpenProfileModal}
+            />
+
+            <AddCustomerModal
+                visibleAddCustomerModal={isOpenAddCustomerModal}
+                handleCloseAddCustomerModal={handleCloseAddCustomerModal}
             />
         </div>
     )

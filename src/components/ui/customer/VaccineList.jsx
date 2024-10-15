@@ -6,14 +6,17 @@ import { Pagination, Row, Col, Select } from 'antd'
 export const VaccineList = () => {
     const [vaccineList, setVaccineList] = useState([])
     const [diseaseList, setDiseaseList] = useState([])
-    const [diseaseSelected, setDiseaseSelected] = useState()
+    const [diseaseSelected, setDiseaseSelected] = useState(0)
     const [filteredVaccineList, setFilteredVaccineList] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
 
     useEffect(() => {
         vaccineService
             .getAllVaccines()
-            .then((respone) => setVaccineList(respone.data.result))
+            .then((respone) => {
+                setVaccineList(respone.data.result)
+                setFilteredVaccineList(respone.data.result)
+            })
             .catch((err) => console.log('Get vaccines failed!'))
         diseaseService
             .getAllDiseases()
@@ -26,7 +29,7 @@ export const VaccineList = () => {
     }
 
     useEffect(() => {
-        if (diseaseSelected === 'all') {
+        if (diseaseSelected === 0) {
             vaccineService
                 .getAllVaccines()
                 .then((response) => setVaccineList(response.data.result))
@@ -40,19 +43,25 @@ export const VaccineList = () => {
     }, [diseaseSelected])
 
     const handleSearch = (event) => {
-        setSearchTerm(event.target.value)
-        const filteredList = vaccineList.filter(
-            (vaccine) =>
-                vaccine.vaccinePurpose &&
-                vaccine.vaccinePurpose.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        setFilteredVaccineList(filteredList)
+        const value = event.target.value
+        setSearchTerm(value)
+
+        if (value === '') {
+            setFilteredVaccineList(vaccineList)
+        } else {
+            const filteredList = vaccineList.filter(
+                (vaccine) =>
+                    vaccine.vaccinePurpose &&
+                    vaccine.vaccinePurpose.toLowerCase().includes(value.toLowerCase())
+            )
+            setFilteredVaccineList(filteredList)
+        }
     }
 
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 12
 
-    const paginatedVaccines = vaccineList.slice(
+    const paginatedVaccines = filteredVaccineList.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     )
@@ -94,7 +103,7 @@ export const VaccineList = () => {
                             placeholder="Chọn bệnh để xem vắc xin"
                             options={[
                                 {
-                                    value: 'all',
+                                    value: 0,
                                     label: <span>Tất cả</span>,
                                 },
                                 ...diseaseList.map((disease) => ({
@@ -129,7 +138,7 @@ export const VaccineList = () => {
                 <Pagination
                     current={currentPage}
                     pageSize={pageSize}
-                    total={vaccineList.length}
+                    total={filteredVaccineList.length}
                     onChange={(page) => setCurrentPage(page)}
                     showSizeChanger={false}
                     style={{ marginTop: '20px', textAlign: 'center' }}

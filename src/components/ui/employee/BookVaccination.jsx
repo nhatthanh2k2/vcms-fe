@@ -4,8 +4,9 @@ import {
     convertPackageType,
     convertVaccineType,
     disabledDoB,
-    disabledPastDate,
+    disabledPastDateForEmployee,
     formatCurrency,
+    phoneNumberPattern,
 } from '@/utils'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,8 +14,6 @@ import { useForm } from 'react-hook-form'
 import dayjs from 'dayjs'
 import { employeeService, vaccinePackageService } from '@/services'
 import { MyToast } from '../common'
-
-const phoneNumberPattern = /^0[3-9]\d{8}$/
 
 const bookVaccineSchema = z.object({
     customerIdentifier: z
@@ -193,7 +192,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                                 valueAsDate: true,
                             })}
                             format="DD-MM-YYYY"
-                            disabledDate={disabledPastDate}
+                            disabledDate={disabledPastDateForEmployee}
                             onChange={(date) => {
                                 setValue('injectionDate', date?.toDate() || null, {
                                     shouldValidate: true,

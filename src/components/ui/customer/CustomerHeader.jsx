@@ -3,6 +3,11 @@ import { Link, useLocation } from 'react-router-dom'
 
 export const CustomerHeader = () => {
     const location = useLocation()
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen)
+    }
 
     return (
         <header className="w-full h-32 sticky top-0 z-50 bg-white border-b-2 rounded-b-xl shadow-lg font-semibold">

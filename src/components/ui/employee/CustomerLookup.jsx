@@ -107,16 +107,6 @@ export const CustomerLookup = () => {
         }
     }
 
-    const [isOpenAddCustomerModal, SetIsOpenAddCustomerModal] = useState(false)
-
-    const handleOpenAddCustomerModal = () => {
-        SetIsOpenAddCustomerModal(true)
-    }
-
-    const handleCloseAddCustomerModal = () => {
-        SetIsOpenAddCustomerModal(false)
-    }
-
     return (
         <section className="flex-col">
             <div className=" bg-base-100 shadow-md flex flex-col p-4 space-y-2">
@@ -161,29 +151,17 @@ export const CustomerLookup = () => {
                                 </span>
                             )}
                         </div>
+                        <div className="flex-1 p-8">
+                            <button
+                                type="button"
+                                onClick={handleLookupCustomer}
+                                className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md  h-12"
+                            >
+                                Tra cứu khách hàng
+                            </button>
+                        </div>
                     </div>
                 </form>
-
-                <div className="flex flex-row space-x-5">
-                    <div className="">
-                        <button
-                            type="button"
-                            onClick={handleLookupCustomer}
-                            className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md  h-12"
-                        >
-                            Tra cứu khách hàng
-                        </button>
-                    </div>
-
-                    <div className="">
-                        <button
-                            onClick={handleOpenAddCustomerModal}
-                            className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md  h-12"
-                        >
-                            Thêm khách hàng mới
-                        </button>
-                    </div>
-                </div>
             </div>
 
             <div role="tablist" className="tabs tabs-lifted mt-5">
@@ -365,11 +343,6 @@ export const CustomerLookup = () => {
             <AlertModal
                 modalId={'modal_no_info'}
                 message={'Khách hàng chưa có thông tin tại trung tâm.'}
-            />
-
-            <AddCustomerModal
-                visibleAddCustomerModal={isOpenAddCustomerModal}
-                handleCloseAddCustomerModal={handleCloseAddCustomerModal}
             />
         </section>
     )

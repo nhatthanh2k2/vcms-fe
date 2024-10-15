@@ -5,6 +5,12 @@ export const disabledPastDate = (current) => {
     return current && current < tomorrow
 }
 
+export const disabledPastDateForEmployee = (current) => {
+    const today = dayjs().startOf('day'); 
+    return current && current < today;
+}
+
+
 export const disabledDoB = (current) => {
     return current && current > dayjs().endOf('day')
 }

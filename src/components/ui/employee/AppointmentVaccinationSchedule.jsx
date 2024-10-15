@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Table, DatePicker, Select, Tooltip } from 'antd'
 import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
-import { appointmentService } from '@/services'
+import { appointmentService, customerService } from '@/services'
 import { MyToast } from '../common'
+import { PreInjectionCheckModal } from '.'
+import { getPatientInfo } from '@/utils'
 
 const options = [
     {
@@ -85,7 +87,7 @@ export const AppointmentVaccinationSchedule = () => {
             title: '',
             key: 'updateStatus',
             render: (text, record) => (
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 justify-center">
                     <div
                         onClick={(e) => {
                             handleUpdateStatus(e, record.appointmentId)
@@ -94,7 +96,7 @@ export const AppointmentVaccinationSchedule = () => {
                         <Tooltip placement="top" title="Cập nhật trạng thái">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-12 h-12 "
+                                className="w-6 h-6"
                                 fill="none"
                                 viewBox="0 0 24 24"
                             >
@@ -105,12 +107,12 @@ export const AppointmentVaccinationSchedule = () => {
                             </svg>
                         </Tooltip>
                     </div>
+
                     <div>
                         <Tooltip placement="top" title="Tạo phiếu tiêm">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-12 h-12 tooltip"
-                                data-tip="Tạo phiếu tiêm"
+                                className="w-6 h-6"
                                 viewBox="0 0 24 24"
                             >
                                 <title>{'File-New'}</title>
@@ -129,6 +131,23 @@ export const AppointmentVaccinationSchedule = () => {
                                         d="M15 4v2a2 2 0 0 0 2 2h2M12 9v6M9 12h6"
                                     />
                                 </g>
+                            </svg>
+                        </Tooltip>
+                    </div>
+
+                    <div onClick={() => handleOpenPreInjectionCheckModal(record)}>
+                        <Tooltip placement="top" title="Tạo phiếu khám sàng lọc">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-6 h-6"
+                                stroke="#000"
+                                strokeWidth={0.32}
+                                viewBox="0 0 18 18"
+                            >
+                                <path
+                                    d="M11.5 13a.5.5 0 0 0-.5.5V15H1V3h2v.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5V3h2v.5a.5.5 0 0 0 1 0v-1a.5.5 0 0 0-.5-.5H9v-.5A1.5 1.5 0 0 0 7.5 0h-3A1.5 1.5 0 0 0 3 1.5V2H.5a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5ZM4 1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V3H4Zm11.854 4.646-2-2a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 7 10.5v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .354-.146l6-6a.5.5 0 0 0 0-.708ZM8 12v-1.293l5.5-5.5L14.793 6.5l-5.5 5.5Zm-2 .5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5Zm0-3a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM8.5 7h-5a.5.5 0 0 1 0-1h5a.5.5 0 0 1 0 1Z"
+                                    data-name="Path 184"
+                                />
                             </svg>
                         </Tooltip>
                     </div>
@@ -164,6 +183,20 @@ export const AppointmentVaccinationSchedule = () => {
             }
         }
         console.log(updateStatusRequest)
+    }
+
+    const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
+    const [patientInfo, setPatientInfo] = useState(null)
+
+    const handleOpenPreInjectionCheckModal = async (record) => {
+        const result = getPatientInfo(record)
+        setPatientInfo(result)
+
+        setIsOpenPreInjectionCheckModal(true)
+    }
+
+    const handleClosePreInjectionCheckModal = () => {
+        setIsOpenPreInjectionCheckModal(false)
     }
 
     return (
@@ -208,6 +241,12 @@ export const AppointmentVaccinationSchedule = () => {
                     }}
                 />
             </div>
+
+            <PreInjectionCheckModal
+                visivlePreInjectionModal={isOpenPreInjectionCheckModal}
+                handleClosePreInjectionCheckModal={handleClosePreInjectionCheckModal}
+                patient={patientInfo}
+            />
         </section>
     )
 }

@@ -4,6 +4,7 @@ import { ChangePasswordTab, EmployeeProfileTab, UpdateEmployeeAvatarTab } from '
 
 export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) => {
     const employee = JSON.parse(sessionStorage.getItem('employeeProfile'))
+
     return (
         <Modal
             title={<div className="text-center font-bold text-xl">Cài đặt hồ sơ cá nhân</div>}

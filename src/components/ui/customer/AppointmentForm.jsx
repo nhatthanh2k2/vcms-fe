@@ -13,6 +13,7 @@ import {
     disabledPastDate,
     convertPackageType,
     convertVaccineType,
+    phoneNumberPattern,
 } from '@/utils'
 
 const appointmentSchema = z.object({
@@ -37,9 +38,20 @@ const appointmentSchema = z.object({
 })
 
 const apptCodeSchema = z.object({
-    appointmentCustomerCode: z.string().min(1, { message: 'Mã khách hàng là bắt buộc' }),
-    appointmentCustomerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
-    appointmentInjectionDate: z.date({ invalid_type_error: 'Ngày tiêm không hợp lệ' }),
+    customerIdentifier: z
+        .string()
+        .min(10, { message: 'Mã KH hoặc SĐT tối thiểu 10 ký tự' })
+        .refine((value) => phoneNumberPattern.test(value) || value.length > 5, {
+            message: 'Mã KH hoặc SĐT không hợp lệ',
+        }),
+    injectionDate: z.date({
+        invalid_type_error: 'Ngày tiêm không hợp lệ',
+        message: 'Ngày tiêm không hợp lệ',
+    }),
+    customerDob: z.date({
+        invalid_type_error: 'Ngày sinh không hợp lệ',
+        message: 'Ngày sinh không hợp lệ',
+    }),
 })
 
 export const AppointmentForm = () => {
@@ -48,7 +60,6 @@ export const AppointmentForm = () => {
     const [provinceList, setProvinceList] = useState([])
     const [districtList, setDistrictList] = useState([])
     const [wardList, setWardList] = useState([])
-
     const [selectedProvince, setSelectedProvince] = useState('')
     const [selectedDistrict, setSelectedDistrict] = useState('')
     const [selectedWard, setSelectedWard] = useState('')
@@ -182,9 +193,9 @@ export const AppointmentForm = () => {
     } = useForm({
         resolver: zodResolver(apptCodeSchema),
         defaultValues: {
-            appointmentCustomerCode: '',
-            appointmentCustomerDob: null,
-            appointmentInjectionDate: null,
+            customerIdentifier: '',
+            customerDob: null,
+            injectionDate: null,
         },
     })
 
@@ -223,35 +234,28 @@ export const AppointmentForm = () => {
     const onSubmitWithCode = async (data) => {
         try {
             const request = {
-                appointmentCustomerCode: data.appointmentCustomerCode,
-                appointmentCustomerDob: data.appointmentCustomerDob
-                    ? dayjs(data.appointmentCustomerDob).format('DD-MM-YYYY')
+                ...data,
+                customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
+                injectionDate: data.injectionDate
+                    ? dayjs(data.injectionDate).format('DD-MM-YYYY')
                     : null,
-                appointmentInjectionDate: data.appointmentInjectionDate
-                    ? dayjs(data.appointmentInjectionDate).format('DD-MM-YYYY')
-                    : null,
-                apppointmentInjectionType: injectionType,
-                appointmentBatchDetailId: batchDetailSelected,
-                appointmentVaccinePackageId: vaccinePackageSelected,
+                injectionType: injectionType,
+                batchDetailId: batchDetailSelected,
+                vaccinePackageId: vaccinePackageSelected,
             }
 
-            console.log(request)
-            var response
-            if (injectionType === 'SINGLE') {
-                response = await appointmentService.createAppointmentWithCustCode(request)
-            } else if (injectionType === 'PACKAGE') {
-                response = await appointmentService.createAppointmentWithCustCode(request)
-            }
-            console.log(response.data)
-
-            if (response.data.code === 1000) {
-                MyToast('success', 'Đăng Ký Thành Công')
+            const response = await appointmentService.createAppointmentWithCustCode(request)
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    MyToast('success', 'Đăng Ký Thành Công')
+                }
             } else {
-                MyToast('error', 'Đăng Ký Không Thành Công')
+                MyToast('error', 'Xảy ra lỗi trong quá trình đăng ký')
             }
         } catch (error) {
-            console.error('Create Appointment Failed:', error)
-            MyToast('error', 'Đăng Ký Không Thành Công')
+            if (error.response) {
+                if (error.response.status === 404) MyToast('error', 'Không tìm thấy khách hàng')
+            }
         }
     }
 
@@ -628,59 +632,31 @@ export const AppointmentForm = () => {
                                 <div className="relative z-0 w-full mb-5 group mt-5">
                                     <input
                                         type="text"
-                                        {...registerWithCode('appointmentCustomerCode')}
+                                        {...registerWithCode('customerIdentifier')}
                                         placeholder=" "
                                         className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                     />
                                     <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                         Mã khách hàng
                                     </label>
-                                    {errorsWithCode.appointmentCustomerCode && (
+                                    {errorsWithCode.customerIdentifier && (
                                         <span className="w-70 text-red-500 text-sm">
-                                            {errorsWithCode.appointmentCustomerCode.message}
-                                        </span>
-                                    )}
-                                </div>
-
-                                <div className="relative z-0 w-full mb-5 group mt-5">
-                                    <div>
-                                        <label>Ngày sinh: </label>
-                                        <DatePicker
-                                            {...registerWithCode('appointmentCustomerDob', {
-                                                valueAsDate: true,
-                                            })}
-                                            format="DD-MM-YYYY"
-                                            disabledDate={disabledDoB}
-                                            onChange={(date) =>
-                                                setValueWithCode(
-                                                    'appointmentCustomerDob',
-                                                    date?.toDate() || null,
-                                                    {
-                                                        shouldValidate: true,
-                                                    }
-                                                )
-                                            }
-                                        />
-                                    </div>
-
-                                    {errorsWithCode.appointmentCustomerDob && (
-                                        <span className="w-50 text-red-500 text-sm">
-                                            {errorsWithCode.appointmentCustomerDob.message}
+                                            {errorsWithCode.customerIdentifier.message}
                                         </span>
                                     )}
                                 </div>
 
                                 <div className="relative z-0 w-125 mb-5 group space-x-2">
-                                    <label>Chọn ngày tiêm: </label>
+                                    <label>Ngày sinh: </label>
                                     <DatePicker
-                                        {...registerWithCode('appointmentInjectionDate', {
+                                        {...registerWithCode('customerDob', {
                                             valueAsDate: true,
                                         })}
                                         format="DD-MM-YYYY"
-                                        disabledDate={disabledPastDate}
+                                        disabledDate={disabledDoB}
                                         onChange={(date) =>
                                             setValueWithCode(
-                                                'appointmentInjectionDate',
+                                                'customerDob',
                                                 date?.toDate() || null,
                                                 {
                                                     shouldValidate: true,
@@ -688,9 +664,34 @@ export const AppointmentForm = () => {
                                             )
                                         }
                                     />
-                                    {errorsWithCode.appointmentInjectionDate && (
+                                    {errorsWithCode.customerDob && (
+                                        <span className="w-50 text-red-500 text-sm">
+                                            {errorsWithCode.customerDob.message}
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="relative z-0 w-125 mb-5 group space-x-2">
+                                    <label>Chọn ngày tiêm: </label>
+                                    <DatePicker
+                                        {...registerWithCode('injectionDate', {
+                                            valueAsDate: true,
+                                        })}
+                                        format="DD-MM-YYYY"
+                                        disabledDate={disabledPastDate}
+                                        onChange={(date) =>
+                                            setValueWithCode(
+                                                'injectionDate',
+                                                date?.toDate() || null,
+                                                {
+                                                    shouldValidate: true,
+                                                }
+                                            )
+                                        }
+                                    />
+                                    {errorsWithCode.injectionDate && (
                                         <span className="w-70 text-red-500 text-sm">
-                                            {errorsWithCode.appointmentInjectionDate.message}
+                                            {errorsWithCode.injectionDate.message}
                                         </span>
                                     )}
                                 </div>

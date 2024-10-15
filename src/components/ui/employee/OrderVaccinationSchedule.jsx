@@ -3,8 +3,8 @@ import { Table, DatePicker, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { employeeService, orderService } from '@/services'
 import { MyToast } from '../common'
-import { convertPaymentType } from '@/utils'
-import { OrderDetailModal } from '.'
+import { convertPaymentType, getPatientInfo } from '@/utils'
+import { OrderDetailModal, PreInjectionCheckModal } from '.'
 
 export const OrderVaccinationSchedule = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -54,24 +54,28 @@ export const OrderVaccinationSchedule = () => {
             title: 'Số điện thoại',
             dataIndex: 'orderCustomerPhone',
             key: 'orderCustomerPhone',
+            width: 150,
             render: (text) => <span className="font-semibold">{text}</span>,
         },
         {
             title: 'Tổng tiền',
             dataIndex: 'orderTotal',
             key: 'orderTotal',
+            width: 150,
             render: (text) => <span className="font-semibold">{text.toLocaleString()} VND</span>,
         },
         {
             title: 'Hình thức thanh toán',
             dataIndex: 'orderPayment',
             key: 'orderPayment',
+            width: 150,
             render: (text) => <span className="font-semibold">{convertPaymentType(text)}</span>,
         },
         {
             title: 'Ngày đặt hàng',
             dataIndex: 'orderDate',
             key: 'orderDate',
+            width: 150,
             render: (text) => <span className="font-semibold">{text}</span>,
         },
         {
@@ -79,12 +83,11 @@ export const OrderVaccinationSchedule = () => {
             key: 'actions',
             render: (text, record) => (
                 <div className="flex space-x-2">
-                    <div>
+                    <div onClick={() => handleGetDetailOrder(record.orderId)}>
                         <Tooltip placement="top" title={'Xem đơn hàng'}>
                             <svg
-                                onClick={() => handleGetDetailOrder(record.orderId)}
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-12 h-12"
+                                className="w-6 h-6"
                                 fill="none"
                                 viewBox="0 0 24 24"
                             >
@@ -99,11 +102,12 @@ export const OrderVaccinationSchedule = () => {
                             </svg>
                         </Tooltip>
                     </div>
+
                     <div>
                         <Tooltip placement="top" title={'Tạo phiếu tiêm'}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-12 h-12"
+                                className="w-6 h-6"
                                 data-tip="Tạo phiếu tiêm"
                                 viewBox="0 0 24 24"
                             >
@@ -126,6 +130,23 @@ export const OrderVaccinationSchedule = () => {
                             </svg>
                         </Tooltip>
                     </div>
+
+                    <div onClick={() => handleOpenPreInjectionCheckModal(record)}>
+                        <Tooltip placement="top" title="Tạo phiếu khám sàng lọc">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-6 h-6"
+                                stroke="#000"
+                                strokeWidth={0.32}
+                                viewBox="0 0 18 18"
+                            >
+                                <path
+                                    d="M11.5 13a.5.5 0 0 0-.5.5V15H1V3h2v.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5V3h2v.5a.5.5 0 0 0 1 0v-1a.5.5 0 0 0-.5-.5H9v-.5A1.5 1.5 0 0 0 7.5 0h-3A1.5 1.5 0 0 0 3 1.5V2H.5a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5ZM4 1.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V3H4Zm11.854 4.646-2-2a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 7 10.5v2a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .354-.146l6-6a.5.5 0 0 0 0-.708ZM8 12v-1.293l5.5-5.5L14.793 6.5l-5.5 5.5Zm-2 .5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5Zm0-3a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5ZM8.5 7h-5a.5.5 0 0 1 0-1h5a.5.5 0 0 1 0 1Z"
+                                    data-name="Path 184"
+                                />
+                            </svg>
+                        </Tooltip>
+                    </div>
                 </div>
             ),
         },
@@ -139,6 +160,19 @@ export const OrderVaccinationSchedule = () => {
 
     const handleCloseOrderDetailModal = () => {
         setIsOpenOrderDetailModal(false)
+    }
+
+    const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
+    const [patientInfo, setPatientInfo] = useState(null)
+
+    const handleOpenPreInjectionCheckModal = async (record) => {
+        const result = getPatientInfo(record)
+        setPatientInfo(result)
+        setIsOpenPreInjectionCheckModal(true)
+    }
+
+    const handleClosePreInjectionCheckModal = () => {
+        setIsOpenPreInjectionCheckModal(false)
     }
 
     return (
@@ -188,6 +222,12 @@ export const OrderVaccinationSchedule = () => {
                 visibleOrderDetailModal={isOpenOrderDetailModal}
                 handleCloseOrderDetailModal={handleCloseOrderDetailModal}
                 orderDetailList={orderDetailList}
+            />
+
+            <PreInjectionCheckModal
+                visivlePreInjectionModal={isOpenPreInjectionCheckModal}
+                handleClosePreInjectionCheckModal={handleClosePreInjectionCheckModal}
+                patient={patientInfo}
             />
         </section>
     )

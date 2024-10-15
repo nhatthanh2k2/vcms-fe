@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { disabledDoB, disabledPastDate, convertPackageType } from '@/utils'
+import {
+    disabledDoB,
+    disabledPastDate,
+    convertPackageType,
+    disabledPastDateForEmployee,
+} from '@/utils'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -27,22 +32,18 @@ const schema = z.object({
     }),
 })
 
-export const CustomizableVaccinePackage = ({
-    vaccinePackageList,
-    vaccineList,
-    batchDetailList,
-}) => {
+export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList }) => {
     const [packageSelected, setPackageSelected] = useState(null)
     const [packageDetailList, setPackageDetailList] = useState([])
     const [filteredVaccineList, setFilteredVaccineList] = useState([])
     const [payment, setPayment] = useState('')
     const [packagePrice, setPackagePrice] = useState(0)
 
-    // console.log('Package Selected:', packageSelected)
-    //console.log('Package Detail List:', packageDetailList)
-    //console.log('Filtered Vaccine List:', filteredVaccineList)
-    // console.log('Payment:', payment)
-    //console.log(vaccinePackageList)
+    console.log('Package Selected:', packageSelected)
+    console.log('Package Detail List:', packageDetailList)
+    console.log('Filtered Vaccine List:', filteredVaccineList)
+    console.log('Payment:', payment)
+    console.log(vaccinePackageList)
 
     const handleChosePackage = async (option) => {
         setPackageSelected(option)
@@ -139,9 +140,6 @@ export const CustomizableVaccinePackage = ({
 
             const vaccinePrice = batchDetailToAdd.batchDetailVaccinePrice
 
-            // console.log('Dose Count:', doseCount)
-            // console.log('Vaccine Price:', vaccinePrice)
-
             setPackagePrice((prevPrice) => prevPrice + doseCount * vaccinePrice)
 
             setPackageDetailList((prev) => [
@@ -149,6 +147,7 @@ export const CustomizableVaccinePackage = ({
                 {
                     vaccineResponse: batchDetailToAdd.vaccineResponse,
                     doseCount: doseCount,
+                    diseaseResponse: batchDetailToAdd.diseaseResponse,
                 },
             ])
 
@@ -200,6 +199,19 @@ export const CustomizableVaccinePackage = ({
             width: 150,
         },
         {
+            title: 'Nguồn gốc',
+            dataIndex: ['vaccineResponse', 'vaccineOrigin'],
+            key: 'vaccineOrigin',
+            width: 150,
+        },
+        {
+            title: 'Phòng bệnh',
+            dataIndex: ['diseaseResponse', 'diseaseName'],
+            key: 'diseaseName',
+            width: 150,
+        },
+
+        {
             key: 'action',
             width: 50,
             render: (text, record) => (
@@ -242,6 +254,18 @@ export const CustomizableVaccinePackage = ({
                 { text: 'Người Lớn', value: 'ADULT' },
             ],
             filterMultiple: false,
+        },
+        {
+            title: 'Nguồn gốc',
+            dataIndex: ['vaccineResponse', 'vaccineOrigin'],
+            key: 'vaccineOrigin',
+            width: 150,
+        },
+        {
+            title: 'Phòng bệnh',
+            dataIndex: ['diseaseResponse', 'diseaseName'],
+            key: 'diseaseName',
+            width: 150,
         },
         {
             key: 'action',
@@ -314,7 +338,7 @@ export const CustomizableVaccinePackage = ({
                                 valueAsDate: true,
                             })}
                             format="DD-MM-YYYY"
-                            disabledDate={disabledPastDate}
+                            disabledDate={disabledPastDateForEmployee}
                             onChange={(date) => {
                                 setValue('injectionDate', date?.toDate() || null, {
                                     shouldValidate: true,
@@ -358,7 +382,7 @@ export const CustomizableVaccinePackage = ({
                 </div>
 
                 {packageSelected && (
-                    <div className="flex flex-row space-x-5">
+                    <div className="flex flex-col space-y-5">
                         <div>
                             <Table
                                 columns={packageDetailColumns}
@@ -437,7 +461,7 @@ export const CustomizableVaccinePackage = ({
                 <div className="flex justify-center">
                     <button
                         type="submit"
-                        className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                        className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                     >
                         <span className="mr-2">Đặt Mua Vắc Xin</span>
                         <svg
@@ -447,8 +471,8 @@ export const CustomizableVaccinePackage = ({
                             viewBox="0 0 24 24"
                         >
                             <path
-                                fill="currentcolor"
-                                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.1 15.1h9.9c.8 0 1.54-.5 1.84-1.23l3.02-6.63A1 1 0 0 0 21 6H5.21l-.94-2H1v2h2.17l3.61 7.59-1.35 2.44C4.79 16.3 5.42 17 6.24 17H19v-2H7.1l1.1-2z"
+                                fill="currentColor"
+                                d="M12 2a1 1 0 0 1 1 1v8h8a1 1 0 0 1 0 2h-8v8a1 1 0 0 1-2 0v-8H3a1 1 0 0 1 0-2h8V3a1 1 0 0 1 1-1z"
                             ></path>
                         </svg>
                     </button>

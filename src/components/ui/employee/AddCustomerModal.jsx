@@ -141,18 +141,30 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
             customerWard: wardData,
             customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
-        const response = await customerService.createCustomer(customerData)
-        if (response.data.code === 1000) {
-            MyToast('success', 'Thêm khách hàng thành công')
-        } else {
-            MyToast('error', 'Thêm khách hàng thành công')
+        try {
+            const response = await customerService.createCustomer(customerData)
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    MyToast('success', 'Thêm khách hàng thành công.')
+                }
+            } else MyToast('error', 'Xảy ra lỗi khi thêm khách hàng.')
+        } catch (error) {
+            if (error.response)
+                if (error.response.status === 409)
+                    MyToast('warn', 'Khách hàng đã có thông tin tại trung tâm.')
         }
     }
+
+    const handleCancel = () => {
+        handleCloseAddCustomerModal()
+        reset()
+    }
+
     return (
         <Modal
             title={<div className="text-center font-bold text-xl">Thêm khách hàng mới</div>}
             open={visibleAddCustomerModal}
-            onCancel={handleCloseAddCustomerModal}
+            onCancel={handleCancel}
             footer={false}
             width={1200}
             style={{
@@ -439,12 +451,12 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                     </div>
                 </form>
                 <div className="flex justify-center gap-5">
-                    <div class="m-3">
+                    <div className="m-3">
                         <button
                             onClick={handleAddCustomer}
-                            class="bg-white text-gray-800 font-bold rounded border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
-                            <span class="mr-2">Lưu khách hàng</span>
+                            <span className="mr-2">Lưu khách hàng</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -459,12 +471,12 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                         </button>
                     </div>
 
-                    <div class="m-3">
+                    <div className="m-3">
                         <button
-                            onClick={handleCloseAddCustomerModal}
-                            class="bg-white text-gray-800 font-bold rounded border-b-2 border-red-500 hover:border-red-600 hover:bg-red-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                            onClick={handleCancel}
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-red-500 hover:border-red-600 hover:bg-red-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
-                            <span class="mr-2">Đóng Form</span>
+                            <span className="mr-2">Đóng</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
