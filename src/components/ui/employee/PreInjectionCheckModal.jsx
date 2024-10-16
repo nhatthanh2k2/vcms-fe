@@ -37,7 +37,7 @@ const preInjectionCheckSchema = z.object({
 })
 
 export const PreInjectionCheckModal = ({
-    visivlePreInjectionModal,
+    visiblePreInjectionModal,
     handleClosePreInjectionCheckModal,
     patient,
 }) => {
@@ -62,7 +62,7 @@ export const PreInjectionCheckModal = ({
             screeningRecordBloodPressure: data.bloodPressure,
             screeningRecordHeartRate: data.heartRate,
             screeningRecordTemperature: data.bodyTemperature,
-            creeningRecordRespiratoryRate: data.respirationRate,
+            screeningRecordRespiratoryRate: data.respirationRate,
             screeningRecordChronicDiseases:
                 data.chronicDiseases === '' ? 'Không' : data.chronicDiseases,
             screeningRecordAllergies: data.allergies === '' ? 'Không' : data.allergies,
@@ -110,7 +110,7 @@ export const PreInjectionCheckModal = ({
                         Thông tin khám sàng lọc trước khi tiêm
                     </div>
                 }
-                open={visivlePreInjectionModal}
+                open={visiblePreInjectionModal}
                 onCancel={handleCancel}
                 footer={null}
                 width={1000}

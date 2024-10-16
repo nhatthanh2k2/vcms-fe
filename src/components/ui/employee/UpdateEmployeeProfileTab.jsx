@@ -1,8 +1,10 @@
+import { addressService } from '@/services'
 import { convertQualification } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { Select } from 'antd'
 
 const updateInfoSchema = z.object({
     employeeFullName: z.string().nonempty('Họ và tên là bắt buộc'),
@@ -19,8 +21,16 @@ const updateInfoSchema = z.object({
     employeeWard: z.string().nonempty('Xã/Phường là bắt buộc'),
 })
 
-export const EmployeeProfileTab = ({ employee }) => {
-    const { register, handleSubmit, setValue } = useForm({
+export const UpdateEmployeeProfileTab = ({ employee }) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setValue,
+        clearErrors,
+        reset,
+        getValues,
+    } = useForm({
         resolver: zodResolver(updateInfoSchema),
         defaultValues: {
             employeeFullName: employee.employeeProfile.employeeFullName,
@@ -41,6 +51,19 @@ export const EmployeeProfileTab = ({ employee }) => {
     const onSubmit = (data) => {
         console.log(data)
     }
+
+    const [provinceList, setProvinceList] = useState([])
+    const [districtList, setDistrictList] = useState([])
+    const [wardList, setWardList] = useState([])
+    const [selectedProvince, setSelectedProvince] = useState('')
+    const [selectedDistrict, setSelectedDistrict] = useState('')
+    const [selectedWard, setSelectedWard] = useState('')
+
+    useEffect(() => {
+        setProvinceList(addressService.getProvinceList())
+        setDistrictList(addressService.getDistrictList())
+        setWardList(addressService.getWardList())
+    }, [])
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -132,7 +155,7 @@ export const EmployeeProfileTab = ({ employee }) => {
                 <label>Địa chỉ thường trú:</label>
             </div>
 
-            <div className="flex gap-10 ">
+            {/* <div className="flex gap-10 ">
                 <div className="flex-1 space-y-2">
                     <label className="font-semibold">Tỉnh/Thành:</label>
                     <input
@@ -157,12 +180,101 @@ export const EmployeeProfileTab = ({ employee }) => {
                         className="input input-bordered input-info w-full input-sm"
                     />
                 </div>
+            </div> */}
+
+            <div className="flex flex-row space-x-4">
+                <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
+                    <label>Tỉnh/Thành:</label>
+                    <Select
+                        {...register('employeeProvince')}
+                        placeholder="Chọn Tỉnh/Thành"
+                        value={getValues('employeeProvince')}
+                        onChange={(provinceValue) => {
+                            setSelectedProvince(provinceValue)
+                            setValue(
+                                'employeeProvince',
+                                addressService.getProvincenNameByCode(provinceValue)
+                            )
+                            if (provinceValue) clearErrors('employeeProvince')
+                        }}
+                        options={provinceList.map((province) => ({
+                            value: province.code,
+                            label: province.name,
+                        }))}
+                    />
+                    {errors.employeeProvince && (
+                        <span className="w-40 text-red-500 text-sm">
+                            {errors.employeeProvince.message}
+                        </span>
+                    )}
+                </div>
+
+                <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
+                    <label>Quận/Huyện:</label>
+                    <Select
+                        {...register('employeeDistrict')}
+                        placeholder="Chọn quận/huyện"
+                        value={getValues('employeeDistrict')}
+                        onChange={(districtValue) => {
+                            if (districtValue !== selectedDistrict) {
+                                setSelectedDistrict(districtValue)
+                                setValue(
+                                    'employeeDistrict',
+                                    addressService.getDistrictNameByCode(districtValue)
+                                )
+                                if (districtValue) clearErrors('employeeDistrict')
+                            }
+                        }}
+                        //disabled={!selectedProvince}
+                        options={districtList
+                            .filter((district) => district.province_code === selectedProvince)
+                            .map((district) => ({
+                                value: district.code,
+                                label: district.name,
+                            }))}
+                        style={{ opacity: !selectedProvince ? 0.75 : 1 }}
+                    />
+                    {errors.employeeDistrict && (
+                        <span className="w-40 text-red-500 text-sm">
+                            {errors.employeeDistrict.message}
+                        </span>
+                    )}
+                </div>
+
+                <div className="relative z-0 w-full mb-5 group flex flex-col   flex-1">
+                    <label>Xã/Phường:</label>
+                    <Select
+                        {...register('employeeWard')}
+                        placeholder="Chọn xã/phường"
+                        value={getValues('employeeWard')} // Hiển thị placeholder khi chưa chọn phường/xã
+                        onChange={(wardValue) => {
+                            setSelectedWard(wardValue)
+                            setValue('employeeWard', addressService.getWardNameByCode(wardValue))
+                            if (wardValue) clearErrors('employeeWard')
+                        }}
+                        //disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                        options={wardList
+                            .filter((ward) => ward.district_code === selectedDistrict) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                            .map((ward) => ({
+                                value: ward.code,
+                                label: ward.name,
+                            }))}
+                        style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                    />
+
+                    {errors.employeeWard && (
+                        <span className="w-40 text-red-500 text-sm">
+                            {errors.employeeWard.message}
+                        </span>
+                    )}
+                </div>
             </div>
 
-            <div></div>
-            <button type="submit" className="btn btn-primary mt-5">
-                Cập nhật
-            </button>
+            <div className="flex justify-center">
+                <button type="submit" className="btn btn-primary mt-5">
+                    Cập nhật
+                </button>
+            </div>
         </form>
     )
 }

@@ -146,8 +146,10 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4 text-orange-500">Đăng ký vắc xin</h2>
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+                Đăng ký vắc xin
+            </h1>
+            <form className="space-y-4 mt-5" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex space-x-5">
                     <div className="flex-1 flex flex-col">
                         <label className="block mb-1 font-medium">Mã KH / SĐT:</label>

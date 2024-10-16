@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, DatePicker, Pagination } from 'antd'
+import { Select, DatePicker, Pagination } from 'antd'
 import { batchDetailService, vaccinePackageService } from '@/services'
 import {
     disabledDoB,
@@ -13,7 +13,6 @@ import { addressService } from '@/services/addressService'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { QRCode } from 'antd'
 import dayjs from 'dayjs'
 import { customerService } from '@/services/customerService'
 import { AlertModal, ModalTransfer, MyToast } from '../common'
@@ -60,6 +59,12 @@ export const OrderForm = () => {
     const [injectionDate, setInjectionDate] = useState(null)
     const [vaccinePackageSelectedList, setVaccinePackageSelectedList] = useState([])
     const [orderType, setOrderType] = useState('')
+    const [provinceList, setProvinceList] = useState([])
+    const [districtList, setDistrictList] = useState([])
+    const [wardList, setWardList] = useState([])
+    const [selectedProvince, setSelectedProvince] = useState('')
+    const [selectedDistrict, setSelectedDistrict] = useState('')
+    const [selectedWard, setSelectedWard] = useState('')
 
     useEffect(() => {
         batchDetailService
@@ -118,80 +123,11 @@ export const OrderForm = () => {
         setPayment(e.target.value)
     }
 
-    const [provinceList, setProvinceList] = useState([])
-    const [districtList, setDistrictList] = useState([])
-    const [wardList, setWardList] = useState([])
-    const [selectedProvince, setSelectedProvince] = useState('')
-    const [selectedDistrict, setSelectedDistrict] = useState('')
-    const [selectedWard, setSelectedWard] = useState('')
-    const [provinceData, setProvinceData] = useState('')
-    const [districtData, setDistrictData] = useState('')
-    const [wardData, setWardData] = useState('')
-
     useEffect(() => {
-        addressService
-            .getProvinceList()
-            .then((response) => setProvinceList(response.data))
-            .catch((error) => console.error('Error fetching provinces:', error))
+        setProvinceList(addressService.getProvinceList())
+        setDistrictList(addressService.getDistrictList())
+        setWardList(addressService.getWardList())
     }, [])
-
-    useEffect(() => {
-        if (selectedProvince) {
-            addressService
-                .getDistrictList()
-                .then((response) => {
-                    const filteredDistricts = response.data.filter(
-                        (district) => district.province_code === Number(selectedProvince)
-                    )
-                    setDistrictList(filteredDistricts)
-                    setSelectedDistrict('')
-                    setSelectedWard('')
-                    setValue('orderCustomerDistrict', '')
-                    setValue('orderCustomerWard', '')
-                })
-                .catch((error) => console.error('Error fetching districts:', error))
-        } else {
-            setDistrictList([])
-        }
-    }, [selectedProvince])
-
-    useEffect(() => {
-        if (selectedDistrict) {
-            addressService
-                .getWardList()
-                .then((response) => {
-                    const filteredWards = response.data.filter(
-                        (ward) => ward.district_code === Number(selectedDistrict)
-                    )
-                    setWardList(filteredWards)
-                    setSelectedWard('')
-                })
-                .catch((error) => console.error('Error fetching wards:', error))
-        } else {
-            setWardList([])
-        }
-    }, [selectedDistrict])
-
-    useEffect(() => {
-        addressService
-            .getProvinceByCode(selectedProvince)
-            .then((response) => setProvinceData(response.data.name))
-            .catch((err) => console.log('Get Province Failed!'))
-    }, [selectedProvince])
-
-    useEffect(() => {
-        addressService
-            .getDistrictByCode(selectedDistrict)
-            .then((response) => setDistrictData(response.data.name))
-            .catch((err) => console.log('Get District Failed!'))
-    }, [selectedDistrict])
-
-    useEffect(() => {
-        addressService
-            .getWardByCode(selectedWard)
-            .then((response) => setWardData(response.data.name))
-            .catch((err) => console.log('Get Ward Failed!'))
-    }, [selectedWard])
 
     const {
         register,
@@ -480,31 +416,25 @@ export const OrderForm = () => {
                                 </div>
                             </div>
 
-                            <div className="relative z-0 w-full mb-5 group">
+                            <div className="relative z-0 w-full mb-2 group">
                                 <label>Địa chỉ thường trú:</label>
                             </div>
 
-                            <div className="flex flex-row space-x-4 w-125">
-                                <div className="relative z-0 w-full mb-5 group">
+                            <div className="flex flex-row space-x-4">
+                                <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                     <label>Tỉnh/Thành:</label>
-                                    <select
-                                        {...register('orderCustomerProvince')}
-                                        onChange={(e) => {
-                                            const provinceValue = e.target.value
+                                    <Select
+                                        placeholder="Chọn Tỉnh/Thành"
+                                        onChange={(provinceValue) => {
                                             setSelectedProvince(provinceValue)
                                             setValue('orderCustomerProvince', provinceValue)
                                             if (provinceValue) clearErrors('orderCustomerProvince')
                                         }}
-                                        value={selectedProvince}
-                                        className="max-h-20 overflow-y-auto block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                    >
-                                        <option value="">Chọn tỉnh thành</option>
-                                        {provinceList.map((province) => (
-                                            <option key={province.code} value={province.code}>
-                                                {province.name}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        options={provinceList.map((province) => ({
+                                            value: province.code,
+                                            label: province.name,
+                                        }))}
+                                    />
                                     {errors.orderCustomerProvince && (
                                         <span className="w-40 text-red-500 text-sm">
                                             {errors.orderCustomerProvince.message}
@@ -512,28 +442,35 @@ export const OrderForm = () => {
                                     )}
                                 </div>
 
-                                <div className="relative z-0 w-full mb-5 group">
+                                <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                     <label>Quận/Huyện:</label>
-                                    <select
-                                        {...register('orderCustomerDistrict')}
-                                        onChange={(e) => {
-                                            const districtValue = e.target.value
-                                            setSelectedDistrict(districtValue)
-                                            setValue('orderCustomerDistrict', districtValue)
-                                            if (districtValue) clearErrors('orderCustomerDistrict')
+                                    <Select
+                                        placeholder="Chọn quận/huyện"
+                                        value={selectedDistrict || undefined}
+                                        onChange={(value) => {
+                                            if (value !== selectedDistrict) {
+                                                setSelectedDistrict(value)
+                                                setValue('orderCustomerDistrict', value)
+                                                if (value) clearErrors('orderCustomerDistrict')
+                                            }
                                         }}
-                                        value={selectedDistrict}
-                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                         disabled={!selectedProvince}
-                                    >
-                                        <option value="">Chọn quận huyện</option>
-                                        {selectedProvince &&
-                                            districtList.map((district) => (
-                                                <option key={district.code} value={district.code}>
-                                                    {district.name}
-                                                </option>
-                                            ))}
-                                    </select>
+                                        options={
+                                            selectedProvince
+                                                ? districtList
+                                                      .filter(
+                                                          (district) =>
+                                                              district.province_code ===
+                                                              selectedProvince
+                                                      )
+                                                      .map((district) => ({
+                                                          value: district.code,
+                                                          label: district.name,
+                                                      }))
+                                                : []
+                                        }
+                                        style={{ opacity: !selectedProvince ? 0.75 : 1 }}
+                                    />
                                     {errors.orderCustomerDistrict && (
                                         <span className="w-40 text-red-500 text-sm">
                                             {errors.orderCustomerDistrict.message}
@@ -541,28 +478,34 @@ export const OrderForm = () => {
                                     )}
                                 </div>
 
-                                <div className="relative z-0 w-full mb-5 group text-nowrap">
+                                <div className="relative z-0 w-full mb-5 group flex flex-col   flex-1">
                                     <label>Xã/Phường:</label>
-                                    <select
-                                        {...register('orderCustomerWard')}
-                                        onChange={(e) => {
-                                            const wardValue = e.target.value
-                                            setSelectedWard(wardValue)
-                                            setValue('orderCustomerWard', wardValue)
-                                            if (wardValue) clearErrors('orderCustomerWard')
+                                    <Select
+                                        placeholder="Chọn xã/phường"
+                                        value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                        onChange={(value) => {
+                                            setSelectedWard(value)
+                                            setValue('orderCustomerWard', value)
+                                            if (value) clearErrors('orderCustomerWard')
                                         }}
-                                        value={selectedWard}
-                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                        disabled={!selectedDistrict}
-                                    >
-                                        <option value="">Chọn xã phường</option>
-                                        {selectedDistrict &&
-                                            wardList.map((ward) => (
-                                                <option key={ward.code} value={ward.code}>
-                                                    {ward.name}
-                                                </option>
-                                            ))}
-                                    </select>
+                                        disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                                        options={
+                                            selectedDistrict
+                                                ? wardList
+                                                      .filter(
+                                                          (ward) =>
+                                                              ward.district_code ===
+                                                              selectedDistrict
+                                                      ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                                                      .map((ward) => ({
+                                                          value: ward.code,
+                                                          label: ward.name,
+                                                      }))
+                                                : []
+                                        }
+                                        style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                    />
+
                                     {errors.orderCustomerWard && (
                                         <span className="w-40 text-red-500 text-sm">
                                             {errors.orderCustomerWard.message}
@@ -933,11 +876,11 @@ export const OrderForm = () => {
                             <div className="mt-5">
                                 {payment === '' ? null : payment === 'PAYPAL' ? (
                                     <PayPalCheckOut
-                                        BatchDetailIdList={batchDetailSelectedList}
-                                        VaccinePackageIdList={vaccinePackageSelectedList}
-                                        Total={totalAmount}
-                                        Payment={payment}
-                                        InjectionDate={injectionDate}
+                                        batchDetailIdList={batchDetailSelectedList}
+                                        vaccinePackageIdList={vaccinePackageSelectedList}
+                                        total={totalAmount}
+                                        payment={payment}
+                                        injectionDate={injectionDate}
                                         customer={existsCustomer}
                                         orderType={orderType}
                                         orderInfo={orderData}

@@ -110,9 +110,10 @@ export const CustomerLookup = () => {
     return (
         <section className="flex-col">
             <div className=" bg-base-100 shadow-md flex flex-col p-4 space-y-2">
-                <h1 className="text-2xl text-orange-500 uppercase font-bold">
+                <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
                     Tra cứu thông tin khách hàng
                 </h1>
+
                 <form ref={formLookupCustomer} onSubmit={handleSubmitLookup(onSubmitLookup)}>
                     <div className="flex flex-row space-x-4">
                         <div className="flex flex-col space-y-2 font-semibold flex-1">

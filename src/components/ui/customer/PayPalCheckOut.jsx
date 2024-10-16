@@ -12,74 +12,17 @@ const initialOptions = {
 }
 
 export const PayPalCheckOut = ({
-    BatchDetailIdList,
-    VaccinePackageIdList,
-    Total,
-    Payment,
-    InjectionDate,
+    batchDetailIdList,
+    vaccinePackageIdList,
+    total,
+    payment,
+    injectionDate,
     customer,
     orderType,
     orderInfo,
 }) => {
-    // console.log('BatchDetailIdList:', BatchDetailIdList)
-    console.log('VaccinePackageIdList:', VaccinePackageIdList)
-    // console.log('Total:', Total)
-    // console.log('Payment:', Payment)
-    // console.log('InjectionDate:', InjectionDate)
-    // console.log('customer:', customer)
-    // console.log('orderType:', orderType)
-    // console.log('orderNoCode:', orderInfo)
-
-    const [provinceData, setProvinceData] = useState('')
-    const [districtData, setDistrictData] = useState('')
-    const [wardData, setWardData] = useState('')
-
-    useEffect(() => {
-        addressService
-            .getProvinceByCode(orderInfo.orderCustomerProvince)
-            .then((response) => setProvinceData(response.data.name))
-            .catch((err) => console.log('Get Province Failed!'))
-        addressService
-            .getDistrictByCode(orderInfo.orderCustomerDistrict)
-            .then((response) => setDistrictData(response.data.name))
-            .catch((err) => console.log('Get District Failed!'))
-        addressService
-            .getWardByCode(orderInfo.orderCustomerWard)
-            .then((response) => setWardData(response.data.name))
-            .catch((err) => console.log('Get Ward Failed!'))
-    }, [orderInfo])
-
-    const createOrder = async (data, actions) => {
-        if (orderType === 'CODE') {
-            const orderWithCodeData = {
-                customerCode: customer.customerCode,
-                customerPhone: customer.customerPhone,
-                oTotal: Total,
-                Payment: Payment,
-                InjectionDate: dayjs(InjectionDate).format('DD-MM-YYYY'),
-                BatchDetailIdList: BatchDetailIdList.map((item) => item.id),
-                VaccinePackageIdList: VaccinePackageIdList.map((item) => item.id),
-            }
-            console.log(orderWithCodeData)
-        } else {
-            const orderData = {
-                orderCustomerFullName: orderInfo.orderCustomerFullName,
-                orderCustomerGender: orderInfo.orderCustomerGender,
-                orderCustomerDob: dayjs(orderInfo.orderCustomerDob).format('DD-MM-YYYY'),
-                orderCustomerEmail: orderInfo.orderCustomerEmail,
-                orderCustomerPhone: orderInfo.orderCustomerPhone,
-                orderCustomerProvince: provinceData,
-                orderCustomerDistrict: districtData,
-                orderCustomerWard: wardData,
-                Total: Total,
-                Payment: Payment,
-                InjectionDate: dayjs(orderInfo.InjectionDate).format('DD-MM-YYYY'),
-                BatchDetailIdList: BatchDetailIdList.map((item) => item.id),
-                VaccinePackageIdList: VaccinePackageIdList.map((item) => item.id),
-            }
-            console.log(orderData)
-        }
-    }
+    console.log(batchDetailIdList)
+    console.log(vaccinePackageIdList)
 
     return (
         <div className="relative">
@@ -91,7 +34,7 @@ export const PayPalCheckOut = ({
                                 purchase_units: [
                                     {
                                         amount: {
-                                            value: convertVNDToUSD(Total),
+                                            value: convertVNDToUSD(total),
                                             currency_code: 'USD',
                                         },
                                         shipping: {
@@ -105,15 +48,21 @@ export const PayPalCheckOut = ({
                                                 address_line_1:
                                                     orderType === 'CODE'
                                                         ? customer.customerProvince
-                                                        : orderInfo.orderCustomerProvince,
+                                                        : addressService.getProvincenNameByCode(
+                                                              orderInfo.orderCustomerProvince
+                                                          ),
                                                 admin_area_2:
                                                     orderType === 'CODE'
                                                         ? customer.customerDistrict
-                                                        : orderInfo.orderCustomerDistrict,
+                                                        : addressService.getDistrictNameByCode(
+                                                              orderInfo.orderCustomerDistrict
+                                                          ),
                                                 admin_area_1:
                                                     orderType === 'CODE'
                                                         ? customer.customerWard
-                                                        : orderInfo.orderCustomerWard,
+                                                        : addressService.getWardNameByCode(
+                                                              orderInfo.orderCustomerWard
+                                                          ),
                                                 postal_code: '700000',
                                                 country_code: 'VN',
                                             },
@@ -131,19 +80,17 @@ export const PayPalCheckOut = ({
                                 const orderWithCodeData = {
                                     customerIdentifier: customer.customerCode,
                                     customerDob: customer.customerDob,
-                                    orderTotal: Total,
-                                    orderPayment: Payment,
-                                    orderInjectionDate: InjectionDate,
-                                    orderBatchDetailIdList: BatchDetailIdList.map(
+                                    orderTotal: total,
+                                    orderPayment: payment,
+                                    orderInjectionDate: injectionDate,
+                                    orderBatchDetailIdList: batchDetailIdList.map(
                                         (item) => item.batchDetailId
                                     ),
-                                    orderVaccinePackageIdList: VaccinePackageIdList.map(
+                                    orderVaccinePackageIdList: vaccinePackageIdList.map(
                                         (item) => item.vaccinePackageId
                                     ),
                                 }
-                                console.log(orderWithCodeData)
 
-                                // Gọi service để tạo order với customer code
                                 try {
                                     const response = await orderService.createOrderWithCustomerCode(
                                         orderWithCodeData
@@ -166,25 +113,32 @@ export const PayPalCheckOut = ({
                                     ),
                                     orderCustomerEmail: orderInfo.orderCustomerEmail,
                                     orderCustomerPhone: orderInfo.orderCustomerPhone,
-                                    orderCustomerProvince: provinceData,
-                                    orderCustomerDistrict: districtData,
-                                    orderCustomerWard: wardData,
-                                    orderTotal: Total,
-                                    orderPayment: Payment,
-                                    orderInjectionDate: InjectionDate,
-                                    orderBatchDetailIdList: BatchDetailIdList.map(
+                                    orderCustomerProvince: addressService.getProvincenNameByCode(
+                                        orderInfo.orderCustomerProvince
+                                    ),
+                                    orderCustomerDistrict: addressService.getDistrictNameByCode(
+                                        orderInfo.orderCustomerDistrict
+                                    ),
+                                    orderCustomerWard: addressService.getWardNameByCode(
+                                        orderInfo.orderCustomerWard
+                                    ),
+                                    orderTotal: total,
+                                    orderPayment: payment,
+                                    orderInjectionDate: dayjs(orderInfo.orderInjectionDate).format(
+                                        'DD-MM-YYYY'
+                                    ),
+                                    orderBatchDetailIdList: batchDetailIdList.map(
                                         (item) => item.batchDetailId
                                     ),
-                                    orderVaccinePackageIdList: VaccinePackageIdList.map(
+                                    orderVaccinePackageIdList: vaccinePackageIdList.map(
                                         (item) => item.vaccinePackageId
                                     ),
                                 }
-                                console.log(orderData)
 
                                 // Gọi service để tạo order
                                 try {
                                     const res = await orderService.createOrder(orderData)
-                                    if (res && res.data && res.data.code === 1000) {
+                                    if (res.status === 200 && res.data.code === 1000) {
                                         MyToast('success', 'Đặt hàng thành công')
                                     } else {
                                         MyToast('error', 'Đặt hàng không thành công')

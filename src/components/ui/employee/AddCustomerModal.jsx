@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { addressService, customerService } from '@/services'
 import { useForm } from 'react-hook-form'
-import { DatePicker, Table, Modal } from 'antd'
+import { DatePicker, Table, Modal, Select } from 'antd'
 import { disabledDoB, disabledPastDate } from '@/utils'
 import { AlertModal, MyToast } from '../common'
 
@@ -64,81 +64,18 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
     const [selectedDistrict, setSelectedDistrict] = useState('')
     const [selectedWard, setSelectedWard] = useState('')
 
-    const [provinceData, setProvinceData] = useState('')
-    const [districtData, setDistrictData] = useState('')
-    const [wardData, setWardData] = useState('')
-
     useEffect(() => {
-        addressService
-            .getProvinceList()
-            .then((response) => setProvinceList(response.data))
-            .catch((error) => console.error('Error fetching provinces:', error))
+        setProvinceList(addressService.getProvinceList())
+        setDistrictList(addressService.getDistrictList())
+        setWardList(addressService.getWardList())
     }, [])
-
-    useEffect(() => {
-        if (selectedProvince) {
-            addressService
-                .getDistrictList()
-                .then((response) => {
-                    const filteredDistricts = response.data.filter(
-                        (district) => district.province_code === Number(selectedProvince)
-                    )
-                    setDistrictList(filteredDistricts)
-                    setSelectedDistrict('')
-                    setSelectedWard('')
-                    setValue('appointmentCustomerDistrict', '')
-                    setValue('appointmentCustomerWard', '')
-                })
-                .catch((error) => console.error('Error fetching districts:', error))
-        } else {
-            setDistrictList([])
-        }
-    }, [selectedProvince])
-
-    useEffect(() => {
-        if (selectedDistrict) {
-            addressService
-                .getWardList()
-                .then((response) => {
-                    const filteredWards = response.data.filter(
-                        (ward) => ward.district_code === Number(selectedDistrict)
-                    )
-                    setWardList(filteredWards)
-                    setSelectedWard('')
-                })
-                .catch((error) => console.error('Error fetching wards:', error))
-        } else {
-            setWardList([])
-        }
-    }, [selectedDistrict])
-
-    useEffect(() => {
-        addressService
-            .getProvinceByCode(selectedProvince)
-            .then((response) => setProvinceData(response.data.name))
-            .catch((err) => console.log('Get Province Failed!'))
-    }, [selectedProvince])
-
-    useEffect(() => {
-        addressService
-            .getDistrictByCode(selectedDistrict)
-            .then((response) => setDistrictData(response.data.name))
-            .catch((err) => console.log('Get District Failed!'))
-    }, [selectedDistrict])
-
-    useEffect(() => {
-        addressService
-            .getWardByCode(selectedWard)
-            .then((response) => setWardData(response.data.name))
-            .catch((err) => console.log('Get Ward Failed!'))
-    }, [selectedWard])
 
     const onSubmit = async (data) => {
         const customerData = {
             ...data,
-            customerProvince: provinceData,
-            customerDistrict: districtData,
-            customerWard: wardData,
+            customerProvince: addressService.getProvincenNameByCode(selectedProvince),
+            customerDistrict: addressService.getDistrictNameByCode(selectedDistrict),
+            customerWard: addressService.getWardNameByCode(selectedWard),
             customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
         try {
@@ -158,6 +95,9 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
     const handleCancel = () => {
         handleCloseAddCustomerModal()
         reset()
+        setSelectedProvince('')
+        setSelectedDistrict('')
+        setSelectedWard('')
     }
 
     return (
@@ -287,31 +227,27 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                             </div>
                         </div>
 
-                        <div className="relative z-0 w-full mb-5 group">
+                        <div className="relative z-0 w-full mb-2 group">
                             <label>Địa chỉ thường trú:</label>
                         </div>
 
-                        <div className="flex flex-row space-x-4 w-125">
-                            <div className="relative z-0 w-full mb-5 group">
+                        <div className="flex flex-row space-x-4">
+                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                 <label>Tỉnh/Thành:</label>
-                                <select
+                                <Select
                                     {...register('customerProvince')}
-                                    onChange={(e) => {
-                                        const provinceValue = e.target.value
+                                    placeholder="Chọn Tỉnh/Thành"
+                                    value={selectedProvince ? selectedProvince : 'Chọn Tỉnh/Thành'}
+                                    onChange={(provinceValue) => {
                                         setSelectedProvince(provinceValue)
                                         setValue('customerProvince', provinceValue)
                                         if (provinceValue) clearErrors('customerProvince')
                                     }}
-                                    value={selectedProvince}
-                                    className="max-h-20 overflow-y-auto block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                >
-                                    <option value="">Chọn tỉnh thành</option>
-                                    {provinceList.map((province) => (
-                                        <option key={province.code} value={province.code}>
-                                            {province.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    options={provinceList.map((province) => ({
+                                        value: province.code,
+                                        label: province.name,
+                                    }))}
+                                />
                                 {errors.customerProvince && (
                                     <span className="w-40 text-red-500 text-sm">
                                         {errors.customerProvince.message}
@@ -319,28 +255,36 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                 )}
                             </div>
 
-                            <div className="relative z-0 w-full mb-5 group">
+                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                 <label>Quận/Huyện:</label>
-                                <select
+                                <Select
                                     {...register('customerDistrict')}
-                                    onChange={(e) => {
-                                        const districtValue = e.target.value
-                                        setSelectedDistrict(districtValue)
-                                        setValue('customerDistrict', districtValue)
-                                        if (districtValue) clearErrors('customerDistrict')
+                                    placeholder="Chọn quận/huyện"
+                                    value={selectedDistrict || undefined}
+                                    onChange={(value) => {
+                                        if (value !== selectedDistrict) {
+                                            setSelectedDistrict(value)
+                                            setValue('customerDistrict', value)
+                                            if (value) clearErrors('customerDistrict')
+                                        }
                                     }}
-                                    value={selectedDistrict}
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                     disabled={!selectedProvince}
-                                >
-                                    <option value="">Chọn quận huyện</option>
-                                    {selectedProvince &&
-                                        districtList.map((district) => (
-                                            <option key={district.code} value={district.code}>
-                                                {district.name}
-                                            </option>
-                                        ))}
-                                </select>
+                                    options={
+                                        selectedProvince
+                                            ? districtList
+                                                  .filter(
+                                                      (district) =>
+                                                          district.province_code ===
+                                                          selectedProvince
+                                                  )
+                                                  .map((district) => ({
+                                                      value: district.code,
+                                                      label: district.name,
+                                                  }))
+                                            : []
+                                    }
+                                    style={{ opacity: !selectedProvince ? 0.75 : 1 }}
+                                />
                                 {errors.customerDistrict && (
                                     <span className="w-40 text-red-500 text-sm">
                                         {errors.customerDistrict.message}
@@ -348,28 +292,34 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                 )}
                             </div>
 
-                            <div className="relative z-0 w-full mb-5 group text-nowrap">
+                            <div className="relative z-0 w-full mb-5 group flex flex-col   flex-1">
                                 <label>Xã/Phường:</label>
-                                <select
+                                <Select
                                     {...register('customerWard')}
-                                    onChange={(e) => {
-                                        const wardValue = e.target.value
-                                        setSelectedWard(wardValue)
-                                        setValue('customerWard', wardValue)
-                                        if (wardValue) clearErrors('customerWard')
+                                    placeholder="Chọn xã/phường"
+                                    value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                    onChange={(value) => {
+                                        setSelectedWard(value)
+                                        setValue('customerWard', value)
+                                        if (value) clearErrors('customerWard')
                                     }}
-                                    value={selectedWard}
-                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                    disabled={!selectedDistrict}
-                                >
-                                    <option value="">Chọn xã phường</option>
-                                    {selectedDistrict &&
-                                        wardList.map((ward) => (
-                                            <option key={ward.code} value={ward.code}>
-                                                {ward.name}
-                                            </option>
-                                        ))}
-                                </select>
+                                    disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                                    options={
+                                        selectedDistrict
+                                            ? wardList
+                                                  .filter(
+                                                      (ward) =>
+                                                          ward.district_code === selectedDistrict
+                                                  ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                                                  .map((ward) => ({
+                                                      value: ward.code,
+                                                      label: ward.name,
+                                                  }))
+                                            : []
+                                    }
+                                    style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                />
+
                                 {errors.customerWard && (
                                     <span className="w-40 text-red-500 text-sm">
                                         {errors.customerWard.message}

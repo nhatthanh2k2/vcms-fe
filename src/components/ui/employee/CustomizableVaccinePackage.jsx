@@ -39,11 +39,11 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
     const [payment, setPayment] = useState('')
     const [packagePrice, setPackagePrice] = useState(0)
 
-    console.log('Package Selected:', packageSelected)
-    console.log('Package Detail List:', packageDetailList)
-    console.log('Filtered Vaccine List:', filteredVaccineList)
-    console.log('Payment:', payment)
-    console.log(vaccinePackageList)
+    // console.log('Package Selected:', packageSelected)
+    // console.log('Package Detail List:', packageDetailList)
+    // console.log('Filtered Vaccine List:', filteredVaccineList)
+    // console.log('Payment:', payment)
+    // console.log(vaccinePackageList)
 
     const handleChosePackage = async (option) => {
         setPackageSelected(option)
@@ -290,10 +290,10 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4 text-orange-500">
-                Đăng ký gói vắc xin theo yêu cầu
-            </h2>
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+                Đăng ký gói tiêm theo yêu cầu
+            </h1>
+            <form className="space-y-4 mt-5" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex space-x-5">
                     <div className="flex-1 flex flex-col">
                         <label className="block mb-1 font-medium">Mã KH / SĐT:</label>

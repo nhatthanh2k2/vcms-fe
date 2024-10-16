@@ -177,9 +177,12 @@ export const OrderVaccinationSchedule = () => {
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4 text-orange-500">Lịch tiêm từ đơn hàng</h2>
-            <div className="flex items-center mb-4">
-                <span>Chọn ngày muốn xem:</span>
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+                Lịch tiêm từ đơn hàng
+            </h1>
+
+            <div className="flex items-center my-5">
+                <span className=" font-semibold">Chọn ngày muốn xem:</span>
                 <DatePicker
                     defaultValue={dayjs(selectedDate)}
                     isClearable
@@ -225,7 +228,7 @@ export const OrderVaccinationSchedule = () => {
             />
 
             <PreInjectionCheckModal
-                visivlePreInjectionModal={isOpenPreInjectionCheckModal}
+                visiblePreInjectionModal={isOpenPreInjectionCheckModal}
                 handleClosePreInjectionCheckModal={handleClosePreInjectionCheckModal}
                 patient={patientInfo}
             />

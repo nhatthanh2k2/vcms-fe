@@ -1,24 +1,37 @@
 
+import { districts, provinces, wards } from "@/assets"
 import axios from "axios"
 
 
 export const addressService = {
     getProvinceList: () => {
-        return axios.get("https://provinces.open-api.vn/api/p/")
+        return provinces
     },
     getDistrictList: () => {
-        return axios.get("https://provinces.open-api.vn/api/d/")
+        return districts
     }, 
     getWardList: () => {
-        return axios.get("https://provinces.open-api.vn/api/w/")
+        return wards
     },
     getProvinceByCode: (provinceCode) => {
-        return axios.get(`https://provinces.open-api.vn/api/p/${provinceCode}`);
+        return provinces.find((province) => province.code === provinceCode)
+    },
+    getProvincenNameByCode: (provinceCode) => {
+        const province = provinces.find((province) => province.code === provinceCode)
+        return province ? province.name : '';
     },
     getDistrictByCode: (districtCode) => {
-        return axios.get(`https://provinces.open-api.vn/api/d/${districtCode}`);
+        return districts.find((district) => district.code === districtCode)
+    },
+    getDistrictNameByCode: (districtCode) => {
+        const district = districts.find((district) => district.code === districtCode)
+        return district ? district.name : ''
     },
     getWardByCode: (wardCode) => {
-        return axios.get(`https://provinces.open-api.vn/api/w/${wardCode}`);
+        return wards.find((ward) => ward.code === wardCode)
+    },
+    getWardNameByCode: (wardCode) => {
+        const ward = wards.find((ward) => ward.code === wardCode)
+        return ward ? ward.name : ''
     },
 }

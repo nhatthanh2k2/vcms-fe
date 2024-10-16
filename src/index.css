@@ -89,3 +89,7 @@ button:focus-visible {
   max-height: 4.5em;              /* Đặt chiều cao tối đa cho 2 dòng (2 * line-height) */
 }
 
+.hover-button:hover svg path {
+  stroke: white;
+}
+

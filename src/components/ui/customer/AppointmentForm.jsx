@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { addressService } from '@/services/addressService'
-import { DatePicker, Pagination } from 'antd'
+import { DatePicker, Pagination, Select } from 'antd'
 import dayjs from 'dayjs'
 import { appointmentService, batchDetailService, vaccinePackageService } from '@/services'
 import { z } from 'zod'
@@ -75,75 +75,7 @@ export const AppointmentForm = () => {
     const [batchDetailSelected, setBatchDetailSelected] = useState()
     const [vaccinePackageSelected, setVaccinePackageSelected] = useState()
 
-    useEffect(() => {
-        addressService
-            .getProvinceList()
-            .then((response) => setProvinceList(response.data))
-            .catch((error) => console.error('Error fetching provinces:', error))
-    }, [])
-
-    useEffect(() => {
-        if (selectedProvince) {
-            addressService
-                .getDistrictList()
-                .then((response) => {
-                    const filteredDistricts = response.data.filter(
-                        (district) => district.province_code === Number(selectedProvince)
-                    )
-                    setDistrictList(filteredDistricts)
-                    setSelectedDistrict('')
-                    setSelectedWard('')
-                    setValue('appointmentCustomerDistrict', '')
-                    setValue('appointmentCustomerWard', '')
-                })
-                .catch((error) => console.error('Error fetching districts:', error))
-        } else {
-            setDistrictList([])
-        }
-    }, [selectedProvince])
-
-    useEffect(() => {
-        if (selectedDistrict) {
-            addressService
-                .getWardList()
-                .then((response) => {
-                    const filteredWards = response.data.filter(
-                        (ward) => ward.district_code === Number(selectedDistrict)
-                    )
-                    setWardList(filteredWards)
-                    setSelectedWard('')
-                })
-                .catch((error) => console.error('Error fetching wards:', error))
-        } else {
-            setWardList([])
-        }
-    }, [selectedDistrict])
-
-    const [provinceData, setProvinceData] = useState('')
-    const [districtData, setDistrictData] = useState('')
-    const [wardData, setWardData] = useState('')
-
-    useEffect(() => {
-        addressService
-            .getProvinceByCode(selectedProvince)
-            .then((response) => setProvinceData(response.data.name))
-            .catch((err) => console.log('Get Province Failed!'))
-    }, [selectedProvince])
-
-    useEffect(() => {
-        addressService
-            .getDistrictByCode(selectedDistrict)
-            .then((response) => setDistrictData(response.data.name))
-            .catch((err) => console.log('Get District Failed!'))
-    }, [selectedDistrict])
-
-    useEffect(() => {
-        addressService
-            .getWardByCode(selectedWard)
-            .then((response) => setWardData(response.data.name))
-            .catch((err) => console.log('Get Ward Failed!'))
-    }, [selectedWard])
-
+    // Lay danh sach vaccine va goi vaccine
     useEffect(() => {
         batchDetailService
             .getDetail()
@@ -154,6 +86,13 @@ export const AppointmentForm = () => {
             .getDefaultPackages()
             .then((response) => setPackageList(response.data.result))
             .catch((err) => console.log('Get Vaccine Package Failed!'))
+    }, [])
+
+    // Lay tinh-thanh, quan-huyen, xa-phuong
+    useEffect(() => {
+        setProvinceList(addressService.getProvinceList())
+        setDistrictList(addressService.getDistrictList())
+        setWardList(addressService.getWardList())
     }, [])
 
     const handlePageChange = (page) => {
@@ -203,9 +142,10 @@ export const AppointmentForm = () => {
         try {
             const request = {
                 ...data,
-                appointmentCustomerProvince: provinceData,
-                appointmentCustomerDistrict: districtData,
-                appointmentCustomerWard: wardData,
+                appointmentCustomerProvince:
+                    addressService.getProvincenNameByCode(selectedProvince),
+                appointmentCustomerDistrict: addressService.getDistrictNameByCode(selectedDistrict),
+                appointmentCustomerWard: addressService.getWardNameByCode(selectedWard),
                 appointmentCustomerDob: data.appointmentCustomerDob
                     ? dayjs(data.appointmentCustomerDob).format('DD-MM-YYYY')
                     : null,
@@ -292,7 +232,7 @@ export const AppointmentForm = () => {
                 </div>
             </div>
 
-            <div className="mt-5 space-x-5 w-full">
+            <div className="mt-5 w-full">
                 <div className="flex gap-5">
                     {isCustomer == 0 ? (
                         <div className="flex flex-row space-x-5">
@@ -410,17 +350,16 @@ export const AppointmentForm = () => {
                                     </div>
                                 </div>
 
-                                <div className="relative z-0 w-full mb-5 group">
+                                <div className="relative z-0 w-full mb-2 group">
                                     <label>Địa chỉ thường trú:</label>
                                 </div>
 
-                                <div className="flex flex-row space-x-4 w-125">
-                                    <div className="relative z-0 w-full mb-5 group">
+                                <div className="flex flex-row space-x-2 w-125">
+                                    <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                         <label>Tỉnh/Thành:</label>
-                                        <select
-                                            {...register('appointmentCustomerProvince')}
-                                            onChange={(e) => {
-                                                const provinceValue = e.target.value
+                                        <Select
+                                            placeholder="Chọn Tỉnh/Thành"
+                                            onChange={(provinceValue) => {
                                                 setSelectedProvince(provinceValue)
                                                 setValue(
                                                     'appointmentCustomerProvince',
@@ -429,16 +368,11 @@ export const AppointmentForm = () => {
                                                 if (provinceValue)
                                                     clearErrors('appointmentCustomerProvince')
                                             }}
-                                            value={selectedProvince}
-                                            className="max-h-20 overflow-y-auto block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                        >
-                                            <option value="">Chọn tỉnh thành</option>
-                                            {provinceList.map((province) => (
-                                                <option key={province.code} value={province.code}>
-                                                    {province.name}
-                                                </option>
-                                            ))}
-                                        </select>
+                                            options={provinceList.map((province) => ({
+                                                value: province.code,
+                                                label: province.name,
+                                            }))}
+                                        />
                                         {errors.appointmentCustomerProvince && (
                                             <span className="w-40 text-red-500 text-sm">
                                                 {errors.appointmentCustomerProvince.message}
@@ -446,35 +380,36 @@ export const AppointmentForm = () => {
                                         )}
                                     </div>
 
-                                    <div className="relative z-0 w-full mb-5 group">
+                                    <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                         <label>Quận/Huyện:</label>
-                                        <select
-                                            {...register('appointmentCustomerDistrict')}
-                                            onChange={(e) => {
-                                                const districtValue = e.target.value
-                                                setSelectedDistrict(districtValue)
-                                                setValue(
-                                                    'appointmentCustomerDistrict',
-                                                    districtValue
-                                                )
-                                                if (districtValue)
-                                                    clearErrors('appointmentCustomerDistrict')
+                                        <Select
+                                            placeholder="Chọn quận/huyện"
+                                            value={selectedDistrict || undefined}
+                                            onChange={(value) => {
+                                                if (value !== selectedDistrict) {
+                                                    setSelectedDistrict(value)
+                                                    setValue('appointmentCustomerDistrict', value)
+                                                    if (value)
+                                                        clearErrors('appointmentCustomerDistrict')
+                                                }
                                             }}
-                                            value={selectedDistrict}
-                                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             disabled={!selectedProvince}
-                                        >
-                                            <option value="">Chọn quận huyện</option>
-                                            {selectedProvince &&
-                                                districtList.map((district) => (
-                                                    <option
-                                                        key={district.code}
-                                                        value={district.code}
-                                                    >
-                                                        {district.name}
-                                                    </option>
-                                                ))}
-                                        </select>
+                                            options={
+                                                selectedProvince
+                                                    ? districtList
+                                                          .filter(
+                                                              (district) =>
+                                                                  district.province_code ===
+                                                                  selectedProvince
+                                                          )
+                                                          .map((district) => ({
+                                                              value: district.code,
+                                                              label: district.name,
+                                                          }))
+                                                    : []
+                                            }
+                                            style={{ opacity: !selectedProvince ? 0.75 : 1 }}
+                                        />
                                         {errors.appointmentCustomerDistrict && (
                                             <span className="w-40 text-red-500 text-sm">
                                                 {errors.appointmentCustomerDistrict.message}
@@ -482,29 +417,34 @@ export const AppointmentForm = () => {
                                         )}
                                     </div>
 
-                                    <div className="relative z-0 w-full mb-5 group text-nowrap">
+                                    <div className="relative z-0 w-full mb-5 group text-nowrap flex flex-col flex-1">
                                         <label>Xã/Phường:</label>
-                                        <select
-                                            {...register('appointmentCustomerWard')}
-                                            onChange={(e) => {
-                                                const wardValue = e.target.value
-                                                setSelectedWard(wardValue)
-                                                setValue('appointmentCustomerWard', wardValue)
-                                                if (wardValue)
-                                                    clearErrors('appointmentCustomerWard')
+                                        <Select
+                                            placeholder="Chọn xã/phường"
+                                            value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                            onChange={(value) => {
+                                                setSelectedWard(value)
+                                                setValue('appointmentCustomerWard', value)
+                                                if (value) clearErrors('appointmentCustomerWard')
                                             }}
-                                            value={selectedWard}
-                                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                            disabled={!selectedDistrict}
-                                        >
-                                            <option value="">Chọn xã phường</option>
-                                            {selectedDistrict &&
-                                                wardList.map((ward) => (
-                                                    <option key={ward.code} value={ward.code}>
-                                                        {ward.name}
-                                                    </option>
-                                                ))}
-                                        </select>
+                                            disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                                            options={
+                                                selectedDistrict
+                                                    ? wardList
+                                                          .filter(
+                                                              (ward) =>
+                                                                  ward.district_code ===
+                                                                  selectedDistrict
+                                                          ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                                                          .map((ward) => ({
+                                                              value: ward.code,
+                                                              label: ward.name,
+                                                          }))
+                                                    : []
+                                            }
+                                            style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                        />
+
                                         {errors.appointmentCustomerWard && (
                                             <span className="w-40 text-red-500 text-sm">
                                                 {errors.appointmentCustomerWard.message}

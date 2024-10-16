@@ -4,7 +4,7 @@ import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
 import { appointmentService, customerService } from '@/services'
 import { MyToast } from '../common'
-import { PreInjectionCheckModal } from '.'
+import { PreInjectionCheckModal, VaccinationInjectionModal } from '.'
 import { getPatientInfo } from '@/utils'
 
 const options = [
@@ -108,7 +108,7 @@ export const AppointmentVaccinationSchedule = () => {
                         </Tooltip>
                     </div>
 
-                    <div>
+                    <div onClick={handleOpenVaccinationInjectionModal(record)}>
                         <Tooltip placement="top" title="Tạo phiếu tiêm">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -186,12 +186,12 @@ export const AppointmentVaccinationSchedule = () => {
     }
 
     const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
+    const [isOpenVaccinationInjectionModal, setIsOpenVaccinationInjectionModal] = useState(false)
     const [patientInfo, setPatientInfo] = useState(null)
 
     const handleOpenPreInjectionCheckModal = async (record) => {
         const result = getPatientInfo(record)
         setPatientInfo(result)
-
         setIsOpenPreInjectionCheckModal(true)
     }
 
@@ -199,11 +199,23 @@ export const AppointmentVaccinationSchedule = () => {
         setIsOpenPreInjectionCheckModal(false)
     }
 
+    const handleOpenVaccinationInjectionModal = (record) => {
+        const result = getPatientInfo(record)
+        setPatientInfo(result)
+        setIsOpenVaccinationInjectionModal(true)
+    }
+
+    const handleCloseVaccinationInjectionModal = () => {
+        setIsOpenVaccinationInjectionModal(false)
+    }
+
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4 text-orange-500">Lịch hẹn tiêm</h2>
-            <div className="flex items-center mb-4">
-                <span>Chọn ngày muốn xem lịch hẹn:</span>
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+                Lịch hẹn tiêm
+            </h1>
+            <div className="flex items-center my-5">
+                <span className="font-semibold">Chọn ngày muốn xem lịch hẹn:</span>
                 <DatePicker
                     defaultValue={dayjs(selectedDate)}
                     isClearable
@@ -243,8 +255,14 @@ export const AppointmentVaccinationSchedule = () => {
             </div>
 
             <PreInjectionCheckModal
-                visivlePreInjectionModal={isOpenPreInjectionCheckModal}
+                visiblePreInjectionModal={isOpenPreInjectionCheckModal}
                 handleClosePreInjectionCheckModal={handleClosePreInjectionCheckModal}
+                patient={patientInfo}
+            />
+
+            <VaccinationInjectionModal
+                visibleInjectionModal={isOpenVaccinationInjectionModal}
+                handleCloseVaccinationInjectionModal={handleCloseVaccinationInjectionModal}
                 patient={patientInfo}
             />
         </section>

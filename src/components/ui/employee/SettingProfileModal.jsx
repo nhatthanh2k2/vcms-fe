@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from 'antd'
-import { ChangePasswordTab, EmployeeProfileTab, UpdateEmployeeAvatarTab } from '.'
+import { ChangePasswordTab, UpdateEmployeeAvatarTab, UpdateEmployeeProfileTab } from '.'
 
 export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) => {
     const employee = JSON.parse(sessionStorage.getItem('employeeProfile'))
@@ -30,7 +30,7 @@ export const SettingProfileModal = ({ handleCloseModal, visibleProfileModal }) =
                     role="tabpanel"
                     className="tab-content bg-base-100 border-base-300 rounded-box p-6"
                 >
-                    <EmployeeProfileTab employee={employee} />
+                    <UpdateEmployeeProfileTab employee={employee} />
                 </div>
 
                 <input

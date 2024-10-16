@@ -10,5 +10,10 @@ const api = apiInstance({
 export const screeningRecordService = {
     createScreeningRecord: (request) => {
         return api.post("/screening-record/create", request)
+    },
+    getScreeningRecordByCreateDate: (createDate) => {
+        return api.get("/screening-record/list/create-date", {
+            params: { createDate }
+        });
     }
 }
