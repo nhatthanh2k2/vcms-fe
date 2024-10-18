@@ -4,9 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { addressService, customerService } from '@/services'
 import { useForm } from 'react-hook-form'
-import { DatePicker, Table, Modal, Select } from 'antd'
-import { disabledDoB, disabledPastDate } from '@/utils'
-import { AlertModal, MyToast } from '../common'
+import { DatePicker, Modal, Select } from 'antd'
+import { disabledDoB } from '@/utils'
+import { MyToast } from '../../common'
 
 const addCustomerSchema = z.object({
     customerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),

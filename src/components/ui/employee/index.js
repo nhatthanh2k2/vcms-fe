@@ -4,12 +4,7 @@ export * from './CustomerLookup'
 export * from './BookVaccination'
 export * from './PrintVaccinationRecord'
 export * from './CustomizableVaccinePackage'
-export * from './SettingProfileModal'
-export * from './UpdateEmployeeProfileTab'
-export * from './ChangePasswordTab'
-export * from './UpdateEmployeeAvatarTab'
-export * from './ForgotPasswordModal'
-export * from './AddCustomerModal'
-export * from './OrderDetailModal'
-export * from './PreInjectionCheckModal'
-export * from './VaccinationInjectionModal'
+
+export * from './modal'
+
+

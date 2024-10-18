@@ -3,6 +3,25 @@ import React, { useState, useEffect } from 'react'
 import { Carousel } from 'antd'
 import { employeeService } from '@/services'
 
+const responsiveSettings = {
+    xs: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    },
+    sm: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+    },
+    md: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+    },
+    lg: {
+        slidesToShow: 5,
+        slidesToScroll: 1,
+    },
+}
+
 export const CarouselDoctor = () => {
     const [employeeList, setEmployeeList] = useState([])
 

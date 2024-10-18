@@ -4,7 +4,7 @@ import { Modal } from 'antd'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { MyToast } from '../common'
+import { MyToast } from '../../common'
 
 const preInjectionCheckSchema = z.object({
     height: z

@@ -108,7 +108,7 @@ export const AppointmentVaccinationSchedule = () => {
                         </Tooltip>
                     </div>
 
-                    <div onClick={handleOpenVaccinationInjectionModal(record)}>
+                    <div onClick={() => handleOpenVaccinationInjectionModal(record)}>
                         <Tooltip placement="top" title="Tạo phiếu tiêm">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

@@ -3,17 +3,20 @@ import React from 'react'
 
 export const VaccinationInjectionModal = ({
     visibleInjectionModal,
-    handleCloseVaccinationModal,
+    handleCloseVaccinationInjectionModal,
     patient,
 }) => {
+    const handleCancel = () => {
+        handleCloseVaccinationInjectionModal()
+    }
     return (
         <div>
             <Modal
                 title={
-                    <div className="text-center font-bold text-xl">
-                        Thông tin khám sàng lọc trước khi tiêm
-                    </div>
+                    <div className="text-center font-bold text-xl">Phiếu tiêm chủng vắc xin</div>
                 }
+                open={visibleInjectionModal}
+                onCancel={handleCloseVaccinationInjectionModal}
                 footer={null}
                 width={1000}
                 style={{
@@ -53,6 +56,10 @@ export const VaccinationInjectionModal = ({
                                 />
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+                        <span className=" uppercase text-base font-bold">Thông tin vắc xin</span>
                     </div>
                 </form>
             </Modal>

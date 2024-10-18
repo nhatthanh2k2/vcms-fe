@@ -19,7 +19,7 @@ export const CarouselIntroduction = () => {
                                     </p>
                                     <img
                                         src="/images/slide-1.jpg"
-                                        className="h-70 object-cover rounded-full"
+                                        className="h-70 object-cover rounded-full mt-5"
                                         alt=""
                                     />
                                 </div>
@@ -42,7 +42,7 @@ export const CarouselIntroduction = () => {
                                     </p>
                                     <img
                                         src="/images/slide-2.jpg"
-                                        className="h-70 object-cover rounded-full"
+                                        className="h-70 object-cover rounded-full mt-5"
                                         alt=""
                                     />
                                 </div>
@@ -65,7 +65,7 @@ export const CarouselIntroduction = () => {
                                     </p>
                                     <img
                                         src="/images/slide-3.jpg"
-                                        className="h-70 object-cover rounded-full"
+                                        className="h-70 object-cover rounded-full mt-5"
                                         alt=""
                                     />
                                 </div>

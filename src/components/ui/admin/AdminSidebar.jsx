@@ -57,8 +57,8 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
             }`}
         >
             {/* <!-- SIDEBAR HEADER --> */}
-            <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-                <img className=" w-50" src="/images/logo2.png"></img>
+            <div className="flex items-center justify-between gap-2 px-6 py-4">
+                <img className="w-50" src="/images/logo2.png"></img>
 
                 <button
                     ref={trigger}

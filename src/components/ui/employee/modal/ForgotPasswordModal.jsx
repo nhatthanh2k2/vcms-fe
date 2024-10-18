@@ -6,7 +6,7 @@ import localeData from 'dayjs/plugin/localeData'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MyToast } from '../common'
+import { MyToast } from '../../common'
 import { employeeService } from '@/services'
 
 dayjs.extend(localeData)

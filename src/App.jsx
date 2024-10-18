@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import './App.css'
+// import './App.css'
 import { router } from './routes'
 import { useNavigate, useRoutes } from 'react-router-dom'
 import { refreshToken } from './services'
