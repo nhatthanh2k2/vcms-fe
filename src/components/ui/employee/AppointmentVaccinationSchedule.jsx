@@ -4,7 +4,7 @@ import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
 import { appointmentService, customerService } from '@/services'
 import { MyToast } from '../common'
-import { PreInjectionCheckModal, VaccinationInjectionModal } from '.'
+import { AppointmentInjectionModal, PreInjectionCheckModal, VaccinationInjectionModal } from '.'
 import { getPatientInfo } from '@/utils'
 
 const options = [
@@ -108,7 +108,11 @@ export const AppointmentVaccinationSchedule = () => {
                         </Tooltip>
                     </div>
 
-                    <div onClick={() => handleOpenVaccinationInjectionModal(record)}>
+                    <div
+                        onClick={() => {
+                            handleOpenAppointmentInjectionModal(record)
+                        }}
+                    >
                         <Tooltip placement="top" title="Tạo phiếu tiêm">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -186,8 +190,9 @@ export const AppointmentVaccinationSchedule = () => {
     }
 
     const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
-    const [isOpenVaccinationInjectionModal, setIsOpenVaccinationInjectionModal] = useState(false)
+    const [isOpenAppointmentInjectionModal, setIsOpenAppointmentInjectionModal] = useState(false)
     const [patientInfo, setPatientInfo] = useState(null)
+    const [appointmentRecord, setAppointmentRecord] = useState(null)
 
     const handleOpenPreInjectionCheckModal = async (record) => {
         const result = getPatientInfo(record)
@@ -199,14 +204,15 @@ export const AppointmentVaccinationSchedule = () => {
         setIsOpenPreInjectionCheckModal(false)
     }
 
-    const handleOpenVaccinationInjectionModal = (record) => {
+    const handleOpenAppointmentInjectionModal = (record) => {
         const result = getPatientInfo(record)
         setPatientInfo(result)
-        setIsOpenVaccinationInjectionModal(true)
+        setAppointmentRecord(record)
+        setIsOpenAppointmentInjectionModal(true)
     }
 
-    const handleCloseVaccinationInjectionModal = () => {
-        setIsOpenVaccinationInjectionModal(false)
+    const handleCloseAppointmentInjectionModal = () => {
+        setIsOpenAppointmentInjectionModal(false)
     }
 
     return (
@@ -260,10 +266,10 @@ export const AppointmentVaccinationSchedule = () => {
                 patient={patientInfo}
             />
 
-            <VaccinationInjectionModal
-                visibleInjectionModal={isOpenVaccinationInjectionModal}
-                handleCloseVaccinationInjectionModal={handleCloseVaccinationInjectionModal}
-                patient={patientInfo}
+            <AppointmentInjectionModal
+                visibleAppointmentInjectionModal={isOpenAppointmentInjectionModal}
+                handleCloseAppointmentInjectionModal={handleCloseAppointmentInjectionModal}
+                appointmentRecord={appointmentRecord}
             />
         </section>
     )

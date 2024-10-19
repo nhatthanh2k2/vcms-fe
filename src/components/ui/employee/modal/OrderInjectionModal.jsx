@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React from 'react'
 
-export const VaccinationInjectionModal = ({
+export const OrderInjectionModal = ({
     visibleInjectionModal,
     handleCloseVaccinationInjectionModal,
     patient,

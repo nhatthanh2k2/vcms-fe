@@ -13,3 +13,18 @@ export const PATH = {
     login: 'dang-nhap',
     reception: 'le-tan',
 }
+
+export const ADMIN_PATH = {
+    home: 'admin',
+    hrManagement: 'quan-ly-nhan-su',
+}
+
+export const EMPLOYEE_PATH = {
+    home: 'nhan-vien',
+    customerLookup: 'tra-cuu-khach-hang',
+    appointmentSchedule: 'lich-hen-tiem',
+    orderSchedule: 'lich-tiem-tu-don-hang',
+    bookVaccine: 'dat-vac-xin',
+    bookCustomPackage: 'dat-goi-theo-yeu-cau',
+    printRecord: 'in-phieu'
+}

@@ -12,8 +12,10 @@ import {
     PageNotFound,
     VaccinationHistoryPage,
     EmplyeeHomePage,
+    AdminHomePage,
+    HRManagementPage,
 } from '@/pages'
-import { PATH } from '@/constant'
+import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
 
 export const router = [
@@ -99,7 +101,16 @@ export const router = [
     {
         path: '/admin',
         element: <AdminLayout />,
-        children: [],
+        children: [
+            {
+                index: true,
+                element: <AdminHomePage />,
+            },
+            {
+                path: ADMIN_PATH.hrManagement,
+                element: <HRManagementPage />,
+            },
+        ],
     },
     {
         path: '/nhan-vien',
