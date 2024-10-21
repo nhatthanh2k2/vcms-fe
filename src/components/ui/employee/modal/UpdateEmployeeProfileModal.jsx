@@ -128,9 +128,6 @@ export const UpdateEmployeeProfileModal = ({
             onCancel={handleCloseUpdateEmployeeProfileModal}
             footer={null}
             width={1200}
-            style={{
-                top: 40,
-            }}
         >
             <div className="flex flex-row space-x-5">
                 <div className="flex flex-col">

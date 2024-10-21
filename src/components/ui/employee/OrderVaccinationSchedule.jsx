@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { employeeService, orderService } from '@/services'
 import { MyToast } from '../common'
 import { convertPaymentType, getPatientInfo } from '@/utils'
-import { OrderDetailModal, PreInjectionCheckModal } from '.'
+import { OrderDetailModal, OrderInjectionModal, PreInjectionCheckModal } from '.'
 
 export const OrderVaccinationSchedule = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -22,12 +22,8 @@ export const OrderVaccinationSchedule = () => {
     const handleGetDetailOrder = async (orderId) => {
         try {
             const response = await orderService.getAllOrderDetailByOrderId(orderId)
-            console.log(response.data)
-            if (response.status === 200) {
-                if (response.data.code === 1000) {
-                    setOrderDetailList(response.data.result)
-                    handleOpenOrderDetailModal()
-                }
+            if (response.data.code === 1000) {
+                setOrderDetailList(response.data.result)
             } else MyToast('error', 'Xảy ra lỗi khi lấy chi tiết đơn hàng')
         } catch (error) {
             if (error.response) {
@@ -83,7 +79,12 @@ export const OrderVaccinationSchedule = () => {
             key: 'actions',
             render: (text, record) => (
                 <div className="flex space-x-2">
-                    <div onClick={() => handleGetDetailOrder(record.orderId)}>
+                    <div
+                        onClick={() => {
+                            handleGetDetailOrder(record.orderId)
+                            handleOpenOrderDetailModal(record)
+                        }}
+                    >
                         <Tooltip placement="top" title={'Xem đơn hàng'}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +104,12 @@ export const OrderVaccinationSchedule = () => {
                         </Tooltip>
                     </div>
 
-                    <div>
+                    <div
+                        onClick={() => {
+                            handleGetDetailOrder(record.orderId)
+                            handleOpenOrderInjectionModal(record)
+                        }}
+                    >
                         <Tooltip placement="top" title={'Tạo phiếu tiêm'}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -175,6 +181,18 @@ export const OrderVaccinationSchedule = () => {
         setIsOpenPreInjectionCheckModal(false)
     }
 
+    const [isOpenOrderinjectionModal, setIsOpenOrderInjectionModal] = useState(false)
+    const [orderRecord, setOrderRecord] = useState(null)
+
+    const handleOpenOrderInjectionModal = (record) => {
+        setOrderRecord(record)
+        setIsOpenOrderInjectionModal(true)
+    }
+
+    const handleCloseOrderInjectionModal = () => {
+        setIsOpenOrderInjectionModal(false)
+    }
+
     return (
         <section className="bg-white rounded-lg shadow p-6">
             <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
@@ -231,6 +249,13 @@ export const OrderVaccinationSchedule = () => {
                 visiblePreInjectionModal={isOpenPreInjectionCheckModal}
                 handleClosePreInjectionCheckModal={handleClosePreInjectionCheckModal}
                 patient={patientInfo}
+            />
+
+            <OrderInjectionModal
+                visibleOrderInjectionModal={isOpenOrderinjectionModal}
+                handleCloseOrderInjectionModal={handleCloseOrderInjectionModal}
+                orderRecord={orderRecord}
+                orderDetailList={orderDetailList}
             />
         </section>
     )

@@ -16,11 +16,11 @@ function App() {
             const expirationTime = decodedToken.exp * 1000
             const currentTime = Date.now()
             const timeLeft = expirationTime - currentTime
-            if (timeLeft < 5 * 60 * 1000) {
+            if (timeLeft <= 5 * 60 * 1000) {
                 refreshToken(navigate)
             }
         }
-        const intervalId = setInterval(checkTokenExpiration, 60 * 1000)
+        const intervalId = setInterval(checkTokenExpiration, 5 * 60 * 1000)
         return () => clearInterval(intervalId)
     }, [])
 

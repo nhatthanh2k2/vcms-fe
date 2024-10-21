@@ -1,4 +1,4 @@
-import axios from "axios"
+
 import { apiInstance } from "@/constant";
 
 const api_url = import.meta.env.VITE_VCMS_API

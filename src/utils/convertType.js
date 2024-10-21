@@ -62,3 +62,14 @@ export const convertPaymentType = (payment) => {
             return payment
     }
 }
+
+export const convertScreeningResult = (result) => {
+    switch (result) {
+        case 'ELIGIBLE':
+            return 'Đủ điều kiện tiêm'
+        case 'NOT_ELIGIBLE':
+            return 'Chưa đủ điều kiện tiêm'
+        default:
+            return result
+    }
+}

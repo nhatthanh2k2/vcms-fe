@@ -190,9 +190,7 @@ export const AppointmentVaccinationSchedule = () => {
     }
 
     const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
-    const [isOpenAppointmentInjectionModal, setIsOpenAppointmentInjectionModal] = useState(false)
     const [patientInfo, setPatientInfo] = useState(null)
-    const [appointmentRecord, setAppointmentRecord] = useState(null)
 
     const handleOpenPreInjectionCheckModal = async (record) => {
         const result = getPatientInfo(record)
@@ -204,9 +202,9 @@ export const AppointmentVaccinationSchedule = () => {
         setIsOpenPreInjectionCheckModal(false)
     }
 
+    const [isOpenAppointmentInjectionModal, setIsOpenAppointmentInjectionModal] = useState(false)
+    const [appointmentRecord, setAppointmentRecord] = useState(null)
     const handleOpenAppointmentInjectionModal = (record) => {
-        const result = getPatientInfo(record)
-        setPatientInfo(result)
         setAppointmentRecord(record)
         setIsOpenAppointmentInjectionModal(true)
     }

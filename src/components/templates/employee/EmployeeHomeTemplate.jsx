@@ -5,12 +5,12 @@ import {
     CustomizableVaccinePackage,
     BookVaccination,
     AppointmentVaccinationSchedule,
-    PrintVaccinationRecord,
     OrderVaccinationSchedule,
     MyToast,
     AddCustomerModal,
     ChangePasswordModal,
     UpdateEmployeeProfileModal,
+    PrintRecord,
 } from '@/components/ui'
 import { useNavigate } from 'react-router-dom'
 
@@ -54,7 +54,7 @@ export const EmployeeHomeTemplate = () => {
                     />
                 )
             case 'printVaccinationRecord':
-                return <PrintVaccinationRecord />
+                return <PrintRecord />
             case 'OrderVaccinationSchedule':
                 return <OrderVaccinationSchedule />
             case 'CustomizableVaccinePackage':
