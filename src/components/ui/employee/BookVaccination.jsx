@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { DatePicker, Modal, Select, Table } from 'antd'
 import {
-    convertPackageType,
     convertVaccineType,
     disabledDoB,
     disabledPastDateForEmployee,
@@ -269,12 +268,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                                     placeholder="Chọn gói vắc xin"
                                     options={vaccinePackageList.map((pack) => ({
                                         value: pack.vaccinePackageId,
-                                        label: (
-                                            <span>
-                                                {pack.vaccinePackageName}{' '}
-                                                {convertPackageType(pack.vaccinePackageType)}
-                                            </span>
-                                        ),
+                                        label: <span>{pack.vaccinePackageName}</span>,
                                     }))}
                                     style={{
                                         width: 384,

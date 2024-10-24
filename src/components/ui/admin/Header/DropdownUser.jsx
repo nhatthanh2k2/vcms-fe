@@ -5,11 +5,10 @@ import { ClickOutside } from './ClickOutSide'
 export const DropdownUser = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false)
 
+    const employee = JSON.parse(sessionStorage.getItem('employeeProfile'))
+
     return (
-        <ClickOutside
-            onClick={() => setDropdownOpen(false)}
-            className="relative"
-        >
+        <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
             <Link
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-4"
@@ -17,17 +16,26 @@ export const DropdownUser = () => {
             >
                 <span className="hidden text-right lg:block">
                     <span className="block text-sm font-medium text-black dark:text-white">
-                        Thomas Anree
+                        {employee?.employeeProfile.employeeFullName}
                     </span>
-                    <span className="block text-xs">UX Designer</span>
+                    <span className="block text-xs">
+                        {employee?.employeeProfile.employeePosition}
+                    </span>
                 </span>
 
                 <span className="h-12 w-12 rounded-full">
-                    <img src="" alt="User" />
+                    <img
+                        src={
+                            import.meta.env.VITE_VCMS_IMAGE +
+                            '/avatars/' +
+                            employee?.employeeProfile.employeeAvatar
+                        }
+                        alt="User"
+                    />
                 </span>
 
                 <svg
-                    className="hidden fill-current sm:block"
+                    className={`hidden fill-current sm:block ${dropdownOpen && 'rotate-180'}`}
                     width="12"
                     height="8"
                     viewBox="0 0 12 8"

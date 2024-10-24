@@ -1,11 +1,16 @@
 import Modal from 'antd/es/modal/Modal'
 import React, { useRef, useState, useEffect } from 'react'
-import { addressService } from '@/services'
-import { convertQualification } from '@/utils'
+import { addressService, employeeService } from '@/services'
+import { convertQualification, disabledDoB } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Select } from 'antd'
+import { DatePicker, Select } from 'antd'
+import { MyToast } from '../../common'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
+dayjs.extend(customParseFormat)
 
 const updateInfoSchema = z.object({
     employeeFullName: z.string().nonempty('Họ và tên là bắt buộc'),
@@ -23,14 +28,17 @@ const updateInfoSchema = z.object({
 })
 
 export const UpdateEmployeeProfileModal = ({
-    employee,
+    employeeInfo,
     visibleUpdateEmployeeProfileModal,
     handleCloseUpdateEmployeeProfileModal,
 }) => {
     const [selectedImage, setSelectedImage] = useState(null)
     const fileInputRef = useRef(null)
-    const originalAvatar =
+    const [employee, setEmployee] = useState(employeeInfo)
+
+    const [originalAvatar, setOriginalAvatar] = useState(
         import.meta.env.VITE_VCMS_IMAGE + '/avatars/' + employee?.employeeProfile.employeeAvatar
+    )
 
     const handleChoseFile = () => {
         fileInputRef.current.click()
@@ -39,6 +47,19 @@ export const UpdateEmployeeProfileModal = ({
     const handleFileChange = (e) => {
         const file = e.target.files[0]
         if (file) {
+            const allowedTypes = ['image/jpeg', 'image/png']
+            if (!allowedTypes.includes(file.type)) {
+                MyToast('warn', 'Vui lòng chọn file JPG hoặc PNG.')
+                return
+            }
+
+            const maxSizeInMB = 2
+            const maxSizeInBytes = maxSizeInMB * 1024 * 1024
+            if (file.size > maxSizeInBytes) {
+                MyToast('warn', 'Kích thước ảnh không vượt quá 2MB.')
+                return
+            }
+
             const reader = new FileReader()
             reader.onloadend = () => {
                 setSelectedImage(reader.result)
@@ -51,7 +72,31 @@ export const UpdateEmployeeProfileModal = ({
         setSelectedImage(null)
     }
 
-    // xu ly cap nhat thong tin
+    const handleUpdateAvatar = async () => {
+        const file = fileInputRef.current.files[0]
+        try {
+            if (file) {
+                const username = employee?.employeeProfile.employeeUsername
+                const response = await employeeService.updateAvatar(username, file)
+                if (response.data.code === 1000) {
+                    const employeeResponse = { ...response.data.result }
+                    const employeeProfile = { ...employeeResponse }
+                    sessionStorage.removeItem('employeeProfile')
+                    sessionStorage.setItem('employeeProfile', JSON.stringify({ employeeProfile }))
+                    setOriginalAvatar(
+                        import.meta.env.VITE_VCMS_IMAGE +
+                            '/avatars/' +
+                            employeeResponse.employeeAvatar
+                    )
+                    setEmployee(JSON.parse(sessionStorage.getItem('employeeProfile')))
+                    MyToast('success', 'Cập nhật ảnh đại diện thành công.')
+                } else MyToast('error', 'Xảy ra lỗi khi cập nhật ảnh.')
+            } else MyToast('warn', 'Bạn chưa chọn ảnh đại diện.')
+        } catch (error) {
+            if (error.response) MyToast('error', 'Cập nhât ảnh đại diện không thành công.')
+        }
+    }
+
     const {
         register,
         handleSubmit,
@@ -78,8 +123,45 @@ export const UpdateEmployeeProfileModal = ({
         },
     })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    useEffect(() => {
+        if (employee?.employeeProfile) {
+            reset({
+                employeeFullName: employee.employeeProfile.employeeFullName,
+                employeeDob: employee.employeeProfile.employeeDob,
+                employeeEmail: employee.employeeProfile.employeeEmail,
+                employeePhone: employee.employeeProfile.employeePhone,
+                employeeGender: employee.employeeProfile.employeeGender,
+                employeeQualification: convertQualification(
+                    employee.employeeProfile.employeeQualification
+                ),
+                employeePosition: employee.employeeProfile.employeePosition,
+                employeeProvince: employee.employeeProfile.employeeProvince,
+                employeeDistrict: employee.employeeProfile.employeeDistrict,
+                employeeWard: employee.employeeProfile.employeeWard,
+            })
+        }
+    }, [employee, reset])
+
+    const onSubmit = async (data) => {
+        const request = {
+            ...data,
+            employeeQualification: employee?.employeeProfile.employeeQualification,
+            employeeUsername: employee?.employeeProfile.employeeUsername,
+        }
+        try {
+            const response = await employeeService.updateProfile(request)
+            if (response.data.code === 1000) {
+                const employeeResponse = { ...response.data.result }
+                const employeeProfile = { ...employeeResponse }
+                sessionStorage.removeItem('employeeProfile')
+                sessionStorage.setItem('employeeProfile', JSON.stringify({ employeeProfile }))
+                setEmployee(JSON.parse(sessionStorage.getItem('employeeProfile')))
+
+                MyToast('success', 'Cập nhật thông tin thành công.')
+            } else MyToast('error', 'Xảy ra lỗi khi cập nhật thông tin.')
+        } catch (error) {
+            if (error.response) MyToast('error', 'Không tìm thấy nhân viên.')
+        }
     }
 
     const [provinceList, setProvinceList] = useState([])
@@ -94,7 +176,7 @@ export const UpdateEmployeeProfileModal = ({
         setDistrictList(addressService.getDistrictList())
         setWardList(addressService.getWardList())
     }, [])
-    // Khi province thay đổi, cập nhật mã quận
+
     useEffect(() => {
         const provinceCode = addressService.getProvinceCodeByName(getValues('employeeProvince'))
         setSelectedProvince(provinceCode)
@@ -121,11 +203,27 @@ export const UpdateEmployeeProfileModal = ({
         setSelectedWard(wardCode)
     }, [selectedDistrict])
 
+    const [dob, setDob] = useState(employee?.employeeProfile.employeeDob)
+    const parsedDob = dayjs(dob, 'DD-MM-YYYY')
+
+    const handleCloseModal = () => {
+        handleCloseUpdateEmployeeProfileModal()
+        reset()
+    }
+
+    const [selectedGender, setSelectedGender] = useState(
+        employee?.employeeProfile.employeeGender || ''
+    )
+
+    const handleGenderChange = (event) => {
+        setSelectedGender(event.target.value)
+    }
+
     return (
         <Modal
-            title={<div className="text-center font-bold text-xl">Cài đặt hồ sơ cá nhân</div>}
+            title={<div className="text-center font-bold text-xl">Cập nhật hồ sơ cá nhân</div>}
             open={visibleUpdateEmployeeProfileModal}
-            onCancel={handleCloseUpdateEmployeeProfileModal}
+            onCancel={handleCloseModal}
             footer={null}
             width={1200}
         >
@@ -163,6 +261,7 @@ export const UpdateEmployeeProfileModal = ({
                             ref={fileInputRef}
                             className="hidden"
                             onChange={handleFileChange}
+                            accept=".jpg, .png"
                         />
                     </div>
 
@@ -190,7 +289,10 @@ export const UpdateEmployeeProfileModal = ({
                             </button>
                         </div>
                         <div className="m-3">
-                            <button className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center hover-button">
+                            <button
+                                onClick={handleUpdateAvatar}
+                                className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center hover-button"
+                            >
                                 <span className="mr-2">Cập nhật ảnh</span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -224,10 +326,15 @@ export const UpdateEmployeeProfileModal = ({
                             </div>
                             <div className="flex-1 flex flex-col space-y-2">
                                 <label className="font-semibold">Ngày sinh:</label>
-                                <input
+                                <DatePicker
                                     {...register('employeeDob')}
-                                    type="text"
-                                    className="input input-bordered input-info w-full input-sm"
+                                    format={'DD-MM-YYYY'}
+                                    defaultValue={parsedDob.isValid() ? parsedDob : null}
+                                    onChange={(date) => {
+                                        setDob(dayjs(date).format('DD-MM-YYYY'))
+                                        setValue('employeeDob', dayjs(date).format('DD-MM-YYYY'))
+                                    }}
+                                    disabledDate={disabledDoB}
                                 />
                             </div>
                         </div>
@@ -262,9 +369,8 @@ export const UpdateEmployeeProfileModal = ({
                                             type="radio"
                                             value="MALE"
                                             className="radio radio-info"
-                                            checked={
-                                                employee?.employeeProfile.employeeGender === 'MALE'
-                                            }
+                                            checked={selectedGender === 'MALE'}
+                                            onChange={handleGenderChange}
                                         />
                                     </div>
                                     <div className="flex gap-2">
@@ -274,10 +380,8 @@ export const UpdateEmployeeProfileModal = ({
                                             type="radio"
                                             value="FEMALE"
                                             className="radio radio-info"
-                                            checked={
-                                                employee?.employeeProfile.employeeGender ===
-                                                'FEMALE'
-                                            }
+                                            checked={selectedGender === 'FEMALE'}
+                                            onChange={handleGenderChange}
                                         />
                                     </div>
                                 </div>

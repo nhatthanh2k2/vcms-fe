@@ -15,8 +15,20 @@ export const Toast = () => {
             draggable
             pauseOnHover
             theme="light"
+            zIndex={9999}
         />
     )
+}
+
+const ToastOption = {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
 }
 
 export async function MyToast(type, message) {
@@ -40,15 +52,4 @@ export async function MyToast(type, message) {
         default: {
         }
     }
-}
-
-const ToastOption = {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
 }

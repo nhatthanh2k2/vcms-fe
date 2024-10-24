@@ -1,18 +1,3 @@
-export const convertPackageType = (type) => {
-    switch (type) {
-        case '6-MONTH':
-            return '(Gói 6 tháng)'
-        case '9-MONTH':
-            return '(Gói 9 tháng)'
-        case '12-MONTH':
-            return '(Gói 12 tháng)'
-        case '24-MONTH':
-            return '(Gói 24 tháng)'
-        default:
-            return '' 
-    }
-}
-
 export const convertVaccineType = (type) => {
     switch (type) {
         case 'BOTH':
@@ -39,12 +24,18 @@ export const convertAppointmentStatus = (status) => {
 
 export const convertQualification = (qual) => {
     switch (qual) {
-        case 'BS':
-            return 'Bác sĩ'
         case 'ĐD':
             return 'Điều dưỡng'
-        case 'ĐH':
-            return 'Đại học'
+        case 'BS':
+            return 'Bác sĩ'
+        case 'BS.CKI':
+            return 'Bác sĩ chuyên khoa I'
+        case 'BS.CKII':
+            return 'Bác sĩ chuyên khoa II'
+        case 'Ths.Bs':
+            return 'Thạc sĩ, Bác sĩ'
+        case 'Ts.Bs':
+            return 'Tiến sĩ, Bác sĩ'
         default:
             return qual
     }

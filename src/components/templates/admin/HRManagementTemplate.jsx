@@ -1,6 +1,11 @@
-import { EmployeeList } from '@/components/ui'
+import { Breadcrumb, EmployeeTable } from '@/components/ui'
 import React from 'react'
 
 export const HRManagementTemplate = () => {
-    return <EmployeeList />
+    return (
+        <>
+            <Breadcrumb pageName={'Nhân sự'} />
+            <EmployeeTable />
+        </>
+    )
 }

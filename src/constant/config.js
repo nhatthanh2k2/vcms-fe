@@ -16,7 +16,10 @@ export const PATH = {
 
 export const ADMIN_PATH = {
     home: 'admin',
-    hrManagement: 'quan-ly-nhan-su',
+    hrManagement: 'quan-ly/nhan-su',
+    vaccineMangement: 'quan-ly/vac-xin/danh-muc',
+    packageManagement: 'quan-ly/goi-vac-xin/danh-muc',
+    batchManagement: 'quan-ly/lo-vac-xin/danh-muc'
 }
 
 export const EMPLOYEE_PATH = {

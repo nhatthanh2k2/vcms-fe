@@ -14,6 +14,9 @@ import {
     EmplyeeHomePage,
     AdminHomePage,
     HRManagementPage,
+    VaccineManagementPage,
+    VaccinePackageManagementPage,
+    VaccineBatchManagementPage,
 } from '@/pages'
 import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -109,6 +112,18 @@ export const router = [
             {
                 path: ADMIN_PATH.hrManagement,
                 element: <HRManagementPage />,
+            },
+            {
+                path: ADMIN_PATH.vaccineMangement,
+                element: <VaccineManagementPage />,
+            },
+            {
+                path: ADMIN_PATH.packageManagement,
+                element: <VaccinePackageManagementPage />,
+            },
+            {
+                path: ADMIN_PATH.batchManagement,
+                element: <VaccineBatchManagementPage />,
             },
         ],
     },

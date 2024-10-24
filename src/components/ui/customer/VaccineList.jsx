@@ -51,12 +51,14 @@ export const VaccineList = () => {
         } else {
             const filteredList = vaccineList.filter(
                 (vaccine) =>
-                    vaccine.vaccinePurpose &&
-                    vaccine.vaccinePurpose.toLowerCase().includes(value.toLowerCase())
+                    vaccine.vaccineDescription &&
+                    vaccine.vaccineDescription.toLowerCase().includes(value.toLowerCase())
             )
             setFilteredVaccineList(filteredList)
         }
     }
+
+    console.log(vaccineList)
 
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 12

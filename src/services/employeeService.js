@@ -26,6 +26,26 @@ export const employeeService =  {
     changePassword: (request) => {
         return api.post("/employees/change-password", request)
     },
+    createEmployee: (request) => {
+        return api.post("/employees/create", request)
+    },
+    deleteEmployee: (employeeId) => {
+        return api.delete("/employees/delete/" + employeeId)
+    },
+    updateProfile: (requset) => {
+        return api.put("/employees/update/update-profile", requset)
+    },
+    updateAvatar: (username, avatarFile) => {
+        
+        const formData = new FormData();
+        formData.append("username", username); 
+        formData.append("avatar", avatarFile); 
     
+        return api.put("/employees/update/update-avatar", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    }
      
 }

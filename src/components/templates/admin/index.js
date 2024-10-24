@@ -1,2 +1,5 @@
 export * from './AdminHomeTemplate'
 export * from './HRManagementTemplate'
+export * from './VaccineManagementTemplate'
+export * from './VaccinePackageManagementTemplate'
+export * from './VaccineBatchManagementTemplate'

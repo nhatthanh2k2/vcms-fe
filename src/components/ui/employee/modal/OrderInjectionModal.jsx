@@ -23,9 +23,8 @@ const orderInjectionSchema = z.object({
     vaccinePackageId: z
         .number()
         .int()
-        .positive()
         .nullable()
-        .refine((val) => val === null, {
+        .refine((val) => val !== null, {
             message: 'Chưa chọn gói vắc xin',
         }),
     injectionType: z.string().min(1, { message: 'Chưa chọn liều lượng' }),
@@ -62,7 +61,7 @@ export const OrderInjectionModal = ({
         defaultValues: {
             vaccineId: null,
             vaccineBatchId: null,
-            vaccinePackageId: null,
+            vaccinePackageId: -1,
             injectionType: '',
             dosage: '',
             dose: '',
@@ -103,14 +102,13 @@ export const OrderInjectionModal = ({
     }, [getValues('vaccinePackageId')])
 
     const onSubmit = async (data) => {
-        console.log(watch())
         try {
             const creationRequest = {
                 customerPhone: orderRecord.orderCustomerPhone,
                 customerDob: orderRecord.orderCustomerDob,
                 employeeUsername: employee.employeeProfile.employeeUsername,
                 vaccineId: data.vaccineId,
-                vaccinePackageId: data.vaccinePackageId ? data.vaccinePackageId : '',
+                vaccinePackageId: data.vaccinePackageId,
                 vaccineBatchId: data.vaccineBatchId,
                 vaccinationRecordType: data.injectionType,
                 vaccinationRecordDosage: data.dosage,
@@ -308,7 +306,6 @@ export const OrderInjectionModal = ({
                                                 setValue('vaccinePackageId', value)
                                                 clearErrors('vaccinePackageId')
                                             }}
-                                            value={watch('vaccinePackageId') || null}
                                             placeholder="Chọn gói vắc xin"
                                         />
                                         {errors.vaccinePackageId && (

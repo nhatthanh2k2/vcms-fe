@@ -1,2 +1,5 @@
 export * from './AdminHomePage'
 export * from './HRManagementPage'
+export * from './VaccineManagementPage'
+export * from './VaccinePackageManagementPage'
+export * from './VaccineBatchManagementPage'

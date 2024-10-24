@@ -10,5 +10,10 @@ const api = apiInstance({
 export const vaccinationRecordService = {
     createVaccinationRecord: (request) => {
         return api.post("/vaccination-record/create", request)
+    },
+    getVaccinationRecordByCreateDate: (createDate) => {
+        return api.get("/vaccination-record/list/create-date", {
+            params: { createDate }
+        });
     }
 }

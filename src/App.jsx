@@ -5,6 +5,7 @@ import { router } from './routes'
 import { useNavigate, useRoutes } from 'react-router-dom'
 import { refreshToken } from './services'
 import { jwtDecode } from 'jwt-decode'
+import './chartSetup'
 
 function App() {
     const navigate = useNavigate()

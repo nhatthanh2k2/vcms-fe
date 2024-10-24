@@ -11,7 +11,6 @@ import {
     disabledDoB,
     formatCurrency,
     disabledPastDate,
-    convertPackageType,
     convertVaccineType,
     phoneNumberPattern,
 } from '@/utils'
@@ -421,13 +420,13 @@ export const AppointmentForm = () => {
                                         <label>Xã/Phường:</label>
                                         <Select
                                             placeholder="Chọn xã/phường"
-                                            value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                            value={selectedWard || undefined}
                                             onChange={(value) => {
                                                 setSelectedWard(value)
                                                 setValue('appointmentCustomerWard', value)
                                                 if (value) clearErrors('appointmentCustomerWard')
                                             }}
-                                            disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                                            disabled={!selectedDistrict}
                                             options={
                                                 selectedDistrict
                                                     ? wardList
@@ -435,14 +434,14 @@ export const AppointmentForm = () => {
                                                               (ward) =>
                                                                   ward.district_code ===
                                                                   selectedDistrict
-                                                          ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                                                          )
                                                           .map((ward) => ({
                                                               value: ward.code,
                                                               label: ward.name,
                                                           }))
                                                     : []
                                             }
-                                            style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                            style={{ opacity: !selectedDistrict ? 0.75 : 1 }}
                                         />
 
                                         {errors.appointmentCustomerWard && (
@@ -658,7 +657,7 @@ export const AppointmentForm = () => {
                                     setVaccinePackageSelected(0)
                                 }}
                                 type="radio"
-                                name="my_tabs_2"
+                                name="vaccine_tabs"
                                 role="tab"
                                 className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
                                 aria-label="Vắc xin lẻ"
@@ -737,7 +736,7 @@ export const AppointmentForm = () => {
                                     setBatchDetailSelected(0)
                                 }}
                                 type="radio"
-                                name="my_tabs_2"
+                                name="vaccine_tabs"
                                 role="tab"
                                 className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
                                 aria-label="Gói vắc xin"
@@ -757,10 +756,7 @@ export const AppointmentForm = () => {
                                                     <div className="card-body">
                                                         <div className="flex space-x-2">
                                                             <h2 className="card-title ">
-                                                                {pack.vaccinePackageName}{' '}
-                                                                {convertPackageType(
-                                                                    pack.vaccinePackageType
-                                                                )}
+                                                                {pack.vaccinePackageName}
                                                             </h2>
                                                             <input
                                                                 type="radio"

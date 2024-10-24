@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-    disabledDoB,
-    disabledPastDate,
-    convertPackageType,
-    disabledPastDateForEmployee,
-} from '@/utils'
+import { disabledDoB, disabledPastDate, disabledPastDateForEmployee } from '@/utils'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -366,12 +361,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                             placeholder="Chọn gói vắc xin"
                             options={vaccinePackageList.map((pack, index) => ({
                                 value: pack.vaccinePackageId,
-                                label: (
-                                    <span key={index}>
-                                        {pack.vaccinePackageName}{' '}
-                                        {convertPackageType(pack.vaccinePackageType)}
-                                    </span>
-                                ),
+                                label: <span key={index}>{pack.vaccinePackageName}</span>,
                             }))}
                             style={{
                                 width: 384,

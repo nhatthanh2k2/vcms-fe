@@ -102,6 +102,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
 
     return (
         <Modal
+            key={'add_customer_modal'}
             title={<div className="text-center font-bold text-xl">Thêm khách hàng mới</div>}
             open={visibleAddCustomerModal}
             onCancel={handleCancel}

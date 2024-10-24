@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Select, DatePicker, Pagination } from 'antd'
 import { batchDetailService, vaccinePackageService } from '@/services'
-import {
-    disabledDoB,
-    formatCurrency,
-    disabledPastDate,
-    convertPackageType,
-    phoneNumberPattern,
-} from '@/utils'
+import { disabledDoB, formatCurrency, disabledPastDate, phoneNumberPattern } from '@/utils'
 
 import { addressService } from '@/services/addressService'
 import { z } from 'zod'
@@ -670,9 +664,6 @@ export const OrderForm = () => {
                                                     <div className="card-body">
                                                         <h2 className="card-title ">
                                                             {pack.vaccinePackageName}{' '}
-                                                            {convertPackageType(
-                                                                pack.vaccinePackageType
-                                                            )}
                                                         </h2>
 
                                                         <p>

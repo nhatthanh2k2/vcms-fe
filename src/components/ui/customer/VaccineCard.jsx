@@ -31,7 +31,7 @@ export const VaccineCard = ({ vaccineDetail }) => {
                 >
                     {vaccineDetail?.vaccineName}
                 </span>
-                <p className="limited-text">{vaccineDetail?.vaccinePurpose}</p>
+                <p className="limited-text">{vaccineDetail?.vaccineDescription}</p>
             </div>
         </div>
     )
