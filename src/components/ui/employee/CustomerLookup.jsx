@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import dayjs from 'dayjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { addressService, customerService } from '@/services'
+import { customerService } from '@/services'
 import { useForm } from 'react-hook-form'
-import { DatePicker, Table, Modal } from 'antd'
-import { disabledDoB, disabledPastDate, phoneNumberPattern } from '@/utils'
+import { DatePicker, Table } from 'antd'
+import { disabledDoB, phoneNumberPattern } from '@/utils'
 import { AlertModal, MyToast } from '../common'
-import { AddCustomerModal } from '.'
 
 const lookupSchema = z.object({
     customerIdentifier: z

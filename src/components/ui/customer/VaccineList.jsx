@@ -35,7 +35,7 @@ export const VaccineList = () => {
                 .then((response) => setVaccineList(response.data.result))
                 .catch((err) => console.log('Get all vaccines failed!'))
         } else {
-            diseaseService
+            vaccineService
                 .getVaccinesOfDisease(diseaseSelected)
                 .then((response) => setVaccineList(response.data.result))
                 .catch((err) => console.log('Get vaccines of disease failed!'))

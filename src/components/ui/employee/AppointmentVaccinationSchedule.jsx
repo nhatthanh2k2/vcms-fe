@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Table, DatePicker, Select, Tooltip } from 'antd'
 import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
-import { appointmentService, customerService } from '@/services'
+import { appointmentService } from '@/services'
 import { MyToast } from '../common'
-import { AppointmentInjectionModal, PreInjectionCheckModal, VaccinationInjectionModal } from '.'
+import { AppointmentInjectionModal, PreInjectionCheckModal } from '.'
 import { getPatientInfo } from '@/utils'
 
 const options = [

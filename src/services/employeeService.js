@@ -37,11 +37,11 @@ export const employeeService =  {
     },
     updateAvatar: (username, avatarFile) => {
         
-        const formData = new FormData();
-        formData.append("username", username); 
-        formData.append("avatar", avatarFile); 
+        const request = new FormData();
+        request.append("username", username); 
+        request.append("avatar", avatarFile); 
     
-        return api.put("/employees/update/update-avatar", formData, {
+        return api.put("/employees/update/update-avatar", request, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

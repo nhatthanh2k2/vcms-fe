@@ -3,15 +3,20 @@ import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
 import dayjs from 'dayjs'
 import { Table, Tooltip } from 'antd'
+import { AddVaccineBatchModal } from '.'
 
 export const VaccineBatchTable = () => {
     const [vaccineBatchList, setVaccineBatchList] = useState([])
 
-    useEffect(() => {
+    const handleGetVaccineBatchList = () => {
         vaccineBatchService
             .getAllBatch()
             .then((response) => setVaccineBatchList(response.data.result))
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy các lô vắc xin.'))
+    }
+
+    useEffect(() => {
+        handleGetVaccineBatchList()
     }, [])
 
     const vaccineBatchColumns = [
@@ -35,7 +40,7 @@ export const VaccineBatchTable = () => {
             title: 'Giá trị',
             dataIndex: 'vaccineBatchValue',
             key: 'vaccineBatchValue',
-            render: (text) => text.toLocaleString() + ' VND',
+            render: (text) => BigInt(text).toLocaleString() + ' VND',
         },
         {
             title: 'Ngày nhập',
@@ -55,7 +60,7 @@ export const VaccineBatchTable = () => {
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                className="w-6 h-6"
+                                className="w-8 h-8"
                             >
                                 <g fill="#000" fillRule="evenodd" clipRule="evenodd">
                                     <path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" />
@@ -68,6 +73,16 @@ export const VaccineBatchTable = () => {
             ),
         },
     ]
+
+    const [isOpenAddVaccineBatchModal, setIsOpenAddVaccineBatchModal] = useState(false)
+
+    const handleOpenAddVaccineBatchModal = () => {
+        setIsOpenAddVaccineBatchModal(true)
+    }
+
+    const handleCloseAddVaccineBatchModal = () => {
+        setIsOpenAddVaccineBatchModal(false)
+    }
 
     return (
         <div className="flex flex-col space-y-5">
@@ -102,7 +117,10 @@ export const VaccineBatchTable = () => {
                     </button>
                 </div>
                 <div>
-                    <button className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
+                    <button
+                        onClick={handleOpenAddVaccineBatchModal}
+                        className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                    >
                         <span className="mr-2">Nhập lô vắc xin mới</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -122,6 +140,12 @@ export const VaccineBatchTable = () => {
                 columns={vaccineBatchColumns}
                 dataSource={vaccineBatchList}
                 rowKey="vaccineBatchId"
+            />
+
+            <AddVaccineBatchModal
+                visibleAddVaccineBatchModal={isOpenAddVaccineBatchModal}
+                handleCloseAddVaccineBatchModal={handleCloseAddVaccineBatchModal}
+                handleGetVaccineBatchList={handleGetVaccineBatchList}
             />
         </div>
     )

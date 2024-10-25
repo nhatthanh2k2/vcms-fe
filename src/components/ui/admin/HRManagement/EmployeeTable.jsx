@@ -46,10 +46,15 @@ export const EmployeeTable = () => {
     }
 
     const [employeeInfo, setEmployeeInfo] = useState(null)
+    const [isOpenDeleteEmployeeModal, setIsOpenDeleteEmployeeModal] = useState(false)
 
     const handleOpenDeleteEmployeeModal = (record) => {
         setEmployeeInfo(record)
-        document.getElementById('delete_employee_modal').showModal()
+        setIsOpenDeleteEmployeeModal(true)
+    }
+
+    const handleCloseDeleteEmployeeModal = (record) => {
+        setIsOpenDeleteEmployeeModal(false)
     }
 
     const [isOpenEditEmployeeModal, setIsOpenEditEmployeeModal] = useState(false)
@@ -289,7 +294,12 @@ export const EmployeeTable = () => {
                 handleCloseEditEmployeeModal={handleCloseEditEmployeeModal}
             />
 
-            <DeleteEmployeeModal employeeInfo={employeeInfo} getEmployeeList={getEmployeeList} />
+            <DeleteEmployeeModal
+                visibleDeleteEmployeeModal={isOpenDeleteEmployeeModal}
+                handleCloseDeleteEmployeeModal={handleCloseDeleteEmployeeModal}
+                employeeInfo={employeeInfo}
+                getEmployeeList={getEmployeeList}
+            />
         </div>
     )
 }

@@ -6,8 +6,4 @@ export const diseaseService = {
     getAllDiseases: () => {
         return axios.get(api_url + "/diseases/all")
     },
-    getVaccinesOfDisease: (diseaseId) => {
-        return axios.get(api_url + `/diseases/detail/${diseaseId}`)
-    }
-
 }

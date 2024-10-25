@@ -156,7 +156,6 @@ export const UpdateEmployeeProfileModal = ({
                 sessionStorage.removeItem('employeeProfile')
                 sessionStorage.setItem('employeeProfile', JSON.stringify({ employeeProfile }))
                 setEmployee(JSON.parse(sessionStorage.getItem('employeeProfile')))
-
                 MyToast('success', 'Cập nhật thông tin thành công.')
             } else MyToast('error', 'Xảy ra lỗi khi cập nhật thông tin.')
         } catch (error) {

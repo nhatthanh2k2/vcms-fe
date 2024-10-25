@@ -21,9 +21,6 @@ export const PayPalCheckOut = ({
     orderType,
     orderInfo,
 }) => {
-    console.log(batchDetailIdList)
-    console.log(vaccinePackageIdList)
-
     return (
         <div className="relative">
             <div className="absolute left-0 right-0 z-40">

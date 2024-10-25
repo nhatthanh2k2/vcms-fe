@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { disabledDoB, disabledPastDate, disabledPastDateForEmployee } from '@/utils'
+import { disabledDoB, disabledPastDateForEmployee } from '@/utils'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'

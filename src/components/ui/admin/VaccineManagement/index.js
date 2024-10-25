@@ -1,2 +1,2 @@
 export * from './VaccineTable'
-export * from './VaccinePackageTable'
+export * from './AddVaccineForm'

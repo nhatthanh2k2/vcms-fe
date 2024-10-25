@@ -19,7 +19,8 @@ export const ADMIN_PATH = {
     hrManagement: 'quan-ly/nhan-su',
     vaccineMangement: 'quan-ly/vac-xin/danh-muc',
     packageManagement: 'quan-ly/goi-vac-xin/danh-muc',
-    batchManagement: 'quan-ly/lo-vac-xin/danh-muc'
+    batchManagement: 'quan-ly/lo-vac-xin/danh-muc',
+    addVaccine: 'quan-ly/vac-xin/them-vac-xin',
 }
 
 export const EMPLOYEE_PATH = {

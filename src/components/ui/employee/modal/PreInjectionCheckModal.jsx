@@ -80,7 +80,7 @@ export const PreInjectionCheckModal = ({
 
             if (response.status === 200) {
                 if (response.data.code === 1000) {
-                    MyToast('success', 'Tạo phiéu khám thành công.')
+                    MyToast('success', 'Tạo phiếu khám thành công.')
                 } else {
                     MyToast('error', 'Xảy ra lỗi khi tạo phiếu khám')
                 }

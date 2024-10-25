@@ -69,7 +69,11 @@ export const EditEmployeeModal = ({
     }
     return (
         <Modal
-            title={<div className="text-center font-bold text-xl">Thông tin nhân viên</div>}
+            title={
+                <div className="text-center font-bold text-xl text-teal-500">
+                    Thông tin nhân viên
+                </div>
+            }
             open={visibleEditEmployeeModal}
             onCancel={handleCloseEditEmployeeModal}
             footer={null}

@@ -17,6 +17,7 @@ import {
     VaccineManagementPage,
     VaccinePackageManagementPage,
     VaccineBatchManagementPage,
+    AddVaccinePage,
 } from '@/pages'
 import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -124,6 +125,10 @@ export const router = [
             {
                 path: ADMIN_PATH.batchManagement,
                 element: <VaccineBatchManagementPage />,
+            },
+            {
+                path: ADMIN_PATH.addVaccine,
+                element: <AddVaccinePage />,
             },
         ],
     },
