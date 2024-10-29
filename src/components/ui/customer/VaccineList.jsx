@@ -13,9 +13,9 @@ export const VaccineList = () => {
     useEffect(() => {
         vaccineService
             .getAllVaccines()
-            .then((respone) => {
-                setVaccineList(respone.data.result)
-                setFilteredVaccineList(respone.data.result)
+            .then((response) => {
+                setVaccineList(response.data.result)
+                setFilteredVaccineList(response.data.result)
             })
             .catch((err) => console.log('Get vaccines failed!'))
         diseaseService
@@ -32,12 +32,15 @@ export const VaccineList = () => {
         if (diseaseSelected === 0) {
             vaccineService
                 .getAllVaccines()
-                .then((response) => setVaccineList(response.data.result))
+                .then((response) => {
+                    setVaccineList(response.data.result)
+                    setFilteredVaccineList(response.data.result)
+                })
                 .catch((err) => console.log('Get all vaccines failed!'))
         } else {
             vaccineService
                 .getVaccinesOfDisease(diseaseSelected)
-                .then((response) => setVaccineList(response.data.result))
+                .then((response) => setFilteredVaccineList(response.data.result))
                 .catch((err) => console.log('Get vaccines of disease failed!'))
         }
     }, [diseaseSelected])
@@ -57,8 +60,6 @@ export const VaccineList = () => {
             setFilteredVaccineList(filteredList)
         }
     }
-
-    console.log(vaccineList)
 
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 12

@@ -40,10 +40,14 @@ export const AppointmentInjectionModal = ({
             .getAllBatch()
             .then((response) => setVaccineBatchList(response.data.result))
             .catch((error) => MyToast('error', 'Lỗi lấy lô hàng.'))
+        // batchDetailService
+        //     .getDetail()
+        //     .then((response) => setBatchDetailList(response.data.result))
+        //     .catch((error) => MyToast('error', 'Lỗi lấy chi tiết lô vắc xin'))
         batchDetailService
-            .getDetail()
+            .getDetailOfSampleBatch()
             .then((response) => setBatchDetailList(response.data.result))
-            .catch((error) => MyToast('error', 'Lỗi lấy chi tiết lô vắc xin'))
+            .catch((err) => console.log('Get Batch Detail Failed!'))
     }, [])
 
     useEffect(() => {
@@ -102,6 +106,7 @@ export const AppointmentInjectionModal = ({
                 vaccinationRecordTotal:
                     appointmentRecord.batchDetailResponse.batchDetailVaccinePrice,
                 vaccinationRecordPayment: data.payment,
+                vaccinationRecordReceiptSource: 'APPOINTMENT',
             }
         } else {
             request = {
@@ -116,9 +121,9 @@ export const AppointmentInjectionModal = ({
                 vaccinationRecordDose: data.dose,
                 vaccinationRecordTotal: vaccinePrice,
                 vaccinationRecordPayment: data.payment,
+                vaccinationRecordReceiptSource: 'APPOINTMENT',
             }
         }
-        console.log(request)
 
         try {
             const response = await vaccinationRecordService.createVaccinationRecord(request)

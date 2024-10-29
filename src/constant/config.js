@@ -6,21 +6,26 @@ export const PATH = {
     medicalTeam: 'doi-ngu-bac-si',
     listVaccineForChildren: 'goi-tiem-tre-em',
     listVaccineForAdults: 'goi-tiem-nguoi-lon',
-    preVaccination: 'luu-y-truoc-tiem',
-    postVaccination: 'luu-y-sau-tiem',
+    VaccinePricing: 'bang-gia-vac-xin',
     vaccineList: 'thong-tin-vac-xin',
     vaccinationHistory: 'tra-cuu-lich-su-tiem',
     login: 'dang-nhap',
     reception: 'le-tan',
+    childPackage: 'goi-tiem-tre-em',
+    adultPackage: 'goi-tiem-nguoi-truong-thanh',
+    adolescentPackage: 'goi-tiem-vi-thanh-nien-va-thanh-nien'
 }
 
 export const ADMIN_PATH = {
-    home: 'admin',
-    hrManagement: 'quan-ly/nhan-su',
-    vaccineMangement: 'quan-ly/vac-xin/danh-muc',
-    packageManagement: 'quan-ly/goi-vac-xin/danh-muc',
-    batchManagement: 'quan-ly/lo-vac-xin/danh-muc',
-    addVaccine: 'quan-ly/vac-xin/them-vac-xin',
+    home: 'trang-chu',
+    management: 'quan-ly',
+    catalog: 'danh-muc',
+    hrManagement: 'nhan-su',
+    vaccineMangement: 'vac-xin-le',
+    packageManagement: 'goi-vac-xin',
+    batchManagement: 'lo-vac-xin',
+    addVaccine: 'them-vac-xin',
+    addPackage: 'them-goi-vac-xin'
 }
 
 export const EMPLOYEE_PATH = {

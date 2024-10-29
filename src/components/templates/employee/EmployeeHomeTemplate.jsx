@@ -12,7 +12,7 @@ import {
     UpdateEmployeeProfileModal,
     PrintRecord,
 } from '@/components/ui'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const EmployeeHomeTemplate = () => {
     const navigate = useNavigate()
@@ -24,15 +24,13 @@ export const EmployeeHomeTemplate = () => {
 
     useEffect(() => {
         batchDetailService
-            .getDetail()
+            .getDetailOfSampleBatch()
             .then((response) => setBatchDetailList(response.data.result))
             .catch((err) => console.log('Get Batch Detail Failed!'))
-
         vaccinePackageService
             .getDefaultPackages()
             .then((response) => setVaccinePackageList(response.data.result))
             .catch((err) => console.log('Get Vaccine Package Failed!'))
-
         vaccineService
             .getAllVaccines()
             .then((response) => setVaccineList(response.data.result))
@@ -303,6 +301,32 @@ export const EmployeeHomeTemplate = () => {
                     </div>
 
                     <div className="p-4 flex flex-col">
+                        {employee.employeeProfile.employeeId === 1000 ? (
+                            <Link
+                                to={'/admin/trang-chu'}
+                                className="
+                            flex bg-white cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm text-black py-3 px-4"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-6 h-6 text-lg mr-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke="#000"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M16 4h3a2 2 0 0 1 2 2v1m-5 13h3a2 2 0 0 0 2-2v-1M4.425 19.428l6 1.8A2 2 0 0 0 13 19.312V4.688a2 2 0 0 0-2.575-1.916l-6 1.8A2 2 0 0 0 3 6.488v11.024a2 2 0 0 0 1.425 1.916zM9.001 12H9m7 0h5m0 0-2-2m2 2-2 2"
+                                    />
+                                </svg>
+                                Đến trang Admin
+                            </Link>
+                        ) : (
+                            ''
+                        )}
+
                         <div
                             className="
                             dropdown dropdown-hover dropdown-right dropdown-end

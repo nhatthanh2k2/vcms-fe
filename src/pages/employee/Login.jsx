@@ -38,7 +38,7 @@ export const Login = () => {
             const role = decodedToken.scope
 
             setTimeout(() => {
-                if (role === 'ADMIN') navigate('/admin')
+                if (role === 'ADMIN') navigate('/admin/trang-chu')
                 else navigate('/nhan-vien')
             }, 2000)
         } catch (error) {
@@ -54,6 +54,12 @@ export const Login = () => {
 
     const handleCloseForgotPasswordModal = () => {
         setIsOpenForgetPasswordModal(false)
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleLogin(event)
+        }
     }
 
     return (
@@ -125,6 +131,7 @@ export const Login = () => {
                                         placeholder="Mã nhân viên"
                                         value={account.username}
                                         onChange={(e) => handleInputChange(e)}
+                                        onKeyDown={handleKeyDown}
                                     />
                                 </div>
 
@@ -168,6 +175,7 @@ export const Login = () => {
                                         placeholder="Mật khẩu"
                                         value={account.password}
                                         onChange={(e) => handleInputChange(e)}
+                                        onKeyDown={handleKeyDown}
                                     />
                                 </div>
 

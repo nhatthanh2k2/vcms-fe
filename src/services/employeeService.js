@@ -35,6 +35,9 @@ export const employeeService =  {
     updateProfile: (requset) => {
         return api.put("/employees/update/update-profile", requset)
     },
+    updateQualificationAndPosition: (request) => {
+        return api.put("/employees/update/update-from-admin", request)
+    },
     updateAvatar: (username, avatarFile) => {
         
         const request = new FormData();

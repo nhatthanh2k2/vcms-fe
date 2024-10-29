@@ -18,6 +18,11 @@ import {
     VaccinePackageManagementPage,
     VaccineBatchManagementPage,
     AddVaccinePage,
+    ChildPackagePage,
+    AdultPackagePage,
+    AdolescentPackagePage,
+    AddVaccinePackagePage,
+    VaccinePricingPage,
 } from '@/pages'
 import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -30,18 +35,6 @@ export const router = [
     {
         path: '/',
         element: <Navigate to="/trang-chu" replace />,
-    },
-    {
-        path: '/gioi-thieu',
-        element: <Navigate to="/gioi-thieu/trung-tam" replace />,
-    },
-    {
-        path: '/goi-tiem',
-        element: <Navigate to="/goi-tiem/goi-tiem-tre-em" replace />,
-    },
-    {
-        path: '/cam-nang',
-        element: <Navigate to="/cam-nang/luu-y-truoc-tiem" replace />,
     },
     {
         path: '/trang-chu',
@@ -78,7 +71,20 @@ export const router = [
     {
         path: '/goi-tiem',
         element: <CustomerLayout />,
-        children: [],
+        children: [
+            {
+                path: PATH.childPackage,
+                element: <ChildPackagePage />,
+            },
+            {
+                path: PATH.adultPackage,
+                element: <AdultPackagePage />,
+            },
+            {
+                path: PATH.adolescentPackage,
+                element: <AdolescentPackagePage />,
+            },
+        ],
     },
     {
         path: '/cam-nang',
@@ -96,42 +102,101 @@ export const router = [
                 path: PATH.vaccinationHistory,
                 element: <VaccinationHistoryPage />,
             },
+            {
+                path: PATH.VaccinePricing,
+                element: <VaccinePricingPage />,
+            },
         ],
     },
     {
         path: PATH.login,
         element: <Login />,
     },
+    // {
+    //     path: '/admin',
+    //     element: <AdminLayout />,
+    //     children: [
+    //         {
+    //             index: true,
+    //             element: <AdminHomePage />,
+    //         },
+    //         {
+    //             path: ADMIN_PATH.hrManagement,
+    //             element: <HRManagementPage />,
+    //         },
+    //         {
+    //             path: ADMIN_PATH.vaccineMangement,
+    //             element: <VaccineManagementPage />,
+    //         },
+    //         {
+    //             path: ADMIN_PATH.packageManagement,
+    //             element: <VaccinePackageManagementPage />,
+    //         },
+    //         {
+    //             path: ADMIN_PATH.batchManagement,
+    //             element: <VaccineBatchManagementPage />,
+    //         },
+    //         {
+    //             path: ADMIN_PATH.addVaccine,
+    //             element: <AddVaccinePage />,
+    //         },
+    //     ],
+    // },
     {
         path: '/admin',
         element: <AdminLayout />,
         children: [
             {
-                index: true,
+                path: ADMIN_PATH.home,
                 element: <AdminHomePage />,
             },
             {
-                path: ADMIN_PATH.hrManagement,
-                element: <HRManagementPage />,
-            },
-            {
-                path: ADMIN_PATH.vaccineMangement,
-                element: <VaccineManagementPage />,
-            },
-            {
-                path: ADMIN_PATH.packageManagement,
-                element: <VaccinePackageManagementPage />,
-            },
-            {
-                path: ADMIN_PATH.batchManagement,
-                element: <VaccineBatchManagementPage />,
-            },
-            {
-                path: ADMIN_PATH.addVaccine,
-                element: <AddVaccinePage />,
+                path: ADMIN_PATH.management,
+                children: [
+                    {
+                        path: ADMIN_PATH.hrManagement,
+                        element: <HRManagementPage />,
+                    },
+                    {
+                        path: ADMIN_PATH.vaccineMangement,
+                        children: [
+                            {
+                                path: ADMIN_PATH.catalog,
+                                element: <VaccineManagementPage />,
+                            },
+                            {
+                                path: ADMIN_PATH.addVaccine,
+                                element: <AddVaccinePage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: ADMIN_PATH.batchManagement,
+                        children: [
+                            {
+                                path: ADMIN_PATH.catalog,
+                                element: <VaccineBatchManagementPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: ADMIN_PATH.packageManagement,
+                        children: [
+                            {
+                                path: ADMIN_PATH.catalog,
+                                element: <VaccinePackageManagementPage />,
+                            },
+                            {
+                                path: ADMIN_PATH.addPackage,
+                                element: <AddVaccinePackagePage />,
+                            },
+                        ],
+                    },
+                ],
             },
         ],
     },
+
     {
         path: '/nhan-vien',
         element: <EmplyeeHomePage />,

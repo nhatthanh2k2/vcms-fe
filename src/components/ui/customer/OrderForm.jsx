@@ -61,8 +61,12 @@ export const OrderForm = () => {
     const [selectedWard, setSelectedWard] = useState('')
 
     useEffect(() => {
+        // batchDetailService
+        //     .getDetail()
+        //     .then((response) => setBatchDetailList(response.data.result))
+        //     .catch((err) => console.log('Get Batch Detail Failed!'))
         batchDetailService
-            .getDetail()
+            .getDetailOfSampleBatch()
             .then((response) => setBatchDetailList(response.data.result))
             .catch((err) => console.log('Get Batch Detail Failed!'))
         vaccinePackageService
@@ -529,34 +533,6 @@ export const OrderForm = () => {
                         </form>
                     )}
 
-                    <div className="flex flex-col space-y-4 mt-8">
-                        <span className="text-lg font-semibold">Chọn phương thức thanh toán:</span>
-
-                        <div className="flex gap-4">
-                            <input
-                                value="TRANSFER"
-                                type="radio"
-                                name="radio-5"
-                                className="radio radio-success"
-                                onChange={handlePayment}
-                                checked={payment === 'TRANSFER'}
-                            />
-                            <span>Thanh toán chuyển khoản</span>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <input
-                                value="PAYPAL"
-                                type="radio"
-                                name="radio-5"
-                                className="radio radio-success"
-                                onChange={handlePayment}
-                                checked={payment === 'PAYPAL'}
-                            />
-                            <span>Thanh toán Paypal</span>
-                        </div>
-                    </div>
-
                     <div className="flex flex-col ">
                         <div role="tablist" className="tabs tabs-lifted mt-10">
                             <input
@@ -855,6 +831,36 @@ export const OrderForm = () => {
                                 </>
                             )}
                         </div>
+
+                        <div className="flex flex-col space-y-4 mt-8">
+                            <span className="text-lg font-semibold">
+                                Chọn phương thức thanh toán:
+                            </span>
+
+                            <div className="flex gap-4">
+                                <input
+                                    value="TRANSFER"
+                                    type="radio"
+                                    name="radio-5"
+                                    className="radio radio-success"
+                                    onChange={handlePayment}
+                                    checked={payment === 'TRANSFER'}
+                                />
+                                <span>Thanh toán chuyển khoản</span>
+                            </div>
+
+                            <div className="flex gap-4">
+                                <input
+                                    value="PAYPAL"
+                                    type="radio"
+                                    name="radio-5"
+                                    className="radio radio-success"
+                                    onChange={handlePayment}
+                                    checked={payment === 'PAYPAL'}
+                                />
+                                <span>Thanh toán Paypal</span>
+                            </div>
+                        </div>
                     </div>
 
                     {totalAmount > 0 && (
@@ -867,9 +873,10 @@ export const OrderForm = () => {
                             <div className="mt-5">
                                 {payment === '' ? null : payment === 'PAYPAL' ? (
                                     <PayPalCheckOut
+                                        key={totalAmount}
                                         batchDetailIdList={batchDetailSelectedList}
                                         vaccinePackageIdList={vaccinePackageSelectedList}
-                                        total={totalAmount}
+                                        initialTotal={totalAmount}
                                         payment={payment}
                                         injectionDate={injectionDate}
                                         customer={existsCustomer}

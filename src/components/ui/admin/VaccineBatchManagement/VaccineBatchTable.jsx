@@ -3,21 +3,48 @@ import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
 import dayjs from 'dayjs'
 import { Table, Tooltip } from 'antd'
-import { AddVaccineBatchModal } from '.'
+import { AddVaccineBatchModal, VaccineBatchDetailModal } from '.'
 
 export const VaccineBatchTable = () => {
     const [vaccineBatchList, setVaccineBatchList] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const handleGetVaccineBatchList = () => {
         vaccineBatchService
             .getAllBatch()
-            .then((response) => setVaccineBatchList(response.data.result))
+            .then((response) => {
+                setVaccineBatchList(response.data.result)
+                setLoading(false)
+            })
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy các lô vắc xin.'))
     }
 
     useEffect(() => {
         handleGetVaccineBatchList()
     }, [])
+
+    const [isOpenAddVaccineBatchModal, setIsOpenAddVaccineBatchModal] = useState(false)
+
+    const handleOpenAddVaccineBatchModal = () => {
+        setIsOpenAddVaccineBatchModal(true)
+    }
+
+    const handleCloseAddVaccineBatchModal = () => {
+        setIsOpenAddVaccineBatchModal(false)
+    }
+
+    const [isOpenVaccineBatchDetailModal, setIsOpenVaccineBatchDetailModal] = useState(false)
+    const [batchSelected, setBatchSelected] = useState(null)
+
+    const handleOpenVaccineBatchDetailModal = (record) => {
+        setBatchSelected(record)
+        setIsOpenVaccineBatchDetailModal(true)
+    }
+
+    const handleCloseVaccineBatchDetailModal = () => {
+        setIsOpenVaccineBatchDetailModal(false)
+        setBatchSelected(null)
+    }
 
     const vaccineBatchColumns = [
         {
@@ -52,8 +79,11 @@ export const VaccineBatchTable = () => {
             title: '',
             dataIndex: 'actions',
             key: 'actions',
-            render: (record) => (
-                <div className="inline-flex space-x-2 items-center rounded-md shadow-sm">
+            render: (_, record) => (
+                <div
+                    onClick={() => handleOpenVaccineBatchDetailModal(record)}
+                    className="inline-flex space-x-2 items-center rounded-md shadow-sm"
+                >
                     <Tooltip placement="top" title="Xem chi tiết">
                         <div>
                             <svg
@@ -73,16 +103,6 @@ export const VaccineBatchTable = () => {
             ),
         },
     ]
-
-    const [isOpenAddVaccineBatchModal, setIsOpenAddVaccineBatchModal] = useState(false)
-
-    const handleOpenAddVaccineBatchModal = () => {
-        setIsOpenAddVaccineBatchModal(true)
-    }
-
-    const handleCloseAddVaccineBatchModal = () => {
-        setIsOpenAddVaccineBatchModal(false)
-    }
 
     return (
         <div className="flex flex-col space-y-5">
@@ -140,12 +160,19 @@ export const VaccineBatchTable = () => {
                 columns={vaccineBatchColumns}
                 dataSource={vaccineBatchList}
                 rowKey="vaccineBatchId"
+                loading={loading}
             />
 
             <AddVaccineBatchModal
                 visibleAddVaccineBatchModal={isOpenAddVaccineBatchModal}
                 handleCloseAddVaccineBatchModal={handleCloseAddVaccineBatchModal}
                 handleGetVaccineBatchList={handleGetVaccineBatchList}
+            />
+
+            <VaccineBatchDetailModal
+                visibleVaccineBatchDetailModal={isOpenVaccineBatchDetailModal}
+                handleCloseVaccineBatchDetailModal={handleCloseVaccineBatchDetailModal}
+                batchSelected={batchSelected}
             />
         </div>
     )

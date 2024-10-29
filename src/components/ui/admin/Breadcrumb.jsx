@@ -9,7 +9,7 @@ export const Breadcrumb = ({ pageName }) => {
             <nav>
                 <ol className="flex items-center gap-2">
                     <li>
-                        <Link className="font-medium" to="/admin">
+                        <Link className="font-medium" to="/admin/trang-chu">
                             Trang chủ /
                         </Link>
                     </li>

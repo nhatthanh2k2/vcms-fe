@@ -10,5 +10,15 @@ const api = apiInstance({
 export const vaccineBatchService = {
     getAllBatch: () => {
         return api.get("/vaccine-batch/all")
+    },
+    getDetailOfBatch: (batchId) => {
+        return api.get(`/vaccine-batch/detail/${batchId}`)
+    },
+    createBatch: (request) => {
+        return api.post("/vaccine-batch/add", request, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 }

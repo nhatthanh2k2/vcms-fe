@@ -77,7 +77,7 @@ export const AppointmentForm = () => {
     // Lay danh sach vaccine va goi vaccine
     useEffect(() => {
         batchDetailService
-            .getDetail()
+            .getDetailOfSampleBatch()
             .then((response) => setBatchDetailList(response.data.result))
             .catch((err) => console.log('Get Batch Detail Failed!'))
 

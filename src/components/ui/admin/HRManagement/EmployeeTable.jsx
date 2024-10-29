@@ -11,6 +11,7 @@ export const EmployeeTable = () => {
     const [isOpenAddEmployeeModal, SetIsOpenAddEmployeeModal] = useState(false)
     const [filteredEmployeeList, setFilteredEmployeeList] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
+    const [loading, setLoading] = useState(true)
 
     const getEmployeeList = () => {
         employeeService
@@ -18,6 +19,7 @@ export const EmployeeTable = () => {
             .then((response) => {
                 setEmployeeList(response.data.result)
                 setFilteredEmployeeList(response.data.result)
+                setLoading(false)
             })
             .catch((error) => MyToast('error', 'Xảy ra lỗi lấy danh sách nhân viên.'))
     }
@@ -55,6 +57,7 @@ export const EmployeeTable = () => {
 
     const handleCloseDeleteEmployeeModal = (record) => {
         setIsOpenDeleteEmployeeModal(false)
+        setEmployeeInfo(null)
     }
 
     const [isOpenEditEmployeeModal, setIsOpenEditEmployeeModal] = useState(false)
@@ -66,6 +69,7 @@ export const EmployeeTable = () => {
 
     const handleCloseEditEmployeeModal = () => {
         setIsOpenEditEmployeeModal(false)
+        setEmployeeInfo(null)
     }
 
     const employeeColumns = [
@@ -264,13 +268,33 @@ export const EmployeeTable = () => {
                         <span className="mr-2">Thêm nhân viên</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
+                            className="icon line-color w-6 h-6"
+                            data-name="Line Color"
                             viewBox="0 0 24 24"
-                            className="w-6 h-6"
                         >
-                            <g stroke="currentColor" strokeLinecap="round" strokeWidth={1.5}>
-                                <path d="M15 12h-3m0 0H9m3 0V9m0 3v3M7 3.338A9.954 9.954 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5" />
-                            </g>
+                            <path
+                                d="M17 17h4m-2-2v4M15 13.1a4.71 4.71 0 0 0-1-.1H8a5 5 0 0 0-5 5v1s2 2 8 2a22 22 0 0 0 3-.19c.35 0 .69-.1 1-.17"
+                                style={{
+                                    fill: 'none',
+                                    stroke: 'currentColor',
+                                    strokeLinecap: 'round',
+                                    strokeLinejoin: 'round',
+                                    strokeWidth: 2,
+                                }}
+                            />
+                            <circle
+                                cx={11}
+                                cy={8}
+                                r={5}
+                                data-name="primary"
+                                style={{
+                                    fill: 'none',
+                                    stroke: 'currentColor',
+                                    strokeLinecap: 'round',
+                                    strokeLinejoin: 'round',
+                                    strokeWidth: 2,
+                                }}
+                            />
                         </svg>
                     </button>
                 </div>
@@ -280,6 +304,7 @@ export const EmployeeTable = () => {
                 columns={employeeColumns}
                 dataSource={filteredEmployeeList}
                 rowKey="employeeId"
+                loading={loading}
             />
 
             <AddEmployeeModal
@@ -292,6 +317,7 @@ export const EmployeeTable = () => {
                 employeeInfo={employeeInfo}
                 visibleEditEmployeeModal={isOpenEditEmployeeModal}
                 handleCloseEditEmployeeModal={handleCloseEditEmployeeModal}
+                getEmployeeList={getEmployeeList}
             />
 
             <DeleteEmployeeModal

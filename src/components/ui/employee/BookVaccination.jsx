@@ -99,13 +99,20 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
             payment: payment,
             actionType: actionType,
         }
-        console.log(request)
-        const response = await employeeService.bookVaccination(request)
-        console.log(response.data)
-        if (response.data.code === 1000) {
-            MyToast('success', 'Đặt vắc xin thành công')
-        } else {
-            MyToast('error', 'Đặt vắc xin thất bại')
+
+        try {
+            const response = await employeeService.bookVaccination(request)
+            if (response.data.code === 1000) {
+                MyToast('success', 'Đặt vắc xin thành công.')
+            } else {
+                MyToast('error', 'Xảy ra lỗi khi đặt vắc xin.')
+            }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    MyToast('error', 'Không tìm thấy khách hàng.')
+                }
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 import { Modal, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { z } from 'zod'
+import { record, z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import {
@@ -10,6 +10,7 @@ import {
     vaccinePackageService,
 } from '@/services'
 import { MyToast } from '../../common'
+import { convertPaymentType } from '@/utils'
 
 const orderInjectionSchema = z.object({
     vaccineId: z
@@ -38,7 +39,6 @@ const orderInjectionSchema = z.object({
         .refine((val) => val !== null, {
             message: 'Chưa chọn lô vắc xin',
         }),
-    payment: z.string().min(1, { message: 'Chưa chọn phương thức thanh toán' }),
 })
 
 export const OrderInjectionModal = ({
@@ -65,7 +65,6 @@ export const OrderInjectionModal = ({
             injectionType: '',
             dosage: '',
             dose: '',
-            payment: '',
         },
     })
 
@@ -78,10 +77,14 @@ export const OrderInjectionModal = ({
             .getAllBatch()
             .then((response) => setVaccineBatchList(response.data.result))
             .catch((error) => MyToast('error', 'Lỗi lấy lô hàng.'))
+        // batchDetailService
+        //     .getDetail()
+        //     .then((response) => setBatchDetailList(response.data.result))
+        //     .catch((error) => MyToast('error', 'Lỗi lấy chi tiết lô vắc xin'))
         batchDetailService
-            .getDetail()
+            .getDetailOfSampleBatch()
             .then((response) => setBatchDetailList(response.data.result))
-            .catch((error) => MyToast('error', 'Lỗi lấy chi tiết lô vắc xin'))
+            .catch((err) => console.log('Get Batch Detail Failed!'))
     }, [])
 
     const batchDetailData = orderDetailList.filter(
@@ -114,7 +117,8 @@ export const OrderInjectionModal = ({
                 vaccinationRecordDosage: data.dosage,
                 vaccinationRecordDose: data.dose,
                 vaccinationRecordTotal: vaccinePrice,
-                vaccinationRecordPayment: data.payment,
+                vaccinationRecordPayment: orderRecord?.orderPayment,
+                vaccinationRecordReceiptSource: 'ORDER',
             }
             const response = await vaccinationRecordService.createVaccinationRecord(creationRequest)
             if (response.data.code === 1000) MyToast('success', 'Tạo phiếu tiêm thành công.')
@@ -405,24 +409,12 @@ export const OrderInjectionModal = ({
                             </div>
                             <div className="flex-1 flex flex-col space-y-2">
                                 <label className="font-semibold">Phương thức thanh toán:</label>
-                                <Select
-                                    options={[
-                                        { value: 'CASH', label: <span>Tiền mặt</span> },
-                                        { value: 'TRANSFER', label: <span>Chuyển khoản</span> },
-                                    ]}
-                                    {...register('payment')}
-                                    onChange={(value) => {
-                                        setValue('payment', value)
-                                        clearErrors('payment')
-                                    }}
-                                    value={watch('payment') || null}
-                                    placeholder="Chọn phương thức"
+                                <input
+                                    type="text"
+                                    value={convertPaymentType(orderRecord?.orderPayment)}
+                                    readOnly
+                                    className="input input-bordered input-info w-full input-sm"
                                 />
-                                {errors.payment && (
-                                    <span className="text-red-500 font-semibold">
-                                        {errors.payment.message}
-                                    </span>
-                                )}
                             </div>
                         </div>
                     </div>

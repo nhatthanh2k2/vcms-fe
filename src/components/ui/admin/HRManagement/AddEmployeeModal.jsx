@@ -248,7 +248,11 @@ export const AddEmployeeModal = ({
                         <Select
                             placeholder="Chọn chức vụ"
                             options={[
-                                { value: 'Điều dưỡng', label: <span>Điều dưỡng</span> },
+                                { value: 'Lễ tân', label: <span>Lễ tân</span> },
+                                {
+                                    value: 'Chuyên viên điều dưỡng',
+                                    label: <span>Chuyên viên điều dưỡng</span>,
+                                },
                                 {
                                     value: 'Giám đốc điều dưỡng',
                                     label: <span>Giám đốc điều dưỡng</span>,
@@ -262,6 +266,7 @@ export const AddEmployeeModal = ({
                                     label: <span>Bác sĩ khám sàng lọc</span>,
                                 },
                                 { value: 'Quản lý Y khoa', label: <span>Quản lý Y khoa</span> },
+                                { value: 'Giám đốc Y khoa', label: <span>Giám đốc Y khoa</span> },
                             ]}
                             {...register('employeePosition')}
                             onChange={(value) => setValue('employeePosition', value)}

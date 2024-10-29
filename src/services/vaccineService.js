@@ -19,7 +19,10 @@ export const vaccineService = {
         });
     },
     getVaccinesOfDisease: (diseaseId) => {
-        return axios.get(api_url + `/list-of-disease/${diseaseId}`)
+        return axios.get(api_url + `/vaccines/list-of-disease/${diseaseId}`)
+    },
+    deleteVaccine: (vaccineId) => {
+        return api.delete(`/vaccines/delete/${vaccineId}`)
     }
 
 }

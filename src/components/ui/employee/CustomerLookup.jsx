@@ -164,7 +164,7 @@ export const CustomerLookup = () => {
                 </form>
             </div>
 
-            <div role="tablist" className="tabs tabs-lifted mt-5">
+            <div role="tablist" className="tabs tabs-lifted mt-5 shadow-lg">
                 <input
                     type="radio"
                     name="customer_tabs"

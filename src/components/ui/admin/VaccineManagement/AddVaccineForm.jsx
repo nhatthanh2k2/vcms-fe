@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { diseaseService, vaccineService } from '@/services'
 import { MyToast } from '../../common'
+import { AddDiseaseModal } from '../DiseaseManagement'
 
 const addVaccineSchema = z.object({
     vaccineName: z.string().min(1, 'Vui lòng nhập tên vắc xin'),
@@ -80,6 +81,17 @@ export const AddVaccineForm = () => {
             diseaseId: '',
         },
     })
+
+    const [isOpenAddDiseaseModal, setIsOpenAddDiseaseModal] = useState(false)
+
+    const handleOpenAddDiseaseModal = (e) => {
+        e.preventDefault()
+        setIsOpenAddDiseaseModal(true)
+    }
+
+    const handleCloseAddDiseaseModal = () => {
+        setIsOpenAddDiseaseModal(false)
+    }
 
     const handleSelectedAge = (age) => {
         const newSelected = selectedAges.includes(age)
@@ -186,7 +198,7 @@ export const AddVaccineForm = () => {
                 </div>
 
                 <div className="flex space-x-5">
-                    <div className="space-y-2 flex flex-col flex-1">
+                    <div className="space-y-2 flex flex-col flex-2">
                         <label className="font-semibold">Số mũi tiêm trẻ em:</label>
                         <input
                             type="text"
@@ -197,7 +209,7 @@ export const AddVaccineForm = () => {
                             <p className="text-red-500">{errors.vaccineChildDoseCount.message}</p>
                         )}
                     </div>
-                    <div className=" space-y-2 flex flex-col flex-1">
+                    <div className=" space-y-2 flex flex-col flex-2">
                         <label className="font-semibold">Số mũi tiêm người lớn:</label>
                         <input
                             type="text"
@@ -210,7 +222,7 @@ export const AddVaccineForm = () => {
                     </div>
 
                     <div className=" space-y-2 flex flex-col flex-1">
-                        <label className="font-semibold">Số mũi tiêm người lớn:</label>
+                        <label className="font-semibold">Phòng bệnh:</label>
                         <Select
                             {...register('diseaseId')}
                             placeholder="Chọn bệnh"
@@ -223,6 +235,12 @@ export const AddVaccineForm = () => {
                         {errors.diseaseId && (
                             <p className="text-red-500">{errors.diseaseId.message}</p>
                         )}
+                    </div>
+
+                    <div className="flex flex-2 items-center justify-end">
+                        <button type="button" onClick={handleOpenAddDiseaseModal}>
+                            Thêm bệnh mới
+                        </button>
                     </div>
                 </div>
 
@@ -335,6 +353,11 @@ export const AddVaccineForm = () => {
                     </button>
                 </div>
             </form>
+
+            <AddDiseaseModal
+                visibleOpenAddDiseaseModal={isOpenAddDiseaseModal}
+                handleCloseAddDiseaseModal={handleCloseAddDiseaseModal}
+            />
         </div>
     )
 }

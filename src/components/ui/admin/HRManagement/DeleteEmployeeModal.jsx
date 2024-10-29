@@ -39,14 +39,17 @@ export const DeleteEmployeeModal = ({
                             <span className="mr-2">Xác nhận</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
+                                className="w-6 h-6"
+                                fill="none"
+                                viewBox="0 0 20 20"
                             >
                                 <path
-                                    fill="currentcolor"
-                                    d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
-                                ></path>
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17 5 8 15l-5-4"
+                                />
                             </svg>
                         </button>
                     </div>

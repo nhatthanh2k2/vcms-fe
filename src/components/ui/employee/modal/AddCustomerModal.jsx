@@ -112,9 +112,9 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                 top: 40,
             }}
         >
-            <div className="">
+            <div>
                 <form
-                    className=" max-w-full flex flex-row gap-5"
+                    className=" max-w-full flex flex-row gap-5 mt-5"
                     onSubmit={handleSubmit(onSubmit)}
                     ref={formAddCustomer}
                 >
@@ -123,7 +123,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                             Thông tin khách hàng
                         </div>
 
-                        <div className="relative z-0 w-full mb-5 group mt-5">
+                        <div className="relative z-0 w-full mb-5 group ">
                             <input
                                 type="text"
                                 {...register('customerFullName')}
@@ -176,7 +176,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
 
                         <div className="flex flex-row gap-10">
                             <div className="relative z-0 w-full mb-5 group flex flex-col">
-                                <div>
+                                <div className="flex space-x-5">
                                     <label>Ngày sinh: </label>
                                     <DatePicker
                                         {...register('customerDob', {
@@ -201,6 +201,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
 
                             <div className="relative z-0 w-full mb-5 group flex flex-col">
                                 <div className="flex flex-row gap-5  mt-2">
+                                    <label htmlFor="">Giới tính: </label>
                                     <div className="flex space-x-2 justify-center">
                                         <label className="">Nam</label>
                                         <input
@@ -228,12 +229,12 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                             </div>
                         </div>
 
-                        <div className="relative z-0 w-full mb-2 group">
+                        <div className="relative z-0 w-full mb-1 group">
                             <label>Địa chỉ thường trú:</label>
                         </div>
 
                         <div className="flex flex-row space-x-4">
-                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
+                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1 space-y-1">
                                 <label>Tỉnh/Thành:</label>
                                 <Select
                                     {...register('customerProvince')}
@@ -256,7 +257,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                 )}
                             </div>
 
-                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
+                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1 space-y-1">
                                 <label>Quận/Huyện:</label>
                                 <Select
                                     {...register('customerDistrict')}
@@ -293,7 +294,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                 )}
                             </div>
 
-                            <div className="relative z-0 w-full mb-5 group flex flex-col   flex-1">
+                            <div className="relative z-0 w-full mb-5 group flex flex-col flex-1 space-y-1">
                                 <label>Xã/Phường:</label>
                                 <Select
                                     {...register('customerWard')}
@@ -331,7 +332,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                     </div>
 
                     <div className="flex-1">
-                        <div className=" text-blue-600 size-5 w-full font-bold my-5 text-base text-center">
+                        <div className=" text-blue-600 size-5 w-full font-bold  text-base text-center">
                             Thông tin liên hệ
                         </div>
 

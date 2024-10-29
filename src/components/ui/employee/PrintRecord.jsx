@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { MyToast } from '../common'
 import { convertScreeningResult } from '@/utils'
+import { PrintScreeningRecordModal, PrintVaccinationRecordModal } from './modal'
 
 export const PrintRecord = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -22,8 +23,32 @@ export const PrintRecord = () => {
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy phiếu tiêm.'))
     }, [selectedDate])
 
-    //console.log(screeningRecordList)
-    //console.log(vaccinationRecordList)
+    const [isOpenPrintScreeningRecordModal, setIsOpenPrintScreeningRecordModal] = useState(false)
+    const [screeningRecordSelected, setScreeningRecordSelected] = useState(null)
+
+    const handleOpenPrintScreeningRecordModal = (record) => {
+        setScreeningRecordSelected(record)
+        setIsOpenPrintScreeningRecordModal(true)
+    }
+
+    const handleClosePrintScreeningRecordModal = () => {
+        setIsOpenPrintScreeningRecordModal(false)
+        setScreeningRecordSelected(null)
+    }
+
+    const [isOpenPrintVaccinationRecordModal, setIsOpenPrintVaccinationRecordModal] =
+        useState(false)
+    const [vaccinationRecordSelected, setVaccinationRecordSelected] = useState(null)
+
+    const handleOpenPrintVaccinationRecordModal = (record) => {
+        setVaccinationRecordSelected(record)
+        setIsOpenPrintVaccinationRecordModal(true)
+    }
+
+    const handleClosePrintVaccinationRecordModal = () => {
+        setIsOpenPrintVaccinationRecordModal(false)
+        setVaccinationRecordSelected(null)
+    }
 
     const handlePrint = (recordCode) => {
         console.log(`Printing record with code: ${recordCode}`)
@@ -70,7 +95,7 @@ export const PrintRecord = () => {
             title: 'In phiếu',
             key: 'print',
             render: (text, record) => (
-                <div onClick={() => handlePrint(record)}>
+                <div onClick={() => handleOpenPrintScreeningRecordModal(record)}>
                     <Tooltip placement="top" title="In phiếu khám sàng lọc">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -118,21 +143,11 @@ export const PrintRecord = () => {
             dataIndex: 'vaccineName',
             key: 'vaccineName',
         },
-        // {
-        //     title: 'Gói vắc xin',
-        //     dataIndex: 'vaccinePackageName',
-        //     key: 'vaccinePackageName',
-        // },
-        // {
-        //     title: 'Lô vắc xin',
-        //     dataIndex: 'vaccineBatchNumber',
-        //     key: 'vaccineBatchNumber',
-        // },
         {
             title: 'In phiếu',
             key: 'print',
             render: (text, record) => (
-                <div onClick={() => handlePrint(record)}>
+                <div onClick={() => handleOpenPrintVaccinationRecordModal(record)}>
                     <Tooltip placement="top" title="In phiếu tiêm">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -208,6 +223,18 @@ export const PrintRecord = () => {
                     />
                 </div>
             </div>
+
+            <PrintScreeningRecordModal
+                visiblePrintScreeningRecordModal={isOpenPrintScreeningRecordModal}
+                handleClosePrintScreeningRecordModal={handleClosePrintScreeningRecordModal}
+                screeningRecordSelected={screeningRecordSelected}
+            />
+
+            <PrintVaccinationRecordModal
+                visiblePrintVaccinationRecordModal={isOpenPrintVaccinationRecordModal}
+                handleClosePrintVaccinationRecordModal={handleClosePrintVaccinationRecordModal}
+                vaccinationRecordSelected={vaccinationRecordSelected}
+            />
         </section>
     )
 }

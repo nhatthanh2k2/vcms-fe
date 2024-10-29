@@ -90,13 +90,6 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
             ),
             doseCountList: packageDetailList.map((packageDetail) => packageDetail.doseCount),
         }
-        // const response = await employeeService.bookCustomPackage(request)
-
-        // if (response.data.code === 1000) {
-        //     MyToast('success', 'Đặt Gói Vắc Xin Thành Công')
-        // } else {
-        //     MyToast('success', 'Đặt Gói Vắc Xin Thành Công')
-        // }
 
         try {
             const response = await employeeService.bookCustomPackage(request)

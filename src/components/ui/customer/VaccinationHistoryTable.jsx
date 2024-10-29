@@ -43,6 +43,11 @@ export const VaccinationHistoryTable = ({ vaccinationRecordList }) => {
     return (
         <div>
             <Table
+                title={() => (
+                    <div className="text-center text-teal-500 font-bold text-2xl">
+                        Lịch sử tiêm vắc xin tại trung tâm
+                    </div>
+                )}
                 columns={columns}
                 dataSource={vaccinationRecordList}
                 locale={{
