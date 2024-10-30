@@ -231,6 +231,7 @@ import { vaccinePackageService, vaccineService } from '@/services'
 import { Select, Table, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
+import { useNavigate } from 'react-router-dom'
 
 export const AddVaccinePackageForm = () => {
     const [vaccineList, setVaccineList] = useState([])
@@ -377,6 +378,12 @@ export const AddVaccinePackageForm = () => {
         }
     }, [searchQuery, vaccineList])
 
+    const navigate = useNavigate()
+
+    const handleBackToPackageList = () => {
+        navigate('/admin/quan-ly/goi-vac-xin/danh-muc')
+    }
+
     return (
         <form action="" className="flex flex-col space-y-3">
             <div className="flex space-x-5">
@@ -478,7 +485,25 @@ export const AddVaccinePackageForm = () => {
                 </div>
             )}
 
-            <div className="flex justify-center">
+            <div className="flex justify-center space-x-5">
+                <button
+                    onClick={handleBackToPackageList}
+                    type="button"
+                    className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="m4 10-.707.707L2.586 10l.707-.707L4 10Zm17 8a1 1 0 1 1-2 0h2ZM8.293 15.707l-5-5 1.414-1.414 5 5-1.414 1.414Zm-5-6.414 5-5 1.414 1.414-5 5-1.414-1.414ZM4 9h10v2H4V9Zm17 7v2h-2v-2h2Zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5V9Z"
+                        />
+                    </svg>
+                    <span className="ml-2">Quay lại</span>
+                </button>
                 <button
                     onClick={handleSubmit}
                     type="button"

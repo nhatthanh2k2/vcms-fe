@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { DatePicker } from 'antd'
-import { calculateAge, convertAgeRangeToMonths, disabledDoB, phoneNumberPattern } from '@/utils'
+import { calculateAge, disabledDoB, phoneNumberPattern } from '@/utils'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,7 +25,7 @@ export const VaccinationHistoryLookup = () => {
     const [vaccinePackageList, setVaccinePackageList] = useState([])
     const [vaccineList, setVaccineList] = useState([])
     const [packageDetailList, setPackageDetailList] = useState([])
-    const [filteredPackageDetailList, setFilteredPackageDetailList] = useState([])
+    const [recommendedPackageList, setRecommendedPackageList] = useState([])
 
     useEffect(() => {
         vaccinePackageService
@@ -90,11 +90,19 @@ export const VaccinationHistoryLookup = () => {
             vaccinePackageService
                 .getDetailsOfPackage(suggestPackage.vaccinePackageId)
                 .then((response) => {
-                    //setPackageDetailList(response.data.result)
+                    setPackageDetailList(response.data.result)
+                    const filteredVaccines = response.data.result.filter((detail) => {
+                        return isVaccineSuitableForAge(detail.vaccineResponse, customerAge)
+                    })
+                    setRecommendedPackageList(filteredVaccines)
                 })
                 .catch((error) => console.log('Get detail of package failed!'))
         }
     }, [customer])
+
+    console.log(packageDetailList)
+
+    console.log(recommendedPackageList)
 
     const {
         register,
@@ -263,7 +271,7 @@ export const VaccinationHistoryLookup = () => {
                             Vắc xin bạn nên tiêm
                         </span>
                         <div className="flex flex-wrap">
-                            {packageDetailList.map((detail, index) => (
+                            {recommendedPackageList.map((detail, index) => (
                                 <div key={index} className="w-1/4 p-2">
                                     <div className="border rounded-lg p-4">
                                         <h3>{detail.vaccineResponse.vaccineName}</h3>

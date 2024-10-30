@@ -16,5 +16,8 @@ export const customerService = {
     },
     getMyVaccinationHistory: (request) => {
         return axios.post(api_url + "/vaccination-record/getMyHistory", request)
+    },
+    getAllCustomers: () => {
+        return api.get("/customers/all")
     }
 }

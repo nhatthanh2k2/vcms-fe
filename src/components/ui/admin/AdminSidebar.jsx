@@ -409,7 +409,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         <ul className="mb-6 flex flex-col gap-1.5">
                             <li>
                                 <NavLink
-                                    to="/chart"
+                                    to="/admin/quan-ly/khach-hang"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                         pathname.includes('chart') && 'bg-graydark dark:bg-meta-4'
                                     }`}
@@ -508,7 +508,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                 <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                                                     <li>
                                                         <NavLink
-                                                            to="/admin/quan-ly/danh-muc-vac-xin"
+                                                            to="/admin/thong-ke/doanh-thu"
                                                             className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                                                 (isActive && '!text-white')
@@ -519,7 +519,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     </li>
                                                     <li>
                                                         <NavLink
-                                                            to="/admin/quan-ly/danh-muc-goi-vac-xin"
+                                                            to="/admin/thong-ke/so-mui-tiem"
                                                             className={({ isActive }) =>
                                                                 'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                                                 (isActive && '!text-white')

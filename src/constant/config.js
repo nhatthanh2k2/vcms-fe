@@ -24,8 +24,12 @@ export const ADMIN_PATH = {
     vaccineMangement: 'vac-xin-le',
     packageManagement: 'goi-vac-xin',
     batchManagement: 'lo-vac-xin',
+    customerManagement: 'khach-hang',
     addVaccine: 'them-vac-xin',
-    addPackage: 'them-goi-vac-xin'
+    addPackage: 'them-goi-vac-xin',
+    statistics: 'thong-ke',
+    revenue: 'doanh-thu',
+    doseCount: 'so-mui-tiem',
 }
 
 export const EMPLOYEE_PATH = {

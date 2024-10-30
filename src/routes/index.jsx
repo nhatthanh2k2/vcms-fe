@@ -23,6 +23,9 @@ import {
     AdolescentPackagePage,
     AddVaccinePackagePage,
     VaccinePricingPage,
+    CustomerManagementPage,
+    RevenuePage,
+    DoseCountPage,
 } from '@/pages'
 import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -191,6 +194,23 @@ export const router = [
                                 element: <AddVaccinePackagePage />,
                             },
                         ],
+                    },
+                    {
+                        path: ADMIN_PATH.customerManagement,
+                        element: <CustomerManagementPage />,
+                    },
+                ],
+            },
+            {
+                path: ADMIN_PATH.statistics,
+                children: [
+                    {
+                        path: ADMIN_PATH.revenue,
+                        element: <RevenuePage />,
+                    },
+                    {
+                        path: ADMIN_PATH.doseCount,
+                        element: <DoseCountPage />,
                     },
                 ],
             },
