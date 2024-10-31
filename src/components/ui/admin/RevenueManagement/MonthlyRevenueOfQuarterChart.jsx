@@ -3,7 +3,6 @@ import { Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
 import { Bar } from 'react-chartjs-2'
-import { beginAtZeroOption } from '@/utils'
 
 export const MonthlyRevenueOfQuarterChart = () => {
     const currentMonth = new Date().getMonth()
@@ -39,34 +38,53 @@ export const MonthlyRevenueOfQuarterChart = () => {
         ],
     }
 
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true },
+        },
+    }
+
     return (
-        <div>
-            <Select
-                options={[
-                    {
-                        value: 1,
-                        label: 'Các tháng Quý 1',
-                    },
-                    {
-                        value: 2,
-                        label: 'Các tháng Quý 2',
-                    },
-                    {
-                        value: 3,
-                        label: 'Các tháng Quý 3',
-                    },
-                    {
-                        value: 4,
-                        label: 'Các tháng Quý 4',
-                    },
-                ]}
-                placeholder="Chọn quý để xem doanh thu"
-                onChange={(value) => setQuarterSelected(value)}
-            />
-            <div>
-                <h2>Doanh thu theo tháng trong quý {quarterSelected}</h2>
-                <Bar data={monthlyOfQuarterData} options={beginAtZeroOption} />
-                <h3>Tổng doanh thu: {totalRevenueOfQuarter.toLocaleString()} VNĐ</h3>
+        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5 space-y-5">
+            <div className="flex justify-between items-center font-bold">
+                <span>
+                    Doanh thu theo tháng trong quý {quarterSelected} năm {yearSelected}
+                </span>
+                <span>
+                    Tổng doanh thu:{' '}
+                    <span className="text-orange-600">
+                        {totalRevenueOfQuarter.toLocaleString()} VNĐ
+                    </span>
+                </span>
+
+                <Select
+                    options={[
+                        {
+                            value: 1,
+                            label: 'Các tháng Quý 1',
+                        },
+                        {
+                            value: 2,
+                            label: 'Các tháng Quý 2',
+                        },
+                        {
+                            value: 3,
+                            label: 'Các tháng Quý 3',
+                        },
+                        {
+                            value: 4,
+                            label: 'Các tháng Quý 4',
+                        },
+                    ]}
+                    placeholder="Chọn quý để xem doanh thu"
+                    onChange={(value) => setQuarterSelected(value)}
+                />
+            </div>
+
+            <div className="h-100 ">
+                <Bar data={monthlyOfQuarterData} options={options} />
             </div>
         </div>
     )

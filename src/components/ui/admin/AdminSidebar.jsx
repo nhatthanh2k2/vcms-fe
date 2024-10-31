@@ -242,10 +242,17 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     <li>
                                                         <NavLink
                                                             to="/admin/quan-ly/vac-xin-le/danh-muc"
-                                                            className={({ isActive }) =>
-                                                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive && '!text-white')
-                                                            }
+                                                            className={({ isActive }) => {
+                                                                const baseClass =
+                                                                    'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white'
+                                                                const activeClass =
+                                                                    isActive ||
+                                                                    pathname.includes('vac-xin-le')
+                                                                        ? '!text-white'
+                                                                        : ''
+
+                                                                return `${baseClass} ${activeClass}`
+                                                            }}
                                                         >
                                                             Vắc xin lẻ
                                                         </NavLink>
@@ -444,8 +451,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                             <NavLink
                                                 to="#"
                                                 className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                                    (pathname === '/forms' ||
-                                                        pathname.includes('forms')) &&
+                                                    pathname.includes('thong-ke') &&
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                                 onClick={(e) => {

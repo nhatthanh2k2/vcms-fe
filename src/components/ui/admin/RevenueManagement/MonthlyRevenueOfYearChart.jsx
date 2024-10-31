@@ -1,5 +1,5 @@
 import { revenueService } from '@/services'
-import { beginAtZeroOption } from '@/utils'
+import { lineOptions } from '@/utils'
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 
@@ -31,21 +31,29 @@ export const MonthlyRevenueOfYearChart = () => {
                 label: 'Doanh thu',
                 data: monthlyRevenueOfYearRevenues,
                 fill: false,
-                backgroundColor: 'rgba(75, 192, 192, 1)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: '#28a745',
+                borderColor: '#28a745',
                 borderWidth: 2,
                 tension: 0.1,
             },
         ],
     }
 
-    console.log(monthlyRevenueOfYearList)
-
     return (
-        <div>
-            <h2>Biểu đồ doanh thu hàng tháng</h2>
-            <Line data={monthlyRevenueOfYearData} options={beginAtZeroOption} />
-            <h3>Tổng doanh thu: {totalMonthlyRevenueOfYear.toLocaleString()} VNĐ</h3>
+        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+            <div className="flex font-bold justify-between">
+                <span>Biểu đồ doanh thu hàng tháng năm {yearSelected}</span>
+                <span>
+                    Tổng doanh thu:{' '}
+                    <span className="text-orange-500">
+                        {totalMonthlyRevenueOfYear.toLocaleString()} VNĐ
+                    </span>
+                </span>
+            </div>
+
+            <div className="h-100">
+                <Line data={monthlyRevenueOfYearData} options={lineOptions} />
+            </div>
         </div>
     )
 }

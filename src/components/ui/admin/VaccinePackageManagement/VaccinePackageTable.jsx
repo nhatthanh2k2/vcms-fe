@@ -37,6 +37,16 @@ export const VaccinePackageTable = () => {
         setIsOpenDeleteVaccinePackageModal(false)
     }
 
+    const navigate = useNavigate()
+
+    const handleToAddVaccinePackagePage = () => {
+        navigate('/admin/quan-ly/goi-vac-xin/them-goi-vac-xin')
+    }
+
+    const handleToEditPackagePage = (record) => {
+        navigate('/admin/quan-ly/goi-vac-xin/chinh-sua-goi', { state: { record } })
+    }
+
     const vaccinePackageColumns = [
         {
             title: 'STT',
@@ -70,6 +80,7 @@ export const VaccinePackageTable = () => {
                 <div className="inline-flex space-x-2 items-center rounded-md shadow-sm">
                     <Tooltip placement="top" title="Chỉnh sửa gói">
                         <svg
+                            onClick={() => handleToEditPackagePage(record)}
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-6 h-6"
                             fill="none"
@@ -106,12 +117,6 @@ export const VaccinePackageTable = () => {
             ),
         },
     ]
-
-    const navigate = useNavigate()
-
-    const handleToAddVaccinePackagePage = () => {
-        navigate('/admin/quan-ly/goi-vac-xin/them-goi-vac-xin')
-    }
 
     return (
         <div className="flex flex-col space-y-5">

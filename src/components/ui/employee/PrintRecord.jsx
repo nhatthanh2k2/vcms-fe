@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { MyToast } from '../common'
 import { convertScreeningResult } from '@/utils'
-import { PrintScreeningRecordModal, PrintVaccinationRecordModal } from './modal'
+import { PrintScreeningRecordModal, PrintVaccinationRecordModal } from './Modal'
 
 export const PrintRecord = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -117,6 +117,8 @@ export const PrintRecord = () => {
         },
     ]
 
+    console.log(vaccinationRecordList)
+
     const vaccinationColumns = [
         {
             title: 'Mã phiếu tiêm',
@@ -135,7 +137,7 @@ export const PrintRecord = () => {
         },
         {
             title: 'Người tạo phiếu',
-            dataIndex: 'employeeFullName',
+            dataIndex: ['employeeResponse', 'employeeFullName'],
             key: 'employeeFullName',
         },
         {

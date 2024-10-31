@@ -14,6 +14,7 @@ export const vaccinationRecordService = {
     getVaccinationRecordByCreateDate: (createDate) => {
         return api.get("/vaccination-record/list/create-date", {
             params: { createDate }
-        });
-    }
+        })
+    },
+    
 }

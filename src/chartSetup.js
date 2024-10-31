@@ -1,21 +1,4 @@
-// import {
-//     Chart as ChartJS,
-//     ArcElement,
-//     Tooltip,
-//     Legend,
-//     CategoryScale,
-//     LinearScale,
-//     BarElement 
-//   } from 'chart.js'
-  
-// ChartJS.register(
-//     ArcElement,
-//     Tooltip,
-//     Legend,
-//     CategoryScale,
-//     LinearScale,
-//     BarElement
-// )
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -25,7 +8,8 @@ import {
   LinearScale,
   BarElement,
   LineElement,  
-  PointElement   
+  PointElement,
+  Filler  
 } from 'chart.js';
 
 ChartJS.register(
@@ -36,5 +20,6 @@ ChartJS.register(
   LinearScale,
   BarElement,
   LineElement,   
-  PointElement   
+  PointElement,   
+  Filler
 );

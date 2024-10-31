@@ -226,9 +226,9 @@ export const UpdateEmployeeProfileModal = ({
             footer={null}
             width={1200}
         >
-            <div className="flex flex-row space-x-5">
-                <div className="flex flex-col">
-                    <div className="flex items-center justify-center bg-gray-200">
+            <div className="flex flex-row space-x-2">
+                <div className="flex flex-col border-2 border-teal-300 rounded-lg items-center justify-center">
+                    <div className="flex items-center justify-center ">
                         <div className="relative">
                             <div className=" rounded-full bg-gray-300 flex items-center justify-center">
                                 <img
@@ -264,8 +264,8 @@ export const UpdateEmployeeProfileModal = ({
                         />
                     </div>
 
-                    <div className="flex space-x-2 mt-2 justify-center">
-                        <div className="m-3">
+                    <div className="flex space-x-2 mt-2 justify-center px-2">
+                        <div>
                             <button
                                 onClick={handleViewOldImage}
                                 className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center hover-button"
@@ -287,7 +287,7 @@ export const UpdateEmployeeProfileModal = ({
                                 </svg>
                             </button>
                         </div>
-                        <div className="m-3">
+                        <div>
                             <button
                                 onClick={handleUpdateAvatar}
                                 className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center hover-button"
@@ -312,9 +312,9 @@ export const UpdateEmployeeProfileModal = ({
                     </div>
                 </div>
 
-                <div>
+                <div className="border-2 border-teal-300 rounded-lg p-5">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="flex gap-10">
+                        <div className="flex gap-5">
                             <div className="flex-1 space-y-2">
                                 <label className="font-semibold">Họ và tên:</label>
                                 <input
@@ -338,7 +338,7 @@ export const UpdateEmployeeProfileModal = ({
                             </div>
                         </div>
 
-                        <div className="flex gap-10 mt-5">
+                        <div className="flex gap-5 mt-5">
                             <div className="flex-1 space-y-2">
                                 <label className="font-semibold">Email:</label>
                                 <input
@@ -357,7 +357,7 @@ export const UpdateEmployeeProfileModal = ({
                             </div>
                         </div>
 
-                        <div className="flex gap-10 mt-5">
+                        <div className="flex gap-5 mt-5">
                             <div className="flex-1 flex flex-col space-y-2 font-semibold">
                                 <label>Giới tính:</label>
                                 <div className="flex gap-2">

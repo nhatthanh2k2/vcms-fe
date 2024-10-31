@@ -1,13 +1,12 @@
 import { revenueService } from '@/services'
 import dayjs from 'dayjs'
-import React, { useEffect } from 'react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
-import { Bar, Line } from 'react-chartjs-2'
-import { beginAtZeroOption } from '@/utils'
+import { Line } from 'react-chartjs-2'
+import { lineOptions } from '@/utils'
 
 export const DailyRevenueOfWeekChart = () => {
-    const [toDate, setToDate] = useState(new Date(2024, 9, 24))
+    const [toDate, setToDate] = useState(new Date())
     const [dailyRevenueList, setDailyRevenueList] = useState([])
 
     useEffect(() => {
@@ -33,8 +32,8 @@ export const DailyRevenueOfWeekChart = () => {
                 label: 'Doanh thu',
                 data: dailyRevenues,
                 fill: false,
-                backgroundColor: 'rgba(75, 192, 192, 1)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: '#28a745',
+                borderColor: '#28a745',
                 borderWidth: 2,
                 tension: 0.1,
             },
@@ -42,10 +41,19 @@ export const DailyRevenueOfWeekChart = () => {
     }
 
     return (
-        <div>
-            <h2>Biểu đồ Doanh thu theo ngày trong tuần này</h2>
-            <Line data={dailyRevenueData} options={beginAtZeroOption} />
-            <h3>Tổng doanh thu: {totalDailyRevenue.toLocaleString()} VNĐ</h3>
+        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+            <div className="flex font-bold justify-between">
+                <span>Biểu đồ Doanh thu trong tuần này</span>
+                <span>
+                    Tổng doanh thu:{' '}
+                    <span className="text-orange-600">
+                        {totalDailyRevenue.toLocaleString()} VNĐ
+                    </span>
+                </span>
+            </div>
+            <div className="h-100">
+                <Line data={dailyRevenueData} options={lineOptions} />
+            </div>
         </div>
     )
 }

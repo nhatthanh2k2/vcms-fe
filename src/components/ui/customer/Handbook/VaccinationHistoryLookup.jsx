@@ -4,7 +4,7 @@ import { calculateAge, disabledDoB, phoneNumberPattern } from '@/utils'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MyToast } from '../common'
+import { MyToast } from '../../common'
 import { customerService, vaccinePackageService, vaccineService } from '@/services'
 import dayjs from 'dayjs'
 import { VaccinationHistoryTable } from '.'
@@ -100,10 +100,6 @@ export const VaccinationHistoryLookup = () => {
         }
     }, [customer])
 
-    console.log(packageDetailList)
-
-    console.log(recommendedPackageList)
-
     const {
         register,
         handleSubmit,
@@ -122,8 +118,10 @@ export const VaccinationHistoryLookup = () => {
             const response = await customerService.getMyVaccinationHistory(request)
 
             if (response.data.code === 1000) {
-                setVaccinationRecordList(response.data.result)
-                if (vaccinationRecordList.length === 0) {
+                const recordList = response.data.result
+                setVaccinationRecordList(recordList)
+
+                if (recordList.length === 0) {
                     MyToast('info', 'Bạn chưa có dữ liệu tiêm chủng tại trung tâm')
                 } else {
                     MyToast('success', 'Lấy lịch sử tiêm thành công')
@@ -146,7 +144,7 @@ export const VaccinationHistoryLookup = () => {
             if (response.data.code === 1000) {
                 MyToast('success', 'Tra cứu thông tin khách hàng thành công')
                 setCustomer(response.data.result)
-                await getMyVaccinationReordHistory(lookupdata)
+                getMyVaccinationReordHistory(lookupdata)
             } else {
                 MyToast('error', 'Tra cứu thông tin khách hàng không thành công')
             }

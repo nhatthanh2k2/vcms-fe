@@ -27,6 +27,7 @@ export const ADMIN_PATH = {
     customerManagement: 'khach-hang',
     addVaccine: 'them-vac-xin',
     addPackage: 'them-goi-vac-xin',
+    editPackage: 'chinh-sua-goi',
     statistics: 'thong-ke',
     revenue: 'doanh-thu',
     doseCount: 'so-mui-tiem',

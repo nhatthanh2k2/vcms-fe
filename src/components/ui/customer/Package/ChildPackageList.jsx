@@ -1,6 +1,6 @@
 import { vaccinePackageService } from '@/services'
 import React, { useEffect, useState } from 'react'
-import { MyToast } from '../common'
+import { MyToast } from '../../common'
 import { ChildPackageTable } from '.'
 
 export const ChildPackageList = () => {

@@ -1,7 +1,7 @@
 import { revenueService } from '@/services'
-import { beginAtZeroOption } from '@/utils'
 import React, { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
+import { MyToast } from '../../common'
 
 export const QuarterlyRevenueOfYearChart = () => {
     const [yearSelected, setYearSelected] = useState(new Date().getFullYear())
@@ -35,11 +35,29 @@ export const QuarterlyRevenueOfYearChart = () => {
         ],
     }
 
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true },
+        },
+    }
+
     return (
-        <div>
-            <h2>Doanh thu theo tháng trong quý {yearSelected}</h2>
-            <Bar data={quarterlyOfYearData} options={beginAtZeroOption} />
-            <h3>Tổng doanh thu: {totalQuarterlyRevenueOfYear.toLocaleString()} VNĐ</h3>
+        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+            <div className="flex justify-between font-bold">
+                <span>Doanh thu theo quý năm {yearSelected}</span>
+                <span>
+                    Tổng doanh thu:{' '}
+                    <span className="text-orange-500">
+                        {totalQuarterlyRevenueOfYear.toLocaleString()} VNĐ
+                    </span>
+                </span>
+            </div>
+
+            <div className="h-100">
+                <Bar data={quarterlyOfYearData} options={options} />
+            </div>
         </div>
     )
 }

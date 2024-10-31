@@ -16,12 +16,12 @@ export const CustomerFooter = () => {
                             </h3>
                             <ul className="space-y-1">
                                 <li>
-                                    <a rel="noopener noreferrer" href="/#">
+                                    <a rel="noopener noreferrer" href="/gioi-thieu/trung-tam">
                                         Giới thiệu
                                     </a>
                                 </li>
                                 <li>
-                                    <a rel="noopener noreferrer" href="/#">
+                                    <a rel="noopener noreferrer" href="/gioi-thieu/doi-ngu-bac-si">
                                         Đội ngũ bác sĩ
                                     </a>
                                 </li>
@@ -33,39 +33,34 @@ export const CustomerFooter = () => {
                             </h3>
                             <ul className="space-y-1">
                                 <li>
-                                    <a rel="noopener noreferrer" href="/#">
-                                        Gói tiêm người lớn
+                                    <a rel="noopener noreferrer" href="/goi-tiem/goi-tiem-tre-em">
+                                        Tiêm trẻ em
                                     </a>
                                 </li>
                                 <li>
-                                    <a rel="noopener noreferrer" href="/#">
-                                        Gói tiêm trẻ em
+                                    <a
+                                        rel="noopener noreferrer"
+                                        href="/goi-tiem/goi-tiem-vi-thanh-nien-va-thanh-nien"
+                                    >
+                                        Tiêm vị thành niên và thanh niên
                                     </a>
                                 </li>
                                 <li>
-                                    <a rel="noopener noreferrer" href="/#">
-                                        Tư vấn
+                                    <a
+                                        rel="noopener noreferrer"
+                                        href="/goi-tiem/goi-tiem-nguoi-truong-thanh"
+                                    >
+                                        Tiêm người lớn
+                                    </a>
+                                </li>
+                                <li>
+                                    <a rel="noopener noreferrer" href="/cam-nang/thong-tin-vac-xin">
+                                        Tiêm thêo yêu cầu
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                        <div className="space-y-3 text-center md:text-left">
-                            <h3 className="tracking-wide uppercase text-black font-semibold">
-                                Cẩm nang
-                            </h3>
-                            <ul className="space-y-1">
-                                <li>
-                                    <a rel="noopener noreferrer" href="/luu-y-truoc-khi-tiem">
-                                        Lưu ý trước khi tiêm
-                                    </a>
-                                </li>
-                                <li>
-                                    <a rel="noopener noreferrer" href="/luu-y-sau-khi-tiem">
-                                        Lưu ý sau khi tiêm
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+
                         <div className="space-y-3 text-center md:text-left">
                             <h3 className="tracking-wide uppercase text-black font-semibold">
                                 Theo dõi chúng tôi

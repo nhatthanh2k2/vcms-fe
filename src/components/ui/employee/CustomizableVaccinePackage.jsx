@@ -120,7 +120,6 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
         )
 
         if (batchDetailToAdd) {
-            console.log('Batch Detail:', batchDetailToAdd)
             const doseCount =
                 packageSelected <= 3
                     ? batchDetailToAdd.vaccineResponse.vaccineAdultDoseCount

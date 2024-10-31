@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { DatePicker, Table } from 'antd'
 import { disabledDoB, phoneNumberPattern } from '@/utils'
 import { AlertModal, MyToast } from '../common'
+import { VaccinationHistoryTable } from '../customer'
 
 const lookupSchema = z.object({
     customerIdentifier: z
@@ -54,10 +55,7 @@ const columns = [
 export const CustomerLookup = () => {
     const [customer, setCustomer] = useState(null)
     const formLookupCustomer = useRef(null)
-
-    // useEffect(() => {
-    //     setCustomer(null)
-    // }, [])
+    const [vaccinationRecordList, setVaccinationRecordList] = useState([])
 
     const {
         register: registerLookup,
@@ -71,6 +69,25 @@ export const CustomerLookup = () => {
             customerDob: null,
         },
     })
+
+    const getMyVaccinationReordHistory = async (request) => {
+        try {
+            const response = await customerService.getMyVaccinationHistory(request)
+
+            if (response.data.code === 1000) {
+                const recordList = response.data.result
+                setVaccinationRecordList(recordList)
+
+                if (recordList.length === 0) {
+                    MyToast('info', 'Bạn chưa có dữ liệu tiêm chủng tại trung tâm')
+                } else {
+                    MyToast('success', 'Lấy lịch sử tiêm thành công')
+                }
+            }
+        } catch (error) {
+            MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+        }
+    }
 
     const handleLookupCustomer = () => {
         formLookupCustomer.current.requestSubmit()
@@ -89,6 +106,7 @@ export const CustomerLookup = () => {
                 if (response.data.code === 1000) {
                     setCustomer(response.data.result)
                     document.getElementById('modal_info').showModal()
+                    getMyVaccinationReordHistory(lookupdata)
                 } else {
                     document.getElementById('modal_no_info').showModal()
                 }
@@ -105,6 +123,8 @@ export const CustomerLookup = () => {
             }
         }
     }
+
+    console.log(vaccinationRecordList)
 
     return (
         <section className="flex-col">
@@ -306,32 +326,9 @@ export const CustomerLookup = () => {
                 />
                 <div
                     role="tabpanel"
-                    className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                    className="tab-content bg-base-100 border-base-300 rounded-box p-3"
                 >
-                    <Table
-                        columns={columns}
-                        locale={{
-                            emptyText: (
-                                <div className="flex flex-col items-center justify-center">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-12 h-12"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        style={{ filter: 'blur(1px)' }}
-                                    >
-                                        <path fill="#fff" d="M0 0h24v24H0z" />
-                                        <path
-                                            stroke="#000"
-                                            strokeLinejoin="round"
-                                            d="m3 15 .924-11.083A1 1 0 0 1 4.92 3h14.16a1 1 0 0 1 .996.917L21 15M3 15v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5M3 15h6c0 1 .6 3 3 3s3-2 3-3h6"
-                                        />
-                                    </svg>
-                                    <p>Chưa có dữ liệu</p>
-                                </div>
-                            ),
-                        }}
-                    />
+                    <VaccinationHistoryTable vaccinationRecordList={vaccinationRecordList} />
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
 import { AdultPackageTable } from '.'
 import { vaccinePackageService } from '@/services'
 import React, { useEffect, useState } from 'react'
-import { MyToast } from '../common'
+import { MyToast } from '../../common'
 
 export const AdultPackageList = () => {
     const [vaccinePackageList, setVaccinePackageList] = useState([])

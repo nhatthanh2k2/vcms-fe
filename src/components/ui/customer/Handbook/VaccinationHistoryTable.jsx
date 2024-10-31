@@ -4,39 +4,28 @@ import { Table } from 'antd'
 const columns = [
     {
         title: 'Tên vắc xin',
-        dataIndex: 'customerCode',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
+        dataIndex: 'vaccineName',
+        key: 'vaccineName',
     },
     {
         title: 'Gói vắc xin',
-        dataIndex: 'appointmentCustomerFullName',
-        key: 'customerFullName',
-        render: (text) => <span className="font-semibold">{text}</span>,
+        dataIndex: 'vaccinePackageName',
+        key: 'vaccinePackageName',
     },
     {
         title: 'Ngày tiêm',
-        dataIndex: 'customerCode',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
+        dataIndex: 'vaccinationRecordDate',
+        key: 'vaccinationRecordDate',
     },
     {
         title: 'Mũi tiêm',
-        dataIndex: 'appointmentCustomerFullName',
-        key: 'customerFullName',
-        render: (text) => <span className="font-semibold">{text}</span>,
+        dataIndex: 'vaccinationRecordDose',
+        key: 'vaccinationRecordDose',
     },
     {
         title: 'Liều lượng',
-        dataIndex: 'customerCode',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
-    },
-    {
-        title: 'Ghi chú',
-        dataIndex: 'customerCode',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
+        dataIndex: 'vaccinationRecordDosage',
+        key: 'vaccinationRecordDosage',
     },
 ]
 export const VaccinationHistoryTable = ({ vaccinationRecordList }) => {

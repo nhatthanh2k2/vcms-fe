@@ -244,15 +244,10 @@ export const AddVaccineForm = () => {
                     </div>
                 </div>
 
-                <div>
-                    <strong className="text-red-500">(*) Lưu ý:</strong> Đối với các thông tin bên
-                    dưới, mỗi ý khác nhau vui lòng đặt dấu ";" ở cuối.
-                </div>
-
                 <div className="flex flex-col space-y-2">
                     <label className="font-semibold">Mô tả vắc xin:</label>
                     <textarea
-                        className="textarea textarea-success w-full"
+                        className="textarea textarea-success w-full ro"
                         placeholder="Bio"
                         {...register('vaccineDescription')}
                     ></textarea>
@@ -261,76 +256,95 @@ export const AddVaccineForm = () => {
                     )}
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Đường tiêm:</label>
-                    <textarea
-                        className="textarea textarea-success w-full"
-                        placeholder="Bio"
-                        {...register('vaccineInjectionRoute')}
-                    ></textarea>
-                    {errors.vaccineInjectionRoute && (
-                        <p className="text-red-500">{errors.vaccineInjectionRoute.message}</p>
-                    )}
+                <div>
+                    <strong className="text-red-500">(*) Lưu ý:</strong> Đối với các thông tin bên
+                    dưới, mỗi ý khác nhau vui lòng đặt dấu ";" ở cuối.
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Chống chỉ định:</label>
-                    <textarea
-                        className="textarea textarea-success w-full"
-                        placeholder="Bio"
-                        {...register('vaccineContraindication')}
-                    ></textarea>
-                    {errors.vaccineContraindication && (
-                        <p className="text-red-500">{errors.vaccineContraindication.message}</p>
-                    )}
+                <div className="flex  space-x-5">
+                    <div className="flex flex-col space-y-2 flex-grow">
+                        <label className="font-semibold">Đối tượng tiêm:</label>
+                        <textarea
+                            className="textarea textarea-success w-full ro"
+                            placeholder="Bio"
+                            rows={4}
+                            {...register('vaccinePatient')}
+                        ></textarea>
+                        {errors.vaccinePatient && (
+                            <p className="text-red-500">{errors.vaccinePatient.message}</p>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col space-y-2  flex-grow">
+                        <label className="font-semibold">Đường tiêm:</label>
+                        <textarea
+                            className="textarea textarea-success w-full ro"
+                            placeholder="Bio"
+                            rows={4}
+                            {...register('vaccineInjectionRoute')}
+                        ></textarea>
+                        {errors.vaccineInjectionRoute && (
+                            <p className="text-red-500">{errors.vaccineInjectionRoute.message}</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Phản ứng sau tiêm:</label>
-                    <textarea
-                        className="textarea textarea-success w-full"
-                        placeholder="Bio"
-                        {...register('vaccineReaction')}
-                    ></textarea>
-                    {errors.vaccineReaction && (
-                        <p className="text-red-500">{errors.vaccineReaction.message}</p>
-                    )}
+                <div className="flex  space-x-5">
+                    <div className="flex flex-col space-y-2  flex-grow">
+                        <label className="font-semibold">Chống chỉ định:</label>
+                        <textarea
+                            className="textarea textarea-success w-full ro"
+                            placeholder="Bio"
+                            rows={4}
+                            {...register('vaccineContraindication')}
+                        ></textarea>
+                        {errors.vaccineContraindication && (
+                            <p className="text-red-500">{errors.vaccineContraindication.message}</p>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col space-y-2  flex-grow">
+                        <label className="font-semibold">Phản ứng sau tiêm:</label>
+                        <textarea
+                            className="textarea textarea-success w-full ro"
+                            placeholder="Bio"
+                            rows={4}
+                            {...register('vaccineReaction')}
+                        ></textarea>
+                        {errors.vaccineReaction && (
+                            <p className="text-red-500">{errors.vaccineReaction.message}</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Bảo quản:</label>
-                    <textarea
-                        className="textarea textarea-success w-full"
-                        placeholder="Bio"
-                        {...register('vaccineStorage')}
-                    ></textarea>
-                    {errors.vaccineStorage && (
-                        <p className="text-red-500">{errors.vaccineStorage.message}</p>
-                    )}
-                </div>
+                <div className="flex space-x-5">
+                    <div className="flex flex-col space-y-2  flex-grow">
+                        <label className="font-semibold">Bảo quản:</label>
+                        <textarea
+                            className="textarea textarea-success w-full ro"
+                            placeholder="Bio"
+                            rows={4}
+                            {...register('vaccineStorage')}
+                        ></textarea>
+                        {errors.vaccineStorage && (
+                            <p className="text-red-500">{errors.vaccineStorage.message}</p>
+                        )}
+                    </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Đối tượng tiêm:</label>
-                    <textarea
-                        className="textarea textarea-success w-full"
-                        placeholder="Bio"
-                        {...register('vaccinePatient')}
-                    ></textarea>
-                    {errors.vaccinePatient && (
-                        <p className="text-red-500">{errors.vaccinePatient.message}</p>
-                    )}
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Phác đồ tiêm:</label>
-                    <textarea
-                        className="textarea textarea-success w-full"
-                        placeholder="Bio"
-                        {...register('vaccineInjectionSchedule')}
-                    ></textarea>
-                    {errors.vaccineInjectionSchedule && (
-                        <p className="text-red-500">{errors.vaccineInjectionSchedule.message}</p>
-                    )}
+                    <div className="flex flex-col space-y-2 flex-grow">
+                        <label className="font-semibold">Phác đồ tiêm:</label>
+                        <textarea
+                            className="textarea textarea-success w-full ro"
+                            placeholder="Bio"
+                            rows={4}
+                            {...register('vaccineInjectionSchedule')}
+                        ></textarea>
+                        {errors.vaccineInjectionSchedule && (
+                            <p className="text-red-500">
+                                {errors.vaccineInjectionSchedule.message}
+                            </p>
+                        )}
+                    </div>
                 </div>
 
                 <div className="flex justify-center">

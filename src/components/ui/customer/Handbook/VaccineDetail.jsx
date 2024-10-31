@@ -84,7 +84,11 @@ export const VaccineDetail = () => {
 
                             <div>
                                 <strong>Bảo quản:</strong>
-                                <p>{vaccineDetail.vaccineStorage}</p>
+                                <p>
+                                    {vaccineDetail.vaccineStorage.split(';').map((item, index) => (
+                                        <ol key={index}>{item}</ol>
+                                    ))}
+                                </p>
                             </div>
                         </div>
 
@@ -120,7 +124,11 @@ export const VaccineDetail = () => {
                             className="border p-6 border-blue-200 rounded-md shadow-sm"
                         >
                             <span className="text-2xl text-blue-700 font-bold">Đối tượng tiêm</span>
-                            <p>{vaccineDetail.vaccinePatient}</p>
+                            <p>
+                                {vaccineDetail.vaccinePatient.split(';').map((item, index) => (
+                                    <ol key={index}>{item}</ol>
+                                ))}
+                            </p>
                         </div>
                     </div>
                 </div>
