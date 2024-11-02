@@ -44,7 +44,7 @@ export const CustomerTable = () => {
     console.log(customerList)
 
     return (
-        <div>
+        <div className="bg-white shadow-default">
             <Table
                 title={() => (
                     <div className="">

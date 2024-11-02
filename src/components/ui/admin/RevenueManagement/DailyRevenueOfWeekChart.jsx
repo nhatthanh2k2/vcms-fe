@@ -51,7 +51,7 @@ export const DailyRevenueOfWeekChart = () => {
                     </span>
                 </span>
             </div>
-            <div className="h-100">
+            <div className="mt-2 h-100">
                 <Line data={dailyRevenueData} options={lineOptions} />
             </div>
         </div>

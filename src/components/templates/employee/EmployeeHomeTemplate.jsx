@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { authService, batchDetailService, vaccinePackageService, vaccineService } from '@/services'
+import { batchDetailService, vaccinePackageService, vaccineService } from '@/services'
 import {
     CustomerLookup,
     CustomizableVaccinePackage,
     BookVaccination,
     AppointmentVaccinationSchedule,
     OrderVaccinationSchedule,
-    MyToast,
     AddCustomerModal,
     ChangePasswordModal,
     UpdateEmployeeProfileModal,
     PrintRecord,
+    ConfirmLogoutModal,
 } from '@/components/ui'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export const EmployeeHomeTemplate = () => {
-    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('customerLookup')
     const [batchDetailList, setBatchDetailList] = useState([])
     const [vaccinePackageList, setVaccinePackageList] = useState([])
@@ -68,19 +67,14 @@ export const EmployeeHomeTemplate = () => {
         }
     }
 
-    const handleLogout = async () => {
-        const token = JSON.parse(sessionStorage.getItem('token'))
+    const [isOpenConfirmLogoutModal, setIsOpenConfirmLogoutModal] = useState(false)
 
-        try {
-            const response = await authService.logout(token)
-            if (response.status === 200) {
-                MyToast('success', 'Đăng xuất thành công')
-                sessionStorage.clear()
-                navigate('/dang-nhap')
-            }
-        } catch (error) {
-            MyToast('error', 'Xảy ra lỗi khi đăng xuất')
-        }
+    const handleOpenConfirmLogoutModal = () => {
+        setIsOpenConfirmLogoutModal(true)
+    }
+
+    const handleCloseConfirmLogoutModal = () => {
+        setIsOpenConfirmLogoutModal(false)
     }
 
     const [isOpenAddCustomerModal, setIsOpenAddCustomerModal] = useState(false)
@@ -356,7 +350,8 @@ export const EmployeeHomeTemplate = () => {
 
                         <div className="flex items-center">
                             <button
-                                onClick={handleLogout}
+                                //onClick={handleLogout}
+                                onClick={handleOpenConfirmLogoutModal}
                                 type="button"
                                 className="inline-flex items-center justify-center hover:bg-blue-200 h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
                             >
@@ -394,6 +389,11 @@ export const EmployeeHomeTemplate = () => {
             <ChangePasswordModal
                 visibleChangePasswordModal={isOpenChangePasswordModal}
                 handleCloseChangePasswordModal={handleCloseChangePasswordModal}
+            />
+
+            <ConfirmLogoutModal
+                visibleConfirmLogoutModal={isOpenConfirmLogoutModal}
+                handleCloseConfirmLogoutModal={handleCloseConfirmLogoutModal}
             />
         </div>
     )

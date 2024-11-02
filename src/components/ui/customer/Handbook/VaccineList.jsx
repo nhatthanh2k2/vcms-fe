@@ -2,22 +2,38 @@ import { diseaseService, vaccineService } from '@/services'
 import React, { useEffect, useState } from 'react'
 import { VaccineCard } from '.'
 import { Pagination, Row, Col, Select } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllVaccines, fetchAllVaccinesOfDisease } from '@/redux'
+
+const ageRanges = [
+    '0-2 tháng',
+    '2-6 tháng',
+    '7-12 tháng',
+    '13-24 tháng',
+    '4-6 tuổi',
+    '9-18 tuổi',
+    'Phụ nữ trước mang thai',
+    'Người trưởng thành',
+]
 
 export const VaccineList = () => {
-    const [vaccineList, setVaccineList] = useState([])
+    const dispatch = useDispatch()
+    const { vaccineList, vaccineOfDiseaseList } = useSelector((state) => state.vaccine)
     const [diseaseList, setDiseaseList] = useState([])
-    const [diseaseSelected, setDiseaseSelected] = useState(0)
+    const [diseaseSelected, setDiseaseSelected] = useState(null)
     const [filteredVaccineList, setFilteredVaccineList] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
+    const [ageRangeSelected, setAgeRangeSelected] = useState(null)
 
     useEffect(() => {
-        vaccineService
-            .getAllVaccines()
-            .then((response) => {
-                setVaccineList(response.data.result)
-                setFilteredVaccineList(response.data.result)
-            })
-            .catch((err) => console.log('Get vaccines failed!'))
+        dispatch(fetchAllVaccines())
+    }, [dispatch])
+
+    useEffect(() => {
+        setFilteredVaccineList(vaccineList)
+    }, [vaccineList])
+
+    useEffect(() => {
         diseaseService
             .getAllDiseases()
             .then((response) => setDiseaseList(response.data.result))
@@ -26,24 +42,34 @@ export const VaccineList = () => {
 
     const handleChoseDisease = (option) => {
         setDiseaseSelected(option)
+        setAgeRangeSelected(null)
+
+        if (option === 0) {
+            setFilteredVaccineList(vaccineList)
+        } else {
+            dispatch(fetchAllVaccinesOfDisease(option))
+        }
     }
 
     useEffect(() => {
-        if (diseaseSelected === 0) {
-            vaccineService
-                .getAllVaccines()
-                .then((response) => {
-                    setVaccineList(response.data.result)
-                    setFilteredVaccineList(response.data.result)
-                })
-                .catch((err) => console.log('Get all vaccines failed!'))
-        } else {
-            vaccineService
-                .getVaccinesOfDisease(diseaseSelected)
-                .then((response) => setFilteredVaccineList(response.data.result))
-                .catch((err) => console.log('Get vaccines of disease failed!'))
+        if (diseaseSelected && diseaseSelected !== 0) {
+            setFilteredVaccineList(vaccineOfDiseaseList)
         }
-    }, [diseaseSelected])
+    }, [vaccineOfDiseaseList, diseaseSelected])
+
+    const handleChoseAgeRange = (option) => {
+        setAgeRangeSelected(option)
+        setDiseaseSelected(null)
+
+        if (option === 'Tất cả') {
+            setFilteredVaccineList(vaccineList)
+        } else {
+            const filteredVaccines = option
+                ? vaccineList.filter((vaccine) => vaccine.vaccineAgeRange.includes(option))
+                : vaccineList
+            setFilteredVaccineList(filteredVaccines)
+        }
+    }
 
     const handleSearch = (event) => {
         const value = event.target.value
@@ -75,7 +101,7 @@ export const VaccineList = () => {
                 <div className="text-2xl text-blue-700 font-bold mb-4">
                     Thông tin sản phẩm vắc xin
                 </div>
-                <div className=" w-fit flex items-center p-6 space-x-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
+                <div className=" flex items-center p-6 space-x-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
                     <div className="flex bg-gray-100 p-4 w-72 space-x-4 rounded-lg">
                         <svg
                             onClick={handleSearch}
@@ -100,9 +126,11 @@ export const VaccineList = () => {
                             onChange={handleSearch}
                         />
                     </div>
+
                     <div className="flex py-3 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer">
                         <Select
                             onChange={handleChoseDisease}
+                            value={diseaseSelected}
                             placeholder="Chọn bệnh để xem vắc xin"
                             options={[
                                 {
@@ -115,7 +143,29 @@ export const VaccineList = () => {
                                 })),
                             ]}
                             style={{
-                                width: 384,
+                                width: 500,
+                                height: 40,
+                            }}
+                        />
+                    </div>
+
+                    <div className="flex py-3 px-4 rounded-lg text-gray-500 font-semibold cursor-pointer">
+                        <Select
+                            onChange={handleChoseAgeRange}
+                            value={ageRangeSelected}
+                            placeholder="Chọn nhóm tuổi để xem vắc xin"
+                            options={[
+                                {
+                                    value: 'Tất cả',
+                                    label: <span>Tất cả</span>,
+                                },
+                                ...ageRanges.map((ageRange) => ({
+                                    value: ageRange,
+                                    label: <span>{ageRange}</span>,
+                                })),
+                            ]}
+                            style={{
+                                width: 250,
                                 height: 40,
                             }}
                         />

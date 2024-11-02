@@ -41,11 +41,11 @@ export const EmployeeGenderChart = () => {
     }
 
     return (
-        <div className="sm:px-7.5 col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-5">
+        <div className="h-80 sm:px-7.5 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
             <span className="flex-1 text-xl font-semibold">Biểu đồ nhân viên theo giới tính</span>
 
-            <div className="mt-4 flex flex-row space-x-10">
-                <div className="w-50 h-50">
+            <div className="mt-2 flex flex-row space-x-10">
+                <div className="w-60 h-60">
                     <Pie data={genderData} />
                 </div>
                 <div className="flex flex-col space-y-3">

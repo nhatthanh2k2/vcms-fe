@@ -1,5 +1,3 @@
-
-
 export const lineOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -55,4 +53,12 @@ export const lineOptions = {
     // layout: {
     //     padding: 10, // Khoảng cách padding bên trong biểu đồ
     // },
+}
+
+export const barOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        y: { beginAtZero: true },
+    },
 }

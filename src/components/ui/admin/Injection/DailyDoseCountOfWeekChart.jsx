@@ -19,7 +19,7 @@ export const DailyDoseCountOfWeekChart = () => {
         labels: dailyDoseCountOfWeekList.map((item) => item.period),
         datasets: [
             {
-                label: 'Số mũi',
+                label: 'Số lượt tiêm',
                 data: dailyDoseCountOfWeekList.map((item) => item.doseCount),
                 borderColor: 'rgba(75,192,192,1)',
                 backgroundColor: 'rgba(75,192,192,0.2)',
@@ -45,9 +45,11 @@ export const DailyDoseCountOfWeekChart = () => {
     }
 
     return (
-        <div className="bg-white w-3/4 h-100 shadow-default border-stroke px-5 pb-5 pt-7.5">
-            <h2 className="font-bold">Biểu đồ số lượng mũi tiêm trong tuần này</h2>
-            <Line data={dailyDoseCountOfWeekData} options={options} />
+        <div className="bg-white shadow-default border-stroke px-5 pb-8 pt-7.5">
+            <h2 className="font-bold">Biểu đồ số lượt tiêm trong tuần này</h2>
+            <div className="mt-2 h-100">
+                <Line data={dailyDoseCountOfWeekData} options={options} />
+            </div>
         </div>
     )
 }

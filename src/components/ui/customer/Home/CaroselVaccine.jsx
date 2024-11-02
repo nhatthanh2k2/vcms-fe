@@ -13,12 +13,34 @@ export const CarouselVaccine = () => {
             .catch((err) => console.log('Get vaccines failed!'))
     }, [])
 
+    const [slidesToShow, setSlidesToShow] = useState(4)
+
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth
+            if (width < 640) {
+                setSlidesToShow(1)
+            } else if (width < 768) {
+                setSlidesToShow(2)
+            } else if (width < 1024) {
+                setSlidesToShow(3)
+            } else {
+                setSlidesToShow(4)
+            }
+        }
+
+        handleResize()
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
     return (
         <div className=" w-full h-full mt-10">
             <Carousel
                 autoplay
-                slidesToScroll={3}
-                slidesToShow={4}
+                slidesToScroll={1}
+                slidesToShow={slidesToShow}
                 dots={false}
                 arrows={false}
                 autoplaySpeed={5000}

@@ -12,3 +12,16 @@ export const fetchAllVaccines = createAsyncThunk(
       }
     }
   );
+
+export const fetchAllVaccinesOfDisease = createAsyncThunk(
+  'vaccine/fetchAllVaccinesOfDisease',
+  async (diseaseId, thunkAPI) => {
+    try {
+      const response = await vaccineService.getVaccinesOfDisease(diseaseId);
+      return response.data.result
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+

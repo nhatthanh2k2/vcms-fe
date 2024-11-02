@@ -27,6 +27,7 @@ import {
     RevenuePage,
     DoseCountPage,
     EditVaccinePackagePage,
+    EditVaccinePage,
 } from '@/pages'
 import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -116,36 +117,6 @@ export const router = [
         path: PATH.login,
         element: <Login />,
     },
-    // {
-    //     path: '/admin',
-    //     element: <AdminLayout />,
-    //     children: [
-    //         {
-    //             index: true,
-    //             element: <AdminHomePage />,
-    //         },
-    //         {
-    //             path: ADMIN_PATH.hrManagement,
-    //             element: <HRManagementPage />,
-    //         },
-    //         {
-    //             path: ADMIN_PATH.vaccineMangement,
-    //             element: <VaccineManagementPage />,
-    //         },
-    //         {
-    //             path: ADMIN_PATH.packageManagement,
-    //             element: <VaccinePackageManagementPage />,
-    //         },
-    //         {
-    //             path: ADMIN_PATH.batchManagement,
-    //             element: <VaccineBatchManagementPage />,
-    //         },
-    //         {
-    //             path: ADMIN_PATH.addVaccine,
-    //             element: <AddVaccinePage />,
-    //         },
-    //     ],
-    // },
     {
         path: '/admin',
         element: <AdminLayout />,
@@ -171,6 +142,10 @@ export const router = [
                             {
                                 path: ADMIN_PATH.addVaccine,
                                 element: <AddVaccinePage />,
+                            },
+                            {
+                                path: ADMIN_PATH.editvaccine,
+                                element: <EditVaccinePage />,
                             },
                         ],
                     },

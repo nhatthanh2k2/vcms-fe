@@ -124,8 +124,6 @@ export const CustomerLookup = () => {
         }
     }
 
-    console.log(vaccinationRecordList)
-
     return (
         <section className="flex-col">
             <div className=" bg-base-100 shadow-md flex flex-col p-4 space-y-2">

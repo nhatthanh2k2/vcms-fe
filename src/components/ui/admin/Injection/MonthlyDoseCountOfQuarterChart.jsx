@@ -1,39 +1,30 @@
-import { revenueService } from '@/services'
+import { injectionService } from '@/services'
+import { barOptions } from '@/utils'
 import { Select } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { MyToast } from '../../common'
 import { Bar } from 'react-chartjs-2'
-import { barOptions } from '@/utils'
 
-export const MonthlyRevenueOfQuarterChart = () => {
+export const MonthlyDoseCountOfQuarterChart = () => {
     const currentMonth = new Date().getMonth()
     const [quarterSelected, setQuarterSelected] = useState(Math.floor(currentMonth / 3) + 1)
     const [yearSelected, setYearSelected] = useState(new Date().getFullYear())
-    const [monthlyRevenueOfQuarterList, setMonthlyRevenueOfQuarterList] = useState([])
+    const [monthlyDoseCountOfQuarterList, setMonthlyDoseCountOfQuarterList] = useState([])
 
     useEffect(() => {
-        revenueService
-            .getMonthlyRevenueOfQuarter(yearSelected, quarterSelected)
-            .then((response) => setMonthlyRevenueOfQuarterList(response.data.result))
+        injectionService
+            .getMonthlyDoseCountOfQuarter(yearSelected, quarterSelected)
+            .then((response) => setMonthlyDoseCountOfQuarterList(response.data.result))
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [quarterSelected])
 
-    const monthlyOfQuarterLabels = monthlyRevenueOfQuarterList.map((data) => data.period)
-    const monthlyOfQuarterRevenues = monthlyRevenueOfQuarterList.map((data) => data.revenue)
-
-    const totalRevenueOfQuarter = monthlyOfQuarterRevenues.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-    )
-
-    const monthlyOfQuarterData = {
-        labels: monthlyOfQuarterLabels,
+    const monthlyDoseCountOfQuarterData = {
+        labels: monthlyDoseCountOfQuarterList.map((item) => item.period),
         datasets: [
             {
-                label: 'Doanh thu',
-                data: monthlyOfQuarterRevenues,
-                backgroundColor: '#28a745',
-                borderColor: '#28a745',
+                label: 'Số lượt tiêm',
+                data: monthlyDoseCountOfQuarterList.map((item) => item.doseCount),
+                borderColor: 'rgba(75,192,192,1)',
+                backgroundColor: 'rgba(75,192,192,0.2)',
                 borderWidth: 1,
             },
         ],
@@ -43,13 +34,7 @@ export const MonthlyRevenueOfQuarterChart = () => {
         <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5 space-y-5">
             <div className="flex justify-between items-center font-bold">
                 <span>
-                    Doanh thu theo tháng trong quý {quarterSelected} năm {yearSelected}
-                </span>
-                <span>
-                    Tổng doanh thu:{' '}
-                    <span className="text-orange-600">
-                        {totalRevenueOfQuarter.toLocaleString()} VNĐ
-                    </span>
+                    Số lượt tiêm theo tháng trong quý {quarterSelected} năm {yearSelected}
                 </span>
 
                 <Select
@@ -77,8 +62,8 @@ export const MonthlyRevenueOfQuarterChart = () => {
                 />
             </div>
 
-            <div className="mt-2 h-100 ">
-                <Bar data={monthlyOfQuarterData} options={barOptions} />
+            <div className="mt-2 h-100">
+                <Bar data={monthlyDoseCountOfQuarterData} options={barOptions} />
             </div>
         </div>
     )

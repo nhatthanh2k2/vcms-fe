@@ -4,7 +4,7 @@ import React from 'react'
 export const EditVaccinePackageTemplate = () => {
     return (
         <>
-            <Breadcrumb pageName={'Chỉnh sửa gói'} />
+            <Breadcrumb pageName={'Cập nhật gói'} />
             <EditVaccinePackageForm />
         </>
     )

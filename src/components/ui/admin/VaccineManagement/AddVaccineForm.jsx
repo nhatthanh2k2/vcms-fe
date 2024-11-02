@@ -133,8 +133,8 @@ export const AddVaccineForm = () => {
     }
 
     return (
-        <div className="flex flex-col">
-            <form className="flex flex-col space-y-5 px-10" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col bg-white px-10 py-5">
+            <form className="flex flex-col space-y-5 " onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex space-x-5">
                     <div className="flex-1 space-y-2">
                         <label className="font-semibold">Tên vắc xin:</label>
@@ -175,23 +175,24 @@ export const AddVaccineForm = () => {
 
                 <div className="flex flex-col">
                     <label className="font-semibold mb-2">Độ tuổi phù hợp:</label>
-                    <Row gutter={[16, 16]} justify="start" align="middle">
-                        {ageRanges.map((age) => (
-                            <Col key={age} xs={12} sm={6} md={6} lg={6}>
-                                <div className="form-control">
-                                    <label className="cursor-pointer label flex items-center space-x-2">
-                                        <span className="label-text">{age}</span>
-                                        <input
-                                            type="checkbox"
-                                            className="checkbox checkbox-success"
-                                            checked={selectedAges.includes(age)}
-                                            onChange={() => handleSelectedAge(age)}
-                                        />
-                                    </label>
-                                </div>
-                            </Col>
+
+                    <div className="flex flex-wrap space-y-3">
+                        {ageRanges.map((age, index) => (
+                            <div
+                                key={index}
+                                className="w-1/4 cursor-pointer flex space-x-5 items-center "
+                            >
+                                <input
+                                    type="checkbox"
+                                    className="checkbox checkbox-success"
+                                    checked={selectedAges.includes(age)}
+                                    onChange={() => handleSelectedAge(age)}
+                                />
+                                <span className="label-text ml-2">{age}</span>
+                            </div>
                         ))}
-                    </Row>
+                    </div>
+
                     {errors.vaccineAgeRange && (
                         <p className="text-red-500 mt-2">{errors.vaccineAgeRange.message}</p>
                     )}
@@ -237,8 +238,12 @@ export const AddVaccineForm = () => {
                         )}
                     </div>
 
-                    <div className="flex flex-2 items-center justify-end">
-                        <button type="button" onClick={handleOpenAddDiseaseModal}>
+                    <div className="flex items-center flex-col justify-between">
+                        <button
+                            type="button"
+                            onClick={handleOpenAddDiseaseModal}
+                            className="mt-8 btn btn-sm btn-accent"
+                        >
                             Thêm bệnh mới
                         </button>
                     </div>

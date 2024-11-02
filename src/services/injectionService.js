@@ -15,5 +15,20 @@ export const injectionService = {
         return api.get("/injections/count-dose/day-of-week", {
             params: { date }
         });
+    }, 
+    getMonthlyDoseCountOfQuarter: (yearSelected, quarterSelected) => {
+        return api.get("/injections/count-dose/month-of-quarter", {
+            params: { year: yearSelected, quarter: quarterSelected }
+        });
+    },
+    getMonthlyDoseCountOfYear: (yearSelected) => {
+        return api.get("/injections/count-dose/month-of-year", {
+            params: { year: yearSelected }
+        });
+    },
+    getQuarterlyDoseCountOfYear: (yearSelected) => {
+        return api.get("/injections/count-dose/quarter-of-year", {
+            params: { year: yearSelected }
+        });
     }
 }

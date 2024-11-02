@@ -41,7 +41,6 @@ export const VaccinationHistoryLookup = () => {
     const getSuggestedPackage = (ageInfo, vaccinePackageList) => {
         return vaccinePackageList.find((pkg) => {
             if (ageInfo.ageInMonths !== null && ageInfo.ageInMonths <= 24) {
-                // Dưới 2 tuổi, kiểm tra gói theo số tháng
                 if (pkg.vaccinePackageName.includes('Gói 6 tháng') && ageInfo.ageInMonths <= 6) {
                     return true
                 }
@@ -55,50 +54,49 @@ export const VaccinationHistoryLookup = () => {
                     return true
                 }
             } else if (ageInfo.ageInYears >= 18) {
-                // Người trưởng thành
                 return pkg.vaccinePackageName.includes('trưởng thành')
             } else if (ageInfo.ageInYears >= 9 && ageInfo.ageInYears <= 18) {
-                // Tuổi vị thành niên và thanh niên (9-18 tuổi)
                 return pkg.vaccinePackageName.includes('9 tuổi - 18 tuổi')
             } else if (ageInfo.ageInYears >= 4 && ageInfo.ageInYears <= 6) {
-                // Trẻ tiền học đường (4-6 tuổi)
                 return pkg.vaccinePackageName.includes('4 tuổi - 6 tuổi')
             }
             return false
         })
     }
 
-    const isVaccineSuitableForAge = (vaccine, customerAge) => {
-        const ageRanges = vaccine.vaccineAgeRange
-
-        return ageRanges.some((range) => {
-            const [minAge, maxAge] = range.split(' - ').map(Number)
-            if (customerAge.includes('tháng')) {
-                const months = parseInt(customerAge)
-                return months >= minAge && months <= maxAge
-            } else {
-                const years = parseInt(customerAge)
-                return years >= minAge && years <= maxAge
-            }
-        })
-    }
-
     useEffect(() => {
         if (customer?.customerDob) {
-            const customerAge = calculateAge(customer.customerDob)
-            const suggestPackage = getSuggestedPackage(customerAge, vaccinePackageList)
-            vaccinePackageService
-                .getDetailsOfPackage(suggestPackage.vaccinePackageId)
-                .then((response) => {
-                    setPackageDetailList(response.data.result)
-                    const filteredVaccines = response.data.result.filter((detail) => {
-                        return isVaccineSuitableForAge(detail.vaccineResponse, customerAge)
+            const suggestPackage = getSuggestedPackage(
+                calculateAge(customer.customerDob),
+                vaccinePackageList
+            )
+
+            if (suggestPackage) {
+                vaccinePackageService
+                    .getDetailsOfPackage(suggestPackage.vaccinePackageId)
+                    .then((response) => {
+                        const vaccinesInPackage = response.data.result
+                        const vaccinesToSuggest = []
+
+                        for (const detail of vaccinesInPackage) {
+                            if (vaccinesToSuggest.length === 3) break
+
+                            const vaccine = detail.vaccineResponse
+                            const isVaccineAdministered = vaccinationRecordList.some(
+                                (record) => record.vaccineName === vaccine.vaccineName
+                            )
+
+                            if (!isVaccineAdministered) {
+                                vaccinesToSuggest.push(detail)
+                            }
+                        }
+
+                        setRecommendedPackageList(vaccinesToSuggest)
                     })
-                    setRecommendedPackageList(filteredVaccines)
-                })
-                .catch((error) => console.log('Get detail of package failed!'))
+                    .catch((error) => console.log('Get detail of package failed!', error))
+            }
         }
-    }, [customer])
+    }, [vaccinationRecordList])
 
     const {
         register,

@@ -2,6 +2,7 @@ import { revenueService } from '@/services'
 import React, { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 import { MyToast } from '../../common'
+import { barOptions } from '@/utils'
 
 export const QuarterlyRevenueOfYearChart = () => {
     const [yearSelected, setYearSelected] = useState(new Date().getFullYear())
@@ -28,19 +29,11 @@ export const QuarterlyRevenueOfYearChart = () => {
             {
                 label: 'Doanh thu',
                 data: quarterOfYearRevenues,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: '#28a745',
+                borderColor: '#28a745',
                 borderWidth: 1,
             },
         ],
-    }
-
-    const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: { beginAtZero: true },
-        },
     }
 
     return (
@@ -55,8 +48,8 @@ export const QuarterlyRevenueOfYearChart = () => {
                 </span>
             </div>
 
-            <div className="h-100">
-                <Bar data={quarterlyOfYearData} options={options} />
+            <div className="mt-2 h-100">
+                <Bar data={quarterlyOfYearData} options={barOptions} />
             </div>
         </div>
     )

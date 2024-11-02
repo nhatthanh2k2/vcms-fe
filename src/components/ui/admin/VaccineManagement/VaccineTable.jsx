@@ -3,32 +3,50 @@ import { Table, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
 import dayjs from 'dayjs'
-import { render } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { DeleteVaccineModal } from '.'
 
 export const VaccineTable = () => {
     const [vaccineList, setVaccineList] = useState([])
+    const [filteredVaccineList, setFilteredVaccineList] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const navigate = useNavigate()
 
     const getVaccineList = () => {
         vaccineService
             .getAllVaccines()
             .then((response) => {
                 setVaccineList(response.data.result)
+                setFilteredVaccineList(response.data.result)
                 setLoading(false)
             })
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy danh sách vắc xin.'))
     }
 
     useEffect(() => {
+        if (searchQuery) {
+            const filtered = vaccineList.filter((vaccine) =>
+                vaccine.vaccineDescription.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            setFilteredVaccineList(filtered)
+        } else {
+            setFilteredVaccineList(vaccineList)
+        }
+    }, [searchQuery, vaccineList])
+
+    useEffect(() => {
         getVaccineList()
     }, [])
 
-    const navigate = useNavigate()
-
     const handleToAddVaccinePage = () => {
         navigate('/admin/quan-ly/vac-xin-le/them-vac-xin')
+    }
+
+    const handleToEditVaccinePage = (record) => {
+        navigate('/admin/quan-ly/vac-xin-le/cap-nhat-vac-xin', { state: { record } })
     }
 
     const [isOpenDeleteVaccineModal, setIsOpenDeleteVaccineModal] = useState(false)
@@ -48,7 +66,8 @@ export const VaccineTable = () => {
         {
             title: 'STT',
             key: 'index',
-            render: (text, record, index) => index + 1,
+            render: (text, record, index) =>
+                (pagination.current - 1) * pagination.pageSize + index + 1,
             width: 50,
         },
         {
@@ -80,8 +99,9 @@ export const VaccineTable = () => {
             key: 'actions',
             render: (_, record) => (
                 <div className="inline-flex space-x-2 items-center rounded-md shadow-sm">
-                    <Tooltip placement="top" title="Chỉnh sửa vắc xin">
+                    <Tooltip placement="top" title="Cập nhật vắc xin">
                         <svg
+                            onClick={() => handleToEditVaccinePage(record)}
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-8 h-8"
                             fill="none"
@@ -125,8 +145,18 @@ export const VaccineTable = () => {
         },
     ]
 
+    const pagination = {
+        current: currentPage,
+        pageSize: pageSize,
+        total: vaccineList.length,
+        onChange: (page, pageSize) => {
+            setCurrentPage(page)
+            setPageSize(pageSize)
+        },
+    }
+
     return (
-        <div className="flex flex-col space-y-5">
+        <div className="flex flex-col space-y-5 bg-white shadow-default">
             <Table
                 title={() => (
                     <div className="flex justify-between items-center">
@@ -137,6 +167,7 @@ export const VaccineTable = () => {
                                 type="text"
                                 name="query"
                                 id="query"
+                                onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <button
                                 type="submit"
@@ -185,7 +216,8 @@ export const VaccineTable = () => {
                 )}
                 rowKey="vaccineId"
                 columns={vaccineColumns}
-                dataSource={vaccineList}
+                dataSource={filteredVaccineList}
+                pagination={pagination}
                 loading={loading}
             />
 

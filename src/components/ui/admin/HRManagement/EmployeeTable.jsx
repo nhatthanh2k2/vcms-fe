@@ -12,6 +12,8 @@ export const EmployeeTable = () => {
     const [filteredEmployeeList, setFilteredEmployeeList] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
 
     const getEmployeeList = () => {
         employeeService
@@ -76,7 +78,8 @@ export const EmployeeTable = () => {
         {
             title: 'STT',
             key: 'index',
-            render: (text, record, index) => index + 1,
+            render: (text, record, index) =>
+                (pagination.current - 1) * pagination.pageSize + index + 1,
             width: 50,
         },
         {
@@ -226,8 +229,18 @@ export const EmployeeTable = () => {
         },
     ]
 
+    const pagination = {
+        current: currentPage,
+        pageSize: pageSize,
+        total: employeeList.length,
+        onChange: (page, pageSize) => {
+            setCurrentPage(page)
+            setPageSize(pageSize)
+        },
+    }
+
     return (
-        <div className="flex flex-col space-y-5">
+        <div className="flex flex-col space-y-5 bg-white shadow-default">
             <Table
                 title={() => (
                     <div className="flex justify-between items-center">
@@ -306,6 +319,7 @@ export const EmployeeTable = () => {
                 dataSource={filteredEmployeeList}
                 rowKey="employeeId"
                 loading={loading}
+                pagination={pagination}
             />
 
             <AddEmployeeModal

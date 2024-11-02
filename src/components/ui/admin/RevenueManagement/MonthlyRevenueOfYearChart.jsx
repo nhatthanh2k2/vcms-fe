@@ -51,7 +51,7 @@ export const MonthlyRevenueOfYearChart = () => {
                 </span>
             </div>
 
-            <div className="h-100">
+            <div className="mt-2 h-100">
                 <Line data={monthlyRevenueOfYearData} options={lineOptions} />
             </div>
         </div>

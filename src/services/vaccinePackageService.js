@@ -14,6 +14,9 @@ export const vaccinePackageService = {
     addVaccinePackage: (request) => {
         return api.post("/vaccine-package/add", request)
     },
+    updateVaccinePackage: (request) => {
+        return api.put("/vaccine-package/update", request)
+    },
     deleteVaccinePackage: (packageId) => {
         return api.delete(`/vaccine-package/delete/${packageId}`)
     }
