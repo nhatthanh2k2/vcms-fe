@@ -26,6 +26,8 @@ export const DoseCountForNextMonthTable = () => {
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy dữ liệu'))
     }, [])
 
+    console.log(doseCountList)
+
     return (
         <div className=" shadow-default bg-white">
             <Table

@@ -64,7 +64,7 @@ export const CarouselDoctor = () => {
                                 employee.employeeAvatar
                             }
                         />
-                        <div className="mx-auto text-center mt-2">
+                        <div className="text-center mt-2">
                             {employee.employeeQualification}. {employee.employeeFullName}
                         </div>
                     </div>

@@ -1,12 +1,51 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
+const ArrowUpIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+        className="w-5 h-5"
+    >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 15l-7-7-7 7" />
+    </svg>
+)
+
+const ArrowDownIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+        className="w-5 h-5"
+    >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+)
+
 export const CustomerHeader = () => {
     const location = useLocation()
     const [isOpen, setIsOpen] = useState(false)
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
+    }
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState({
+        gioiThieu: false,
+        goiTiem: false,
+        camNang: false,
+    })
+
+    const toggleDropdown = (menu) => {
+        setIsDropdownOpen((prev) => ({
+            ...prev,
+            [menu]: !prev[menu],
+        }))
     }
 
     return (
@@ -279,7 +318,7 @@ export const CustomerHeader = () => {
                         isOpen ? 'block' : 'hidden'
                     }`}
                 >
-                    <nav className="mx-auto flex flex-col text-base">
+                    {/* <nav className="mx-auto flex flex-col text-base">
                         <div>
                             <Link
                                 to="/trang-chu"
@@ -436,6 +475,175 @@ export const CustomerHeader = () => {
                             >
                                 Đặt mua vắc xin
                             </Link>
+                        </div>
+                    </nav> */}
+
+                    <nav className="mx-auto flex flex-col space-y-2 text-base">
+                        <div>
+                            <a
+                                href="/trang-chu"
+                                className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname === '/trang-chu' ? 'after:scale-x-100 text-blue-700' : ''
+                    }`}
+                            >
+                                Trang chủ
+                            </a>
+                        </div>
+
+                        <div>
+                            <div
+                                onClick={() => toggleDropdown('gioiThieu')}
+                                className="flex items-center space-x-2"
+                            >
+                                <a
+                                    onClick={(event) => event.preventDefault()}
+                                    className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                                location.pathname.startsWith('/gioi-thieu')
+                                    ? 'after:scale-x-100 text-blue-700'
+                                    : ''
+                            }`}
+                                >
+                                    Giới thiệu
+                                </a>
+                                {isDropdownOpen.gioiThieu ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                            </div>
+                            {isDropdownOpen.gioiThieu && (
+                                <ul className="pl-5 mt-1 text-sm ">
+                                    <li className="mb-2">
+                                        <a className="text-black " href="/gioi-thieu/trung-tam">
+                                            Về trung tâm
+                                        </a>
+                                    </li>
+                                    <li className="mb-2">
+                                        <a
+                                            className="text-black "
+                                            href="/gioi-thieu/doi-ngu-bac-si"
+                                        >
+                                            Đội ngũ bác sĩ
+                                        </a>
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
+
+                        <div>
+                            <div
+                                onClick={() => toggleDropdown('goiTiem')}
+                                className="flex items-center space-x-2"
+                            >
+                                <a
+                                    onClick={(event) => event.preventDefault()}
+                                    className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                                location.pathname.startsWith('/goi-tiem')
+                                    ? 'after:scale-x-100 text-blue-700'
+                                    : ''
+                            }`}
+                                >
+                                    Gói tiêm
+                                </a>
+                                {isDropdownOpen.goiTiem ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                            </div>
+                            {isDropdownOpen.goiTiem && (
+                                <ul className="pl-5 mt-1 text-sm">
+                                    <li className="mb-2">
+                                        <a href="/goi-tiem/goi-tiem-tre-em" className="text-black ">
+                                            Gói tiêm trẻ em
+                                        </a>
+                                    </li>
+                                    <li className="mb-2">
+                                        <a
+                                            href="/goi-tiem/goi-tiem-nguoi-lon"
+                                            className="text-black "
+                                        >
+                                            Gói tiêm người lớn
+                                        </a>
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
+
+                        <div>
+                            <div
+                                onClick={() => toggleDropdown('camNang')}
+                                className="flex items-center space-x-2"
+                            >
+                                <a
+                                    onClick={(event) => event.preventDefault()}
+                                    className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                            after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] 
+                            after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                                location.pathname.startsWith('/cam-nang')
+                                    ? 'after:scale-x-100 text-blue-700'
+                                    : ''
+                            }`}
+                                >
+                                    Cẩm nang
+                                </a>
+                                {isDropdownOpen.camNang ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                            </div>
+                            {isDropdownOpen.camNang && (
+                                <ul className="pl-5 mt-1 text-sm">
+                                    <li className="mb-2">
+                                        <a
+                                            href="/cam-nang/bang-gia-vac-xin"
+                                            className="text-black hover:text-black "
+                                        >
+                                            Bảng giá vắc xin
+                                        </a>
+                                    </li>
+                                    <li className="mb-2">
+                                        <a
+                                            href="/cam-nang/thong-tin-vac-xin"
+                                            className="text-black hover:text-black "
+                                        >
+                                            Thông tin vắc xin
+                                        </a>
+                                    </li>
+                                    <li className="mb-2">
+                                        <a
+                                            href="/cam-nang/tra-cuu-lich-su-tiem"
+                                            className="text-black hover:text-black hover:bg-blue-100"
+                                        >
+                                            Tra cứu lịch sử tiêm
+                                        </a>
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
+                        <div>
+                            <a
+                                href="/trang-chu/dang-ky-lich-tiem"
+                                className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname === '/trang-chu/dang-ky-lich-tiem'
+                            ? 'after:scale-x-100 text-blue-700'
+                            : ''
+                    }`}
+                            >
+                                Đăng ký lịch tiêm
+                            </a>
+                        </div>
+
+                        <div>
+                            <a
+                                href="/trang-chu/dat-mua-vac-xin"
+                                className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
+                    after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
+                        location.pathname === '/trang-chu/dat-mua-vac-xin'
+                            ? 'after:scale-x-100 text-blue-700'
+                            : ''
+                    }`}
+                            >
+                                Đặt mua vắc xin
+                            </a>
                         </div>
                     </nav>
                 </div>

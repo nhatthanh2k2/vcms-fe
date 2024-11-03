@@ -214,69 +214,68 @@ export const OrderForm = () => {
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="flex mx-10 space-x-4 mt-5">
-                <div className="flex flex-col w-2/3">
+            <div className="flex mx-10 lg:mx-20 space-x-5 mt-10 flex-wrap md:flex-nowrap">
+                <div className="flex flex-col ">
                     {!showForm && (
-                        <div>
+                        <div className="mb-5 min-w-fit">
                             <form
-                                className="flex flex-row space-x-4 items-center font-semibold"
+                                className="flex flex-col space-y-2 font-semibold w-full"
                                 onSubmit={handleSubmitLookup(onSubmitLookup)}
                             >
-                                <div
-                                    className="flex flex-col space-y-2 flex-1"
-                                    onSubmit={handleSubmitLookup(onSubmitLookup)}
-                                >
-                                    <label className="block mb-1 font-medium">
-                                        Nhập Mã KH / SĐT:
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            {...registerLookup('customerIdentifier')}
-                                            type="text"
-                                            placeholder="Số điện thoại / Mã KH"
-                                            className="input input-bordered input-info w-full max-w-xs"
-                                        />
-                                        {errorsLookup.customerIdentifier && (
-                                            <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
-                                                {errorsLookup.customerIdentifier.message}
-                                            </span>
-                                        )}
+                                <div className="flex flex-col md:flex-row md:space-x-2">
+                                    <div className="flex flex-col space-y-2 flex-1 min-w-[200px]">
+                                        <label className="block mb-1 font-medium">
+                                            Nhập Mã KH / SĐT:
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                {...registerLookup('customerIdentifier')}
+                                                type="text"
+                                                placeholder="Số điện thoại / Mã KH"
+                                                className="input input-bordered input-info w-full"
+                                            />
+                                            {errorsLookup.customerIdentifier && (
+                                                <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                                    {errorsLookup.customerIdentifier.message}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="flex flex-col space-y-2 flex-1">
-                                    <label className="block mb-1 font-medium">Ngày sinh</label>
-                                    <div className="relative flex flex-col">
-                                        <DatePicker
-                                            {...registerLookup('customerDob', {
-                                                valueAsDate: true,
-                                            })}
-                                            format="DD-MM-YYYY"
-                                            disabledDate={disabledDoB}
-                                            onChange={(date) =>
-                                                setValueLookup(
-                                                    'customerDob',
-                                                    date?.toDate() || null,
-                                                    {
-                                                        shouldValidate: true,
-                                                    }
-                                                )
-                                            }
-                                            style={{ height: '48px' }}
-                                        />
-                                        {errorsLookup.customerDob && (
-                                            <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
-                                                {errorsLookup.customerDob.message}
-                                            </span>
-                                        )}
+                                    <div className="flex flex-col space-y-2 flex-1 min-w-[200px]">
+                                        <label className="block mb-1 font-medium">Ngày sinh</label>
+                                        <div className="relative flex flex-col">
+                                            <DatePicker
+                                                {...registerLookup('customerDob', {
+                                                    valueAsDate: true,
+                                                })}
+                                                format="DD-MM-YYYY"
+                                                disabledDate={disabledDoB}
+                                                onChange={(date) =>
+                                                    setValueLookup(
+                                                        'customerDob',
+                                                        date?.toDate() || null,
+                                                        {
+                                                            shouldValidate: true,
+                                                        }
+                                                    )
+                                                }
+                                                style={{ height: '48px' }}
+                                            />
+                                            {errorsLookup.customerDob && (
+                                                <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                                    {errorsLookup.customerDob.message}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className="flex-1 mt-10">
                                     <button
                                         type="submit"
-                                        className="text-base rounded-full border-l-0 border-r-0 hover:scale-110 focus:outline-none flex justify-center px-4 py-2  font-bold cursor-pointer 
-                        hover:bg-green-500 hover:text-white  bg-green-300   text-green-800 border duration-200 ease-in-out  border-green-500 transition"
+                                        className="text-base rounded-full border-l-0 border-r-0 hover:scale-110 focus:outline-none flex justify-center px-4 py-2 font-bold cursor-pointer 
+                                    hover:bg-green-500 hover:text-white bg-green-300 text-green-800 border duration-200 ease-in-out border-green-500 transition"
                                     >
                                         Tra cứu thông tin
                                     </button>
@@ -299,7 +298,7 @@ export const OrderForm = () => {
                     )}
 
                     {showForm && (
-                        <form className="w-2/3">
+                        <form className="w-fit">
                             <div>
                                 <span className="text-2xl text-blue-600 uppercase font-bold text-center">
                                     Thông tin người tiêm
@@ -356,8 +355,8 @@ export const OrderForm = () => {
                                 )}
                             </div>
 
-                            <div className="flex flex-row gap-10">
-                                <div className="relative z-0 w-full mb-5 group flex flex-col">
+                            <div className="flex flex-col md:flex-row justify-center items-center">
+                                <div className="relative z-0 w-full mb-2 group flex flex-col">
                                     <div>
                                         <label>Ngày sinh: </label>
                                         <DatePicker
@@ -384,9 +383,11 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-
                                 <div className="relative z-0 w-full mb-5 group flex flex-col">
-                                    <div className="flex flex-row gap-5  mt-2">
+                                    <div className="flex  md:flex-row gap-5 mt-2">
+                                        <div>
+                                            <span>Giới tính: </span>
+                                        </div>
                                         <div className="flex space-x-2 justify-center">
                                             <label className="">Nam</label>
                                             <input
@@ -418,8 +419,8 @@ export const OrderForm = () => {
                                 <label>Địa chỉ thường trú:</label>
                             </div>
 
-                            <div className="flex flex-row space-x-4">
-                                <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
+                            <div className="flex flex-col mb-5 md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+                                <div className="relative z-0 w-full  group flex flex-col flex-1">
                                     <label>Tỉnh/Thành:</label>
                                     <Select
                                         placeholder="Chọn Tỉnh/Thành"
@@ -439,8 +440,7 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-
-                                <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
+                                <div className="relative z-0 w-full group flex flex-col flex-1">
                                     <label>Quận/Huyện:</label>
                                     <Select
                                         placeholder="Chọn quận/huyện"
@@ -475,18 +475,17 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-
-                                <div className="relative z-0 w-full mb-5 group flex flex-col   flex-1">
+                                <div className="relative z-0 w-full  group flex flex-col flex-1">
                                     <label>Xã/Phường:</label>
                                     <Select
                                         placeholder="Chọn xã/phường"
-                                        value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                        value={selectedWard || undefined}
                                         onChange={(value) => {
                                             setSelectedWard(value)
                                             setValue('orderCustomerWard', value)
                                             if (value) clearErrors('orderCustomerWard')
                                         }}
-                                        disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                                        disabled={!selectedDistrict}
                                         options={
                                             selectedDistrict
                                                 ? wardList
@@ -494,16 +493,15 @@ export const OrderForm = () => {
                                                           (ward) =>
                                                               ward.district_code ===
                                                               selectedDistrict
-                                                      ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                                                      )
                                                       .map((ward) => ({
                                                           value: ward.code,
                                                           label: ward.name,
                                                       }))
                                                 : []
                                         }
-                                        style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                        style={{ opacity: !selectedDistrict ? 0.75 : 1 }}
                                     />
-
                                     {errors.orderCustomerWard && (
                                         <span className="w-40 text-red-500 text-sm">
                                             {errors.orderCustomerWard.message}
@@ -512,7 +510,7 @@ export const OrderForm = () => {
                                 </div>
                             </div>
 
-                            <div className="relative z-0 w-full mb-5 group space-x-2">
+                            <div className="relative z-0 w-full mb-5 group space-x-2 flex">
                                 <label>Chọn ngày tiêm: </label>
                                 <DatePicker
                                     {...register('orderInjectionDate', { valueAsDate: true })}
@@ -533,384 +531,387 @@ export const OrderForm = () => {
                         </form>
                     )}
 
-                    <div className="flex flex-col ">
-                        <div role="tablist" className="tabs tabs-lifted mt-10">
-                            <input
-                                type="radio"
-                                name="my_tabs_2"
-                                role="tab"
-                                className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
-                                aria-label="Vắc xin lẻ"
-                                defaultChecked
-                            />
-                            <div
-                                role="tabpanel"
-                                className="tab-content bg-base-100 border-base-300 rounded-box p-6 "
-                            >
-                                <div className="flex flex-wrap gap-4 flex-grow">
-                                    {currentBatchDetails.map((batchDetail, index) => {
-                                        const isVaccineSelected = batchDetailSelectedList.find(
-                                            (v) => v.batchDetailId === batchDetail.batchDetailId
-                                        )
+                    <div className="flex flex-col">
+                        <div className="bg-white rounded-lg shadow p-4 flex flex-col space-x-2">
+                            <div className="flex space-x-2 items-center justify-center mb-5 w-full">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="icon line-color h-8 w-8"
+                                    data-name="Line Color"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M7 4 4.33 7 3 5.5"
+                                        style={{
+                                            fill: 'none',
+                                            stroke: '#2ca9bc',
+                                            strokeLinecap: 'round',
+                                            strokeLinejoin: 'round',
+                                            strokeWidth: 2,
+                                        }}
+                                    />
+                                    <path
+                                        d="M3 11.5 4.33 13 7 10M3 17.5 4.33 19 7 16"
+                                        data-name="secondary"
+                                        style={{
+                                            fill: 'none',
+                                            stroke: '#2ca9bc',
+                                            strokeLinecap: 'round',
+                                            strokeLinejoin: 'round',
+                                            strokeWidth: 2,
+                                        }}
+                                    />
+                                    <path
+                                        d="M11 6h10m-10 6h10m-10 6h10"
+                                        style={{
+                                            fill: 'none',
+                                            stroke: '#000',
+                                            strokeLinecap: 'round',
+                                            strokeLinejoin: 'round',
+                                            strokeWidth: 2,
+                                        }}
+                                    />
+                                </svg>
+                                <span className="text-lg font-bold text-blue-900">
+                                    DANH SÁCH VẮC XIN CHỌN MUA
+                                </span>
+                            </div>
 
+                            <div className="border-b border-green-500 "></div>
+
+                            <div className="mt-5">
+                                {batchDetailSelectedList.length === 0 &&
+                                vaccinePackageSelectedList.length === 0 ? (
+                                    <div className="text-xl text-blue-600 text-center">
+                                        Danh sách trống
+                                    </div>
+                                ) : (
+                                    <>
+                                        {batchDetailSelectedList.map((batchDetail) => (
+                                            <div
+                                                key={batchDetail.batchDetailId}
+                                                className="border-b border-red-100 p-5"
+                                            >
+                                                <div className="flex flex-row items-center justify-between">
+                                                    <div className="flex flex-col space-y-2">
+                                                        <span className=" uppercase text-xl font-bold text-black">
+                                                            {
+                                                                batchDetail.vaccineResponse
+                                                                    .vaccineName
+                                                            }
+                                                        </span>
+
+                                                        <span>
+                                                            Nguồn gốc:{' '}
+                                                            {
+                                                                batchDetail.vaccineResponse
+                                                                    .vaccineOrigin
+                                                            }
+                                                        </span>
+                                                        <span className="text-lg font-bold text-blue-800">
+                                                            {formatCurrency(
+                                                                batchDetail.batchDetailVaccinePrice
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRemoveVaccine(
+                                                                batchDetail.batchDetailId
+                                                            )
+                                                        }
+                                                        className="btn btn-square btn-sm"
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            className="h-6 w-6"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth="2"
+                                                                d="M6 18L18 6M6 6l12 12"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {vaccinePackageSelectedList.map((pack) => (
+                                            <div
+                                                key={pack.vaccinePackageId}
+                                                className="border-b border-red-100 p-5 flex flex-col space-y-2"
+                                            >
+                                                <div className="flex flex-row items-center justify-between">
+                                                    <div className="flex flex-col space-y-2">
+                                                        <span className=" uppercase text-xl font-bold text-black">
+                                                            {pack.vaccinePackageName}
+                                                        </span>
+
+                                                        <span className="text-lg font-bold text-blue-800">
+                                                            {formatCurrency(
+                                                                pack.vaccinePackagePrice
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRemovePackage(
+                                                                pack.vaccinePackageId
+                                                            )
+                                                        }
+                                                        className="btn btn-square btn-sm"
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            className="h-6 w-6"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth="2"
+                                                                d="M6 18L18 6M6 6l12 12"
+                                                            />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col space-y-4 mt-8">
+                                <span className="text-lg font-semibold">
+                                    Chọn phương thức thanh toán:
+                                </span>
+
+                                <div className="flex gap-4">
+                                    <input
+                                        value="TRANSFER"
+                                        type="radio"
+                                        name="radio-5"
+                                        className="radio radio-success"
+                                        onChange={handlePayment}
+                                        checked={payment === 'TRANSFER'}
+                                    />
+                                    <span>Thanh toán chuyển khoản</span>
+                                </div>
+
+                                <div className="flex gap-4">
+                                    <input
+                                        value="PAYPAL"
+                                        type="radio"
+                                        name="radio-5"
+                                        className="radio radio-success"
+                                        onChange={handlePayment}
+                                        checked={payment === 'PAYPAL'}
+                                    />
+                                    <span>Thanh toán Paypal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {totalAmount > 0 && (
+                            <div>
+                                <div className=" flex flex-col mt-4">
+                                    <span className="text-2xl font-semibold">
+                                        Tổng số tiền: {formatCurrency(totalAmount)}
+                                    </span>
+                                </div>
+                                <div className="mt-5">
+                                    {payment === '' ? null : payment === 'PAYPAL' ? (
+                                        <PayPalCheckOut
+                                            key={totalAmount}
+                                            batchDetailIdList={batchDetailSelectedList}
+                                            vaccinePackageIdList={vaccinePackageSelectedList}
+                                            initialTotal={totalAmount}
+                                            payment={payment}
+                                            injectionDate={injectionDate}
+                                            customer={existsCustomer}
+                                            orderType={orderType}
+                                            orderInfo={orderData}
+                                        />
+                                    ) : (
+                                        <div className="flex justify-center">
+                                            <button
+                                                type="button"
+                                                className="btn btn-info"
+                                                onClick={() =>
+                                                    document
+                                                        .getElementById('modal_transfer')
+                                                        .showModal()
+                                                }
+                                            >
+                                                <div className="flex items-center space-x-2">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="w-8 h-8"
+                                                        viewBox="0 0 24 24"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path d="M8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 0-2 0v4a3 3 0 0 0 3 3h4a1 1 0 0 0 0-2Zm14-6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 0 0 2h4a3 3 0 0 0 3-3v-4a1 1 0 0 0-1-1ZM20 1h-4a1 1 0 0 0 0 2h4a1 1 0 0 1 1 1v4a1 1 0 0 0 2 0V4a3 3 0 0 0-3-3ZM2 9a1 1 0 0 0 1-1V4a1 1 0 0 1 1-1h4a1 1 0 0 0 0-2H4a3 3 0 0 0-3 3v4a1 1 0 0 0 1 1Zm8-4H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1ZM9 9H7V7h2Zm5 2h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1Zm1-4h2v2h-2Zm-5 6H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-1 4H7v-2h2Zm5-1a1 1 0 0 0 1-1 1 1 0 0 0 0-2h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1Zm4-3a1 1 0 0 0-1 1v3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-4 4a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z" />
+                                                    </svg>
+                                                    <span>Quét mã chuyển khoản</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex flex-col">
+                    <div role="tablist" className="tabs tabs-lifted ">
+                        <input
+                            type="radio"
+                            name="my_tabs_2"
+                            role="tab"
+                            className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
+                            aria-label="Vắc xin lẻ"
+                            defaultChecked
+                        />
+                        <div
+                            role="tabpanel"
+                            className="tab-content bg-base-100 border-base-300 rounded-box p-6 "
+                        >
+                            <div className="flex flex-wrap gap-4 flex-grow">
+                                {currentBatchDetails.map((batchDetail, index) => {
+                                    const isVaccineSelected = batchDetailSelectedList.find(
+                                        (v) => v.batchDetailId === batchDetail.batchDetailId
+                                    )
+
+                                    return (
+                                        <div
+                                            className="card card-compact bg-base-100 w-70 shadow-xl"
+                                            key={index}
+                                        >
+                                            <div className="card-body">
+                                                <h2 className="card-title">
+                                                    {batchDetail.vaccineResponse.vaccineName}
+                                                </h2>
+                                                <p>
+                                                    Phòng: {batchDetail.diseaseResponse.diseaseName}
+                                                </p>
+                                                <p>
+                                                    Giá chỉ:{' '}
+                                                    {formatCurrency(
+                                                        batchDetail.batchDetailVaccinePrice
+                                                    )}
+                                                </p>
+                                                <div className="card-actions justify-end">
+                                                    {isVaccineSelected ? (
+                                                        <button
+                                                            onClick={() =>
+                                                                handleRemoveVaccine(
+                                                                    batchDetail.batchDetailId
+                                                                )
+                                                            }
+                                                            className="btn btn-outline btn-accent"
+                                                        >
+                                                            Đã Chọn
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() =>
+                                                                handleSelectVaccine(batchDetail)
+                                                            }
+                                                            className="btn btn-outline btn-info"
+                                                        >
+                                                            Chọn
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+
+                            {batchDetailList.length > pageSize && (
+                                <div className="pagination flex  mt-5 justify-center">
+                                    <Pagination
+                                        current={currentPage}
+                                        pageSize={pageSize}
+                                        total={batchDetailList.length}
+                                        onChange={handlePageChange}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <input
+                            type="radio"
+                            name="my_tabs_2"
+                            role="tab"
+                            className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
+                            aria-label="Gói vắc xin"
+                        />
+                        <div
+                            role="tabpanel"
+                            className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                        >
+                            <div className="flex flex-col ">
+                                <div className="flex flex-wrap gap-2 flex-grow">
+                                    {packageList.map((pack, index) => {
+                                        const isPackageSelected = vaccinePackageSelectedList.find(
+                                            (p) => p.vaccinePackageId === pack.vaccinePackageId
+                                        )
                                         return (
                                             <div
-                                                className="card card-compact bg-base-100 w-70 shadow-xl"
                                                 key={index}
+                                                className="card bg-base-100 w-70 shadow-xl flex-shrink-0 "
                                             >
                                                 <div className="card-body">
-                                                    <h2 className="card-title">
-                                                        {batchDetail.vaccineResponse.vaccineName}
+                                                    <h2 className="card-title ">
+                                                        {pack.vaccinePackageName}{' '}
                                                     </h2>
+
                                                     <p>
-                                                        Phòng:{' '}
-                                                        {batchDetail.diseaseResponse.diseaseName}
-                                                    </p>
-                                                    <p>
-                                                        Giá chỉ:{' '}
-                                                        {formatCurrency(
-                                                            batchDetail.batchDetailVaccinePrice
-                                                        )}
+                                                        Giá:{' '}
+                                                        {formatCurrency(pack.vaccinePackagePrice)}
                                                     </p>
                                                     <div className="card-actions justify-end">
-                                                        {isVaccineSelected ? (
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleRemoveVaccine(
-                                                                        batchDetail.batchDetailId
-                                                                    )
-                                                                }
-                                                                className="btn btn-outline btn-accent"
-                                                            >
-                                                                Đã Chọn
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleSelectVaccine(batchDetail)
-                                                                }
-                                                                className="btn btn-outline btn-info"
-                                                            >
-                                                                Chọn
-                                                            </button>
-                                                        )}
+                                                        <div className="card-actions justify-end">
+                                                            {isPackageSelected ? (
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleRemovePackage(
+                                                                            pack.vaccinePackageId
+                                                                        )
+                                                                    }
+                                                                    className="btn btn-outline btn-accent"
+                                                                >
+                                                                    Đã Chọn
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleSelectPackage(pack)
+                                                                    }
+                                                                    className="btn btn-outline btn-info"
+                                                                >
+                                                                    Chọn
+                                                                </button>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         )
                                     })}
                                 </div>
-
-                                {batchDetailList.length > pageSize && (
-                                    <div className="pagination flex  mt-5 justify-center">
-                                        <Pagination
-                                            current={currentPage}
-                                            pageSize={pageSize}
-                                            total={batchDetailList.length}
-                                            onChange={handlePageChange}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            <input
-                                type="radio"
-                                name="my_tabs_2"
-                                role="tab"
-                                className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
-                                aria-label="Gói vắc xin"
-                            />
-                            <div
-                                role="tabpanel"
-                                className="tab-content bg-base-100 border-base-300 rounded-box p-6"
-                            >
-                                <div className="flex flex-col ">
-                                    <div className="flex flex-wrap gap-2 flex-grow">
-                                        {packageList.map((pack, index) => {
-                                            const isPackageSelected =
-                                                vaccinePackageSelectedList.find(
-                                                    (p) =>
-                                                        p.vaccinePackageId === pack.vaccinePackageId
-                                                )
-                                            return (
-                                                <div
-                                                    key={index}
-                                                    className="card bg-base-100 w-70 shadow-xl flex-shrink-0 "
-                                                >
-                                                    <div className="card-body">
-                                                        <h2 className="card-title ">
-                                                            {pack.vaccinePackageName}{' '}
-                                                        </h2>
-
-                                                        <p>
-                                                            Giá:{' '}
-                                                            {formatCurrency(
-                                                                pack.vaccinePackagePrice
-                                                            )}
-                                                        </p>
-                                                        <div className="card-actions justify-end">
-                                                            <div className="card-actions justify-end">
-                                                                {isPackageSelected ? (
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            handleRemovePackage(
-                                                                                pack.vaccinePackageId
-                                                                            )
-                                                                        }
-                                                                        className="btn btn-outline btn-accent"
-                                                                    >
-                                                                        Đã Chọn
-                                                                    </button>
-                                                                ) : (
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            handleSelectPackage(
-                                                                                pack
-                                                                            )
-                                                                        }
-                                                                        className="btn btn-outline btn-info"
-                                                                    >
-                                                                        Chọn
-                                                                    </button>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="w-1/3 ">
-                    <div className="bg-white rounded-lg shadow p-4 flex flex-col space-x-2">
-                        <div className="flex space-x-2 items-center justify-center mb-5 w-full">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="icon line-color h-8 w-8"
-                                data-name="Line Color"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    d="M7 4 4.33 7 3 5.5"
-                                    style={{
-                                        fill: 'none',
-                                        stroke: '#2ca9bc',
-                                        strokeLinecap: 'round',
-                                        strokeLinejoin: 'round',
-                                        strokeWidth: 2,
-                                    }}
-                                />
-                                <path
-                                    d="M3 11.5 4.33 13 7 10M3 17.5 4.33 19 7 16"
-                                    data-name="secondary"
-                                    style={{
-                                        fill: 'none',
-                                        stroke: '#2ca9bc',
-                                        strokeLinecap: 'round',
-                                        strokeLinejoin: 'round',
-                                        strokeWidth: 2,
-                                    }}
-                                />
-                                <path
-                                    d="M11 6h10m-10 6h10m-10 6h10"
-                                    style={{
-                                        fill: 'none',
-                                        stroke: '#000',
-                                        strokeLinecap: 'round',
-                                        strokeLinejoin: 'round',
-                                        strokeWidth: 2,
-                                    }}
-                                />
-                            </svg>
-                            <span className="text-lg font-bold text-blue-900">
-                                DANH SÁCH VẮC XIN CHỌN MUA
-                            </span>
-                        </div>
-
-                        <div className="border-b border-green-500 "></div>
-
-                        <div className="mt-5">
-                            {batchDetailSelectedList.length === 0 &&
-                            vaccinePackageSelectedList.length === 0 ? (
-                                <div className="text-xl text-blue-600 text-center">
-                                    Danh sách trống
-                                </div>
-                            ) : (
-                                <>
-                                    {batchDetailSelectedList.map((batchDetail) => (
-                                        <div
-                                            key={batchDetail.batchDetailId}
-                                            className="border-b border-red-100 p-5"
-                                        >
-                                            <div className="flex flex-row items-center justify-between">
-                                                <div className="flex flex-col space-y-2">
-                                                    <span className=" uppercase text-xl font-bold text-black">
-                                                        {batchDetail.vaccineResponse.vaccineName}
-                                                    </span>
-
-                                                    <span>
-                                                        Nguồn gốc:{' '}
-                                                        {batchDetail.vaccineResponse.vaccineOrigin}
-                                                    </span>
-                                                    <span className="text-lg font-bold text-blue-800">
-                                                        {formatCurrency(
-                                                            batchDetail.batchDetailVaccinePrice
-                                                        )}
-                                                    </span>
-                                                </div>
-                                                <button
-                                                    onClick={() =>
-                                                        handleRemoveVaccine(
-                                                            batchDetail.batchDetailId
-                                                        )
-                                                    }
-                                                    className="btn btn-square btn-sm"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="h-6 w-6"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="M6 18L18 6M6 6l12 12"
-                                                        />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    {vaccinePackageSelectedList.map((pack) => (
-                                        <div
-                                            key={pack.vaccinePackageId}
-                                            className="border-b border-red-100 p-5 flex flex-col space-y-2"
-                                        >
-                                            <div className="flex flex-row items-center justify-between">
-                                                <div className="flex flex-col space-y-2">
-                                                    <span className=" uppercase text-xl font-bold text-black">
-                                                        {pack.vaccinePackageName}
-                                                    </span>
-
-                                                    <span className="text-lg font-bold text-blue-800">
-                                                        {formatCurrency(pack.vaccinePackagePrice)}
-                                                    </span>
-                                                </div>
-                                                <button
-                                                    onClick={() =>
-                                                        handleRemovePackage(pack.vaccinePackageId)
-                                                    }
-                                                    className="btn btn-square btn-sm"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="h-6 w-6"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="M6 18L18 6M6 6l12 12"
-                                                        />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </>
-                            )}
-                        </div>
-
-                        <div className="flex flex-col space-y-4 mt-8">
-                            <span className="text-lg font-semibold">
-                                Chọn phương thức thanh toán:
-                            </span>
-
-                            <div className="flex gap-4">
-                                <input
-                                    value="TRANSFER"
-                                    type="radio"
-                                    name="radio-5"
-                                    className="radio radio-success"
-                                    onChange={handlePayment}
-                                    checked={payment === 'TRANSFER'}
-                                />
-                                <span>Thanh toán chuyển khoản</span>
-                            </div>
-
-                            <div className="flex gap-4">
-                                <input
-                                    value="PAYPAL"
-                                    type="radio"
-                                    name="radio-5"
-                                    className="radio radio-success"
-                                    onChange={handlePayment}
-                                    checked={payment === 'PAYPAL'}
-                                />
-                                <span>Thanh toán Paypal</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {totalAmount > 0 && (
-                        <div>
-                            <div className=" flex flex-col mt-4">
-                                <span className="text-2xl font-semibold">
-                                    Tổng số tiền: {formatCurrency(totalAmount)}
-                                </span>
-                            </div>
-                            <div className="mt-5">
-                                {payment === '' ? null : payment === 'PAYPAL' ? (
-                                    <PayPalCheckOut
-                                        key={totalAmount}
-                                        batchDetailIdList={batchDetailSelectedList}
-                                        vaccinePackageIdList={vaccinePackageSelectedList}
-                                        initialTotal={totalAmount}
-                                        payment={payment}
-                                        injectionDate={injectionDate}
-                                        customer={existsCustomer}
-                                        orderType={orderType}
-                                        orderInfo={orderData}
-                                    />
-                                ) : (
-                                    <div className="flex justify-center">
-                                        <button
-                                            type="button"
-                                            className="btn btn-info"
-                                            onClick={() =>
-                                                document
-                                                    .getElementById('modal_transfer')
-                                                    .showModal()
-                                            }
-                                        >
-                                            <div className="flex items-center space-x-2">
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    className="w-8 h-8"
-                                                    viewBox="0 0 24 24"
-                                                    fill="currentColor"
-                                                >
-                                                    <path d="M8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 0-2 0v4a3 3 0 0 0 3 3h4a1 1 0 0 0 0-2Zm14-6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 0 0 2h4a3 3 0 0 0 3-3v-4a1 1 0 0 0-1-1ZM20 1h-4a1 1 0 0 0 0 2h4a1 1 0 0 1 1 1v4a1 1 0 0 0 2 0V4a3 3 0 0 0-3-3ZM2 9a1 1 0 0 0 1-1V4a1 1 0 0 1 1-1h4a1 1 0 0 0 0-2H4a3 3 0 0 0-3 3v4a1 1 0 0 0 1 1Zm8-4H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1ZM9 9H7V7h2Zm5 2h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1Zm1-4h2v2h-2Zm-5 6H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-1 4H7v-2h2Zm5-1a1 1 0 0 0 1-1 1 1 0 0 0 0-2h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1Zm4-3a1 1 0 0 0-1 1v3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-4 4a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z" />
-                                                </svg>
-                                                <span>Quét mã chuyển khoản</span>
-                                            </div>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
 

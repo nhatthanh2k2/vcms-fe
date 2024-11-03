@@ -139,8 +139,8 @@ export const PayPalCheckOut = ({
     }, [initialTotal])
 
     return (
-        <div className="relative">
-            <div className="absolute left-0 right-0 z-40">
+        <div className=" ">
+            <div className=" left-0 right-0 z-40">
                 <PayPalScriptProvider options={initialOptions}>
                     <PayPalButtons
                         // createOrder={(data, actions) => {
