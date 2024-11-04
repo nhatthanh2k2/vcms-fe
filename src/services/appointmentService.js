@@ -21,5 +21,8 @@ export const appointmentService = {
     },
     updateAppointmentStatus: (request) => {
         return api.put("/appointments/update/appointment-status", request)
+    },
+    getCanceledAppointmentList: () => {
+        return api.get("/appointments/list/canceled-list")
     }
 }

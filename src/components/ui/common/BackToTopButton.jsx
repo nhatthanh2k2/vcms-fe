@@ -30,7 +30,7 @@ export const BackToTopButton = () => {
                 <button
                     onClick={goToTop}
                     title="Go To Top"
-                    className="fixed bottom-10 right-10 w-14 h-14 p-4 border-0 rounded-full shadow-md bg-green-600 hover:bg-green-700 text-white text-lg font-semibold transition-colors duration-300 z-50"
+                    className="fixed bottom-4 right-24 w-14 h-14 p-4 border-0 rounded-full shadow-md bg-green-600 hover:bg-green-700 text-white text-lg font-semibold transition-colors duration-300 z-40"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,6 @@ export const BackToTopButton = () => {
                     >
                         <path d="M12 4l8 8h-6v8h-4v-8H4l8-8z" />
                     </svg>
-                    <span className="sr-only">Go to top</span>
                 </button>
             )}
         </>

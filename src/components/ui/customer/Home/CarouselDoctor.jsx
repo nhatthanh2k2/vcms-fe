@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Carousel } from 'antd'
-import { vaccineService } from '@/services'
+import { employeeService } from '@/services'
 
-export const CarouselVaccine = () => {
-    const [vaccineList, setVaccineList] = useState([])
+export const CarouselDoctor = () => {
+    const [employeeList, setEmployeeList] = useState([])
 
     useEffect(() => {
-        vaccineService
-            .getAllVaccines()
-            .then((respone) => setVaccineList(respone.data.result))
-            .catch((err) => console.log('Get vaccines failed!'))
+        employeeService
+            .getAllEmployees()
+            .then((response) => setEmployeeList(response.data.result))
+            .catch((err) => console.log('Get employees failed'))
     }, [])
+
+    const rolesToFilter = ['DOCTOR', 'NURSE']
+
+    const filteredEmployees = employeeList.filter((employee) =>
+        employee.roles.some((role) => rolesToFilter.includes(role))
+    )
 
     const [slidesToShow, setSlidesToShow] = useState(4)
 
@@ -36,30 +42,31 @@ export const CarouselVaccine = () => {
     }, [])
 
     return (
-        <div className=" w-full h-full mt-10">
+        <div className=" w-full mt-10">
             <Carousel
                 autoplay
                 slidesToScroll={1}
                 slidesToShow={slidesToShow}
                 dots={false}
                 arrows={false}
-                autoplaySpeed={5000}
+                autoplaySpeed={3000}
             >
-                {vaccineList.map((vaccine, index) => (
+                {filteredEmployees.map((employee, index) => (
                     <div
                         key={index}
                         className="mx-4 flex flex-col items-center justify-center pointer-events-none"
                     >
                         <img
-                            className="h-64 w-72 mx-auto object-contain"
+                            className="h-96 w-80 object-cover"
                             src={
                                 import.meta.env.VITE_VCMS_IMAGE +
-                                '/vaccines/' +
-                                vaccine.vaccineImage
+                                '/avatars/' +
+                                employee.employeeAvatar
                             }
-                            alt={vaccine.vaccineName}
                         />
-                        <div className="mx-auto text-center mt-2">{vaccine.vaccineName}</div>
+                        <div className="text-center mt-2 font-bold">
+                            {employee.employeeQualification}. {employee.employeeFullName}
+                        </div>
                     </div>
                 ))}
             </Carousel>

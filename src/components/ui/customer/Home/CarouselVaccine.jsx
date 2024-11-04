@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Carousel } from 'antd'
-import { employeeService } from '@/services'
+import { vaccineService } from '@/services'
 
-export const CarouselDoctor = () => {
-    const [employeeList, setEmployeeList] = useState([])
+export const CarouselVaccine = () => {
+    const [vaccineList, setVaccineList] = useState([])
 
     useEffect(() => {
-        employeeService
-            .getAllEmployees()
-            .then((response) => setEmployeeList(response.data.result))
-            .catch((err) => console.log('Get employees failed'))
+        vaccineService
+            .getAllVaccines()
+            .then((respone) => setVaccineList(respone.data.result))
+            .catch((err) => console.log('Get vaccines failed!'))
     }, [])
-
-    const rolesToFilter = ['DOCTOR', 'NURSE']
-
-    const filteredEmployees = employeeList.filter((employee) =>
-        employee.roles.some((role) => rolesToFilter.includes(role))
-    )
 
     const [slidesToShow, setSlidesToShow] = useState(4)
 
@@ -42,30 +36,31 @@ export const CarouselDoctor = () => {
     }, [])
 
     return (
-        <div className=" w-full mt-10">
+        <div className=" w-full h-full mt-10">
             <Carousel
                 autoplay
                 slidesToScroll={1}
                 slidesToShow={slidesToShow}
                 dots={false}
                 arrows={false}
-                autoplaySpeed={3000}
+                autoplaySpeed={5000}
             >
-                {filteredEmployees.map((employee, index) => (
+                {vaccineList.map((vaccine, index) => (
                     <div
                         key={index}
-                        className="mx-4 flex flex-col items-center justify-center pointer-events-none"
+                        className="mx-4 flex flex-col items-center justify-center pointer-events-none "
                     >
                         <img
-                            className="h-96 w-80 object-cover"
+                            className="h-64 w-72 mx-auto object-contain "
                             src={
                                 import.meta.env.VITE_VCMS_IMAGE +
-                                '/avatars/' +
-                                employee.employeeAvatar
+                                '/vaccines/' +
+                                vaccine.vaccineImage
                             }
+                            alt={vaccine.vaccineName}
                         />
-                        <div className="text-center mt-2">
-                            {employee.employeeQualification}. {employee.employeeFullName}
+                        <div className="mx-auto text-center mt-2 font-bold">
+                            {vaccine.vaccineName}
                         </div>
                     </div>
                 ))}

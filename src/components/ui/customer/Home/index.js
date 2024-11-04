@@ -1,4 +1,4 @@
-export * from './CaroselDoctor'
-export * from './CaroselIntroduction'
-export * from './CaroselVaccine'
+export * from './CarouselDoctor'
+export * from './CarouselIntroduction'
+export * from './CarouselVaccine'
 export * from './DirectionsMap'

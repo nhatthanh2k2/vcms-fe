@@ -52,3 +52,15 @@ export const convertAgeRangeToMonths = (range) => {
     }
     return null;
 };
+
+export const ageRanges = [
+    '0-2 tháng',
+    '2-6 tháng',
+    '7-12 tháng',
+    '13-24 tháng',
+    '4-6 tuổi',
+    '9-18 tuổi',
+    'Phụ nữ trước mang thai',
+    'Người trưởng thành',
+    'Ngoài các nhóm trên',
+]

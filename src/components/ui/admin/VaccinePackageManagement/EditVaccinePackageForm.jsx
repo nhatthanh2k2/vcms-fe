@@ -10,6 +10,7 @@ import { convertVaccineType } from '@/utils'
 export const EditVaccinePackageForm = () => {
     const dispatch = useDispatch()
     const { batchDetailList } = useSelector((state) => state.batchDetail)
+    const navigate = useNavigate()
     const location = useLocation()
     const record = location.state?.record
 
@@ -203,9 +204,7 @@ export const EditVaccinePackageForm = () => {
         },
     ]
 
-    const navigate = useNavigate()
-
-    const handleBackToPackageList = () => {
+    const handleBackToPackageTable = () => {
         navigate('/admin/quan-ly/goi-vac-xin/danh-muc')
     }
 
@@ -312,7 +311,7 @@ export const EditVaccinePackageForm = () => {
 
                 <div className="flex justify-center space-x-5">
                     <button
-                        onClick={handleBackToPackageList}
+                        onClick={handleBackToPackageTable}
                         type="button"
                         className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                     >

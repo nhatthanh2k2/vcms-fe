@@ -46,7 +46,9 @@ export const VaccineTable = () => {
     }
 
     const handleToEditVaccinePage = (record) => {
-        navigate('/admin/quan-ly/vac-xin-le/cap-nhat-vac-xin', { state: { record } })
+        navigate(`/admin/quan-ly/vac-xin-le/cap-nhat-vac-xin/${record.vaccineCode}`, {
+            state: { record },
+        })
     }
 
     const [isOpenDeleteVaccineModal, setIsOpenDeleteVaccineModal] = useState(false)

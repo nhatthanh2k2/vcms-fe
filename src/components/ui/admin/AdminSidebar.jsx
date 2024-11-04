@@ -74,7 +74,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
     return (
         <aside
             ref={sidebar}
-            className={`absolute left-0 top-0 z-10 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+            className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
         >
@@ -534,6 +534,17 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                             Số lượt tiêm
                                                         </NavLink>
                                                     </li>
+                                                    <li>
+                                                        <NavLink
+                                                            to="/admin/thong-ke/cuoc-hen-bi-huy"
+                                                            className={({ isActive }) =>
+                                                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                                                (isActive && '!text-white')
+                                                            }
+                                                        >
+                                                            Cuộc hẹn bị hủy
+                                                        </NavLink>
+                                                    </li>
                                                 </ul>
                                             </div>
                                             {/* <!-- Dropdown Menu End --> */}
@@ -596,6 +607,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 </nav>
                 {/* <!-- Sidebar Menu --> */}
             </div>
+
             <UpdateEmployeeProfileModal
                 employeeInfo={employee}
                 visibleUpdateEmployeeProfileModal={isOpenUpdateEmployeeProfileModal}

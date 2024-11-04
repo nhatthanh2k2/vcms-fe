@@ -11,6 +11,7 @@ export const VaccinePackageTable = () => {
     const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
+    const navigate = useNavigate()
 
     const getVaccinePackageList = () => {
         vaccinePackageService
@@ -39,14 +40,14 @@ export const VaccinePackageTable = () => {
         setIsOpenDeleteVaccinePackageModal(false)
     }
 
-    const navigate = useNavigate()
-
     const handleToAddVaccinePackagePage = () => {
         navigate('/admin/quan-ly/goi-vac-xin/them-goi-vac-xin')
     }
 
     const handleToEditPackagePage = (record) => {
-        navigate('/admin/quan-ly/goi-vac-xin/cap-nhat-goi', { state: { record } })
+        navigate(`/admin/quan-ly/goi-vac-xin/cap-nhat-goi/${record.vaccinePackageId}`, {
+            state: { record },
+        })
     }
 
     const vaccinePackageColumns = [

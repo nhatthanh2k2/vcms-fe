@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Select } from 'antd'
+import { Select } from 'antd'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { diseaseService, vaccineService } from '@/services'
 import { MyToast } from '../../common'
 import { AddDiseaseModal } from '../DiseaseManagement'
+import { ageRanges } from '@/utils'
 
 const addVaccineSchema = z.object({
     vaccineName: z.string().min(1, 'Vui lòng nhập tên vắc xin'),
@@ -22,7 +23,7 @@ const addVaccineSchema = z.object({
     vaccineReaction: z.string().min(1, { message: 'Vui lòng nhập phản ứng sau tiêm cho vắc xin' }),
     vaccineChildDoseCount: z.string().nonempty({ message: 'Số mũi tiêm trẻ em là bắt buộc' }),
 
-    vaccineAdultDoseCount: z.string().nonempty({ message: 'Số mũi tiêm trẻ em là bắt buộc' }),
+    vaccineAdultDoseCount: z.string().nonempty({ message: 'Số mũi tiêm người lớn là bắt buộc' }),
     vaccineStorage: z.string().min(1, { message: 'Vui lòng nhập cách bảo quản cho vắc xin' }),
     vaccineInjectionSchedule: z
         .string()
@@ -34,26 +35,19 @@ const addVaccineSchema = z.object({
     }, z.number().int().nonnegative({ message: 'Bạn chưa chọn loại bệnh cho vắc xin' })),
 })
 
-const ageRanges = [
-    '0-2 tháng',
-    '2-6 tháng',
-    '7-12 tháng',
-    '13-24 tháng',
-    '4-6 tuổi',
-    '9-18 tuổi',
-    'Phụ nữ trước mang thai',
-    'Người trưởng thành',
-]
-
 export const AddVaccineForm = () => {
     const [selectedAges, setSelectedAges] = useState([])
     const [diseaseList, setDiseaseList] = useState([])
 
-    useEffect(() => {
+    const getDiseaseList = () => {
         diseaseService
             .getAllDiseases()
             .then((response) => setDiseaseList(response.data.result))
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy danh mục bệnh.'))
+    }
+
+    useEffect(() => {
+        getDiseaseList()
     }, [])
 
     const {
@@ -180,7 +174,7 @@ export const AddVaccineForm = () => {
                         {ageRanges.map((age, index) => (
                             <div
                                 key={index}
-                                className="w-1/4 cursor-pointer flex space-x-5 items-center "
+                                className="w-1/3 cursor-pointer flex space-x-5 items-center "
                             >
                                 <input
                                     type="checkbox"
@@ -376,6 +370,7 @@ export const AddVaccineForm = () => {
             <AddDiseaseModal
                 visibleOpenAddDiseaseModal={isOpenAddDiseaseModal}
                 handleCloseAddDiseaseModal={handleCloseAddDiseaseModal}
+                getDiseaseList={getDiseaseList}
             />
         </div>
     )

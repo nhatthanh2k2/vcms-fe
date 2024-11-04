@@ -28,6 +28,7 @@ import {
     DoseCountPage,
     EditVaccinePackagePage,
     EditVaccinePage,
+    CanceledAppointmentPage,
 } from '@/pages'
 import { ADMIN_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -100,7 +101,7 @@ export const router = [
                 element: <VaccineListPage />,
             },
             {
-                path: 'thong-tin-vac-xin/:vaccineCode',
+                path: `${PATH.vaccineList}/:vaccineCode`,
                 element: <VaccineDetailPage />,
             },
             {
@@ -144,7 +145,7 @@ export const router = [
                                 element: <AddVaccinePage />,
                             },
                             {
-                                path: ADMIN_PATH.editvaccine,
+                                path: `${ADMIN_PATH.editvaccine}/:vaccineCode`,
                                 element: <EditVaccinePage />,
                             },
                         ],
@@ -170,7 +171,7 @@ export const router = [
                                 element: <AddVaccinePackagePage />,
                             },
                             {
-                                path: ADMIN_PATH.editPackage,
+                                path: `${ADMIN_PATH.editPackage}/:vaccinePackageId`,
                                 element: <EditVaccinePackagePage />,
                             },
                         ],
@@ -191,6 +192,10 @@ export const router = [
                     {
                         path: ADMIN_PATH.doseCount,
                         element: <DoseCountPage />,
+                    },
+                    {
+                        path: ADMIN_PATH.canceledAppointment,
+                        element: <CanceledAppointmentPage />,
                     },
                 ],
             },
