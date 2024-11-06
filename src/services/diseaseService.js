@@ -13,5 +13,8 @@ export const diseaseService = {
     },
     addDisease: (request) => {
         return api.post('/diseases/create', request)
+    },
+    deleteDisease: (diseaseId) => {
+        return api.delete(`/diseases/delete/${diseaseId}`)
     }
 }

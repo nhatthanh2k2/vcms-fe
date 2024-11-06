@@ -179,8 +179,8 @@ export const OrderVaccinationSchedule = () => {
                     </div>
 
                     <div
-                        onClick={() => {
-                            handleGetDetailOrder(record.orderId)
+                        onClick={async () => {
+                            await handleGetDetailOrder(record.orderId)
                             handleSendVaccinationReminderEmail(record)
                         }}
                     >
@@ -248,15 +248,62 @@ export const OrderVaccinationSchedule = () => {
     const handleSendVaccinationReminderEmail = (record) => {
         setIsLoading(true)
 
+        const productListHtml = orderDetailList
+            .map((detail, index) => {
+                if (detail.batchDetailResponse !== null) {
+                    return `
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                            index + 1
+                        }</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                            detail.batchDetailResponse.vaccineResponse.vaccineName
+                        }</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                            detail.batchDetailResponse.batchDetailVaccinePrice
+                        } VNĐ</td>
+                    </tr>
+                `
+                } else {
+                    return `
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                            index + 1
+                        }</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                            detail.vaccinePackageResponse.vaccinePackageName
+                        }</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                            detail.vaccinePackageResponse.vaccinePackagePrice
+                        } VNĐ</td>
+                    </tr>
+                `
+                }
+            })
+            .join('')
+
+        const emailContent = `
+            
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 14pt;">STT</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 14pt;">Tên vắc xin</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 14pt;">Giá vắc xin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${productListHtml}
+                </tbody>
+            </table>
+            
+        `
+
         const templateParams = {
             customerName: record.orderCustomerFullName,
             cutomerEmail: record.orderCustomerEmail,
-            vaccineName:
-                orderDetailList[0]?.vaccinePackageResponse === null
-                    ? orderDetailList[0]?.batchDetailResponse.vaccineResponse.vaccineName
-                    : orderDetailList[0]?.vaccinePackageResponse.vaccinePackageName,
-            vacicnePrice: record.orderTotal,
             injectionDate: record.orderInjectionDate,
+            product_list_html: emailContent,
         }
 
         emailjs
@@ -271,8 +318,6 @@ export const OrderVaccinationSchedule = () => {
                 (error) => {
                     setIsLoading(false)
                     MyToast('error', 'Xảy ra lỗi khi gửi email nhắc lịch tiêm.')
-
-                    //console.log(error)
                 }
             )
     }

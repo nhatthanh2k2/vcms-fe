@@ -54,8 +54,8 @@ export const VaccineTable = () => {
     const [isOpenDeleteVaccineModal, setIsOpenDeleteVaccineModal] = useState(false)
     const [vaccineSelected, setVaccineSelected] = useState(null)
 
-    const handleOpenDeleteVaccineModal = (record) => {
-        setVaccineSelected(record)
+    const handleOpenDeleteVaccineModal = (vaccineId) => {
+        setVaccineSelected(vaccineId)
         setIsOpenDeleteVaccineModal(true)
     }
 
@@ -101,7 +101,11 @@ export const VaccineTable = () => {
             key: 'actions',
             render: (_, record) => (
                 <div className="inline-flex space-x-2 items-center rounded-md shadow-sm">
-                    <Tooltip placement="top" title="Cập nhật vắc xin">
+                    <Tooltip
+                        placement="top"
+                        title="Cập nhật vắc xin"
+                        key={`update-${record.vaccineId}`}
+                    >
                         <svg
                             onClick={() => handleToEditVaccinePage(record)}
                             xmlns="http://www.w3.org/2000/svg"
@@ -124,9 +128,9 @@ export const VaccineTable = () => {
                         </svg>
                     </Tooltip>
 
-                    <Tooltip placement="top" title="Xóa vắc xin">
+                    <Tooltip placement="top" title="Xóa vắc xin" key={`delete-${record.vaccineId}`}>
                         <svg
-                            onClick={() => handleOpenDeleteVaccineModal(record)}
+                            onClick={() => handleOpenDeleteVaccineModal(record.vaccineId)}
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-6 h-6"
                             fill="none"
@@ -158,8 +162,9 @@ export const VaccineTable = () => {
     }
 
     return (
-        <div className="flex flex-col space-y-5 bg-white shadow-default">
+        <div className=" bg-white shadow-default">
             <Table
+                bordered
                 title={() => (
                     <div className="flex justify-between items-center">
                         <div className="relative w-full max-w-xl">
@@ -216,7 +221,8 @@ export const VaccineTable = () => {
                         </div>
                     </div>
                 )}
-                rowKey="vaccineId"
+                rowKey={'vaccineId'}
+                footer={false}
                 columns={vaccineColumns}
                 dataSource={filteredVaccineList}
                 pagination={pagination}
@@ -224,6 +230,7 @@ export const VaccineTable = () => {
             />
 
             <DeleteVaccineModal
+                key={'delete_vaccine'}
                 visibleDeleteVaccineModal={isOpenDeleteVaccineModal}
                 handleCloseDeleteVaccineModal={handleCloseDeleteVaccineModal}
                 vaccineSelected={vaccineSelected}

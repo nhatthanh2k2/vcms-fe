@@ -31,6 +31,7 @@ export const DoseCountForNextMonthTable = () => {
     return (
         <div className=" shadow-default bg-white">
             <Table
+                bordered
                 title={() => (
                     <div className="font-bold text-blue-600 text-xl">
                         Số mũi vắc xin đăng ký tiêm trong 1 tháng kế tiếp

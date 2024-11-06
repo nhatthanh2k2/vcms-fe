@@ -43,6 +43,7 @@ export const AdolescentPackageTable = ({ pack }) => {
                     Danh mục {pack.vaccinePackageName}
                 </div>
             )}
+            bordered
             footer={() => (
                 <div className="flex flex-col">
                     <div className="text-center text-lg font-semibold">

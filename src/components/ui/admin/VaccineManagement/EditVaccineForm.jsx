@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Select } from 'antd'
-import { diseaseService } from '@/services'
+import { diseaseService, vaccineService } from '@/services'
 import { ageRanges } from '@/utils'
+import { MyToast } from '../../common'
 
 const updateVaccineSchema = z.object({
     vaccineName: z.string().min(1, 'Vui lòng nhập tên vắc xin'),
@@ -17,9 +18,17 @@ const updateVaccineSchema = z.object({
         .string()
         .min(1, { message: 'Vui lòng nhập chống chỉ định cho vắc xin' }),
     vaccineReaction: z.string().min(1, { message: 'Vui lòng nhập phản ứng sau tiêm cho vắc xin' }),
-    vaccineChildDoseCount: z.string().min(1, { message: 'Số mũi tiêm trẻ em là bắt buộc' }),
+    vaccineChildDoseCount: z
+        .union([z.string(), z.number()])
+        .refine((value) => (typeof value === 'number' ? value >= 0 : value.length > 0), {
+            message: 'Số mũi tiêm trẻ em là bắt buộc',
+        }),
 
-    vaccineAdultDoseCount: z.string().min(1, { message: 'Số mũi tiêm người lớn là bắt buộc' }),
+    vaccineAdultDoseCount: z
+        .union([z.string(), z.number()])
+        .refine((value) => (typeof value === 'number' ? value >= 0 : value.length > 0), {
+            message: 'Số mũi tiêm người lớn là bắt buộc',
+        }),
     vaccineStorage: z.string().min(1, { message: 'Vui lòng nhập cách bảo quản cho vắc xin' }),
     vaccineInjectionSchedule: z
         .string()
@@ -33,12 +42,11 @@ const updateVaccineSchema = z.object({
 
 export const EditVaccineForm = () => {
     const location = useLocation()
-    const record = location.state?.record
+    const [record, setRecord] = useState(location.state?.record)
+
     const [selectedAges, setSelectedAges] = useState(record.vaccineAgeRange)
     const [diseaseList, setDiseaseList] = useState([])
     const navigate = useNavigate()
-
-    console.log(record)
 
     useEffect(() => {
         diseaseService
@@ -57,29 +65,72 @@ export const EditVaccineForm = () => {
     } = useForm({
         resolver: zodResolver(updateVaccineSchema),
         defaultValues: {
-            vaccineName: record.vaccineName || '',
-            vaccineOrigin: record.vaccineOrigin || '',
-            vaccineAgeRange: record.vaccineAgeRange || [],
-            vaccineDescription: record.vaccineDescription || '',
-            vaccineInjectionRoute: record.vaccineInjectionRoute || '',
-            vaccineContraindication: record.vaccineContraindication || '',
-            vaccineReaction: record.vaccineReaction || '',
-            vaccineChildDoseCount: record.vaccineChildDoseCount || '0',
-            vaccineAdultDoseCount: record.vaccineAdultDoseCount || '0',
-            vaccineStorage: record.vaccineStorage || '',
-            vaccineInjectionSchedule: record.vaccineInjectionSchedule || '',
-            vaccinePatient: record.vaccinePatient || '',
-            diseaseId: record.diseaseResponse?.diseaseId || '',
+            vaccineName: record.vaccineName,
+            vaccineOrigin: record.vaccineOrigin,
+            vaccineAgeRange: record.vaccineAgeRange,
+            vaccineDescription: record.vaccineDescription,
+            vaccineInjectionRoute: record.vaccineInjectionRoute,
+            vaccineContraindication: record.vaccineContraindication,
+            vaccineReaction: record.vaccineReaction,
+            vaccineChildDoseCount: record.vaccineChildDoseCount,
+            vaccineAdultDoseCount: record.vaccineAdultDoseCount,
+            vaccineStorage: record.vaccineStorage,
+            vaccineInjectionSchedule: record.vaccineInjectionSchedule,
+            vaccinePatient: record.vaccinePatient,
+            diseaseId: record.diseaseResponse?.diseaseId,
         },
     })
+
+    const handleSelectedAge = (age) => {
+        const newSelected = selectedAges.includes(age)
+            ? selectedAges.filter((item) => item !== age)
+            : [...selectedAges, age]
+
+        setSelectedAges(newSelected)
+        setValue('vaccineAgeRange', newSelected)
+    }
 
     const handleBackToVaccineTable = () => {
         navigate('/admin/quan-ly/vac-xin-le/danh-muc')
     }
 
     const onSubmit = async (data) => {
-        console.log(data)
+        try {
+            const response = await vaccineService.updateVaccineInfo(record.vaccineId, data)
+            if (response.data.code === 1000) {
+                MyToast('success', 'Cập nhật thông tin vắc xin thành công.')
+                setRecord(response.data.result)
+            } else
+                MyToast('error', 'Xảy ra lỗi khi cập nhật thông tin vắc xin, vui lòng thử lại sau.')
+        } catch (error) {
+            if (error.response) {
+                MyToast('error', 'Cập nhật thông tin vắc xin không thành công.')
+            }
+        }
     }
+
+    // xử lý mới
+    const [vaccinePatients, setVaccinePatients] = useState(
+        record.vaccinePatient.split(';').filter(Boolean) || []
+    ) // Chia chuỗi thành mảng và bỏ phần tử trống
+    const handleAddVaccinePatient = () => {
+        setVaccinePatients([...vaccinePatients, ''])
+    }
+
+    // Xóa một mục trong vaccinePatient
+    const handleRemoveVaccinePatient = (index) => {
+        const newVaccinePatients = vaccinePatients.filter((_, idx) => idx !== index)
+        setVaccinePatients(newVaccinePatients)
+    }
+
+    // Cập nhật giá trị cho vaccinePatient
+    const handleVaccinePatientChange = (index, value) => {
+        const newVaccinePatients = [...vaccinePatients]
+        newVaccinePatients[index] = value
+        setVaccinePatients(newVaccinePatients)
+    }
+
+    console.log(vaccinePatients.join(';'))
 
     return (
         <div className="flex flex-col bg-white p-5">
@@ -178,16 +229,6 @@ export const EditVaccineForm = () => {
                             onChange={(value) => setValue('diseaseId', value)}
                         />
                     </div>
-
-                    <div className="flex items-center flex-col justify-between">
-                        <button
-                            type="button"
-                            //onClick={handleOpenAddDiseaseModal}
-                            className="mt-8 btn btn-sm btn-accent"
-                        >
-                            Thêm bệnh mới
-                        </button>
-                    </div>
                 </div>
 
                 <div className="flex flex-col space-y-2">
@@ -197,6 +238,34 @@ export const EditVaccineForm = () => {
                         placeholder="Bio"
                         {...register('vaccineDescription')}
                     ></textarea>
+                </div>
+
+                <div className="flex flex-col space-y-2">
+                    <label className="font-semibold">Đối tượng tiêm:</label>
+                    {vaccinePatients.map((patient, index) => (
+                        <div key={index} className="flex space-x-2">
+                            <input
+                                type="text"
+                                className="input input-bordered input-success w-full input-sm"
+                                value={patient}
+                                onChange={(e) => handleVaccinePatientChange(index, e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                className="text-red-500"
+                                onClick={() => handleRemoveVaccinePatient(index)}
+                            >
+                                Xóa
+                            </button>
+                        </div>
+                    ))}
+                    <button
+                        type="button"
+                        className="text-blue-500"
+                        onClick={handleAddVaccinePatient}
+                    >
+                        Thêm đối tượng
+                    </button>
                 </div>
 
                 <div>
@@ -311,11 +380,6 @@ export const EditVaccineForm = () => {
                     </button>
                 </div>
             </form>
-
-            {/* <AddDiseaseModal
-        visibleOpenAddDiseaseModal={isOpenAddDiseaseModal}
-        handleCloseAddDiseaseModal={handleCloseAddDiseaseModal}
-    /> */}
         </div>
     )
 }

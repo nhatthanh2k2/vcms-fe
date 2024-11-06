@@ -23,6 +23,9 @@ export const vaccineService = {
     },
     deleteVaccine: (vaccineId) => {
         return api.delete(`/vaccines/delete/${vaccineId}`)
+    },
+    updateVaccineInfo: (vaccineid, request) => {
+        return api.put(api_url + `/vaccines/update/${vaccineid}`, request)
     }
 
 }

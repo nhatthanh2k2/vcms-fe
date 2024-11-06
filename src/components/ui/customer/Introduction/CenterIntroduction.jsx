@@ -153,74 +153,76 @@ export const CenterIntroduction = () => {
         //         </span>
         //     </div>
         // </div>
-        <div className="bg-bg-vaccination">
-            <div className="mx-5 md:mx-10 lg:mx-20 xl:mx-32 flex flex-col pt-5">
-                <span className="text-blue-700 mx-auto my-5 text-xl md:text-2xl lg:text-3xl uppercase font-bold">
-                    "Sức khỏe của bạn - sứ mệnh của chúng tôi!"
-                </span>
-                <span className="text-justify">
-                    Là 1 trong những đơn vị dẫn đầu ngành tiêm chủng vắc xin dịch vụ tại Việt Nam,
-                    trong nhiều năm hình thành và phát triển, trung tâm tiêm chủng của chúng tôi đã
-                    nỗ lực không ngừng nghỉ và đạt nhiều thành tích nổi bật trong hoạt động tiêm
-                    chủng vắc xin, phòng chống dịch bệnh, nhận được sự tin tưởng yêu mến sử dụng
-                    dịch vụ của hàng chục triệu người dân trên khắp cả nước.
-                </span>
-                <span className="text-justify mt-4">
-                    Đặc biệt đáng ghi nhận là nỗ lực đẩy mạnh công tác truyền thông giáo dục cộng
-                    đồng về vai trò của tiêm chủng vắc xin với trẻ lớn, người lớn, người cao tuổi,
-                    người có bệnh nền, bệnh mạn tính của trung tâm tiêm chủng.
-                </span>
-                <span className="text-blue-700 mx-auto my-5 text-xl md:text-2xl lg:text-3xl uppercase font-bold">
-                    Vì sao chọn trung tâm tiêm chủng của chúng tôi?
-                </span>
-                <div className="flex flex-wrap justify-center gap-5 my-5">
-                    <div className="w-40 sm:w-48 md:w-60 lg:w-72 rounded-lg border-2">
-                        <div className="bg-white">
-                            <img
-                                src="/images/introduction/vaccine_chinh_hang_da_chung_loai.png"
-                                alt="Vắc-xin chính hãng"
-                            />
+        <>
+            {' '}
+            <div className="bg-bg-vaccination">
+                <div className="mx-5 md:mx-10 lg:mx-20 xl:mx-32 flex flex-col pt-5">
+                    <span className="text-blue-700 mx-auto my-5 text-xl md:text-2xl lg:text-3xl uppercase font-bold">
+                        "Sức khỏe của bạn - sứ mệnh của chúng tôi!"
+                    </span>
+                    <span className="text-justify">
+                        Là 1 trong những đơn vị dẫn đầu ngành tiêm chủng vắc xin dịch vụ tại Việt
+                        Nam, trong nhiều năm hình thành và phát triển, trung tâm tiêm chủng của
+                        chúng tôi đã nỗ lực không ngừng nghỉ và đạt nhiều thành tích nổi bật trong
+                        hoạt động tiêm chủng vắc xin, phòng chống dịch bệnh, nhận được sự tin tưởng
+                        yêu mến sử dụng dịch vụ của hàng chục triệu người dân trên khắp cả nước.
+                    </span>
+                    <span className="text-justify mt-4">
+                        Đặc biệt đáng ghi nhận là nỗ lực đẩy mạnh công tác truyền thông giáo dục
+                        cộng đồng về vai trò của tiêm chủng vắc xin với trẻ lớn, người lớn, người
+                        cao tuổi, người có bệnh nền, bệnh mạn tính của trung tâm tiêm chủng.
+                    </span>
+                    <span className="text-blue-700 mx-auto my-3 text-xl md:text-2xl lg:text-3xl uppercase font-bold">
+                        Vì sao chọn trung tâm tiêm chủng của chúng tôi?
+                    </span>
+                    <div className="flex flex-wrap justify-center gap-5 mt-3 mb-5">
+                        <div className="w-40 sm:w-48 md:w-60 lg:w-72 rounded-lg border-2">
+                            <div className="bg-white">
+                                <img
+                                    src="/images/introduction/vaccine_chinh_hang_da_chung_loai.png"
+                                    alt="Vắc-xin chính hãng"
+                                />
+                            </div>
+                            <div className="bg-blue-700 text-center text-white p-2">
+                                Vắc-xin chính hãng - đa chủng loại
+                            </div>
                         </div>
-                        <div className="bg-blue-700 text-center text-white p-2">
-                            Vắc-xin chính hãng - đa chủng loại
+                        <div className="w-40 sm:w-48 md:w-60 lg:w-72 border-2 rounded-lg">
+                            <div className="bg-white">
+                                <img
+                                    src="/images/introduction/he_thong_luu_tru_dat_chuan_GSP.png"
+                                    alt="Hệ thống kho lạnh GSP"
+                                />
+                            </div>
+                            <div className="bg-blue-700 text-center text-white p-2">
+                                Hệ thống kho lạnh GSP
+                            </div>
                         </div>
-                    </div>
-                    <div className="w-40 sm:w-48 md:w-60 lg:w-72 border-2 rounded-lg">
-                        <div className="bg-white">
-                            <img
-                                src="/images/introduction/he_thong_luu_tru_dat_chuan_GSP.png"
-                                alt="Hệ thống kho lạnh GSP"
-                            />
+                        <div className="w-40 sm:w-48 md:w-60 lg:w-72 border-2 rounded-lg">
+                            <div className="bg-white">
+                                <img
+                                    src="/images/introduction/tiem_nhe_it_dau.png"
+                                    alt="Đội ngũ bác sĩ chuyên môn cao"
+                                />
+                            </div>
+                            <div className="bg-blue-700 text-center text-white p-2">
+                                Đội ngũ bác sĩ chuyên môn cao
+                            </div>
                         </div>
-                        <div className="bg-blue-700 text-center text-white p-2">
-                            Hệ thống kho lạnh GSP
-                        </div>
-                    </div>
-                    <div className="w-40 sm:w-48 md:w-60 lg:w-72 border-2 rounded-lg">
-                        <div className="bg-white">
-                            <img
-                                src="/images/introduction/tiem_nhe_it_dau.png"
-                                alt="Đội ngũ bác sĩ chuyên môn cao"
-                            />
-                        </div>
-                        <div className="bg-blue-700 text-center text-white p-2">
-                            Đội ngũ bác sĩ chuyên môn cao
-                        </div>
-                    </div>
-                    <div className="w-40 sm:w-48 md:w-60 lg:w-72 border-2 rounded-lg">
-                        <div className="bg-white">
-                            <img
-                                src="/images/introduction/gia_tot.webp"
-                                alt="Giá hợp lý, ưu đãi, bình ổn"
-                            />
-                        </div>
-                        <div className="bg-blue-700 text-center text-white p-2">
-                            Giá hợp lý, ưu đãi, bình ổn
+                        <div className="w-40 sm:w-48 md:w-60 lg:w-72 border-2 rounded-lg">
+                            <div className="bg-white">
+                                <img
+                                    src="/images/introduction/gia_tot.webp"
+                                    alt="Giá hợp lý, ưu đãi, bình ổn"
+                                />
+                            </div>
+                            <div className="bg-blue-700 text-center text-white p-2">
+                                Giá hợp lý, ưu đãi, bình ổn
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div className="flex flex-col mx-5 md:mx-10 lg:mx-20 xl:mx-32 space-y-5">
                 <span className="text-justify uppercase font-bold text-black text-lg md:text-xl">
                     1. Luôn có đầy đủ vắc xin chính hãng, thế hệ mới, kể cả loại thường xuyên khan
@@ -312,6 +314,6 @@ export const CenterIntroduction = () => {
                     <br />
                 </span>
             </div>
-        </div>
+        </>
     )
 }

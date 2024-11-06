@@ -1,36 +1,39 @@
 import React from 'react'
 import { Modal } from 'antd'
-import { vaccineService } from '@/services'
+import { diseaseService } from '@/services'
 import { MyToast } from '../../common'
 
-export const DeleteVaccineModal = ({
-    visibleDeleteVaccineModal,
-    handleCloseDeleteVaccineModal,
-    vaccineSelected,
-    getVaccineList,
+export const DeleteDiseaseModal = ({
+    visibleOpenDeleteDiseaseModal,
+    handleCloseDeleteDiseaseModal,
+    diseaseSelected,
+    getDiseaseList,
 }) => {
-    const handleDeleteVaccine = async () => {
+    const handleConfirmDeleteDisease = async () => {
         try {
-            const response = await vaccineService.deleteVaccine(vaccineSelected)
+            const response = await diseaseService.deleteDisease(diseaseSelected)
             if (response.data.code === 1000) {
-                MyToast('success', 'Xóa vắc xin thành công.')
-                getVaccineList()
-                handleCloseDeleteVaccineModal()
-            } else MyToast('error', 'Xảy ra lỗi khi xóa  vắc xin.')
+                MyToast('success', 'Xóa bệnh thành công.')
+                handleCloseDeleteDiseaseModal()
+                getDiseaseList()
+            } else MyToast('error', 'Xảy ra lỗi khi xóa bệnh.')
         } catch (error) {
-            if (error.response) MyToast('warn', 'Không thể xóa vắc xin.')
+            if (error.response) {
+                MyToast('warn', 'Không thể xóa bệnh có liên quan đến vắc xin.')
+            }
         }
     }
     return (
         <Modal
-            title={<div className="text-center text-2xl font-bold">Xác nhận xóa vắc xin?</div>}
-            open={visibleDeleteVaccineModal}
-            onCancel={handleCloseDeleteVaccineModal}
+            open={visibleOpenDeleteDiseaseModal}
+            onCancel={handleCloseDeleteDiseaseModal}
+            centered
+            title={<div className="text-center font-bold text-2xl">Xác nhận xóa bệnh?</div>}
             footer={[
-                <div key={'footer-buttons'} className="flex justify-center space-x-2">
-                    <div className="m-3" key={'comfirm'}>
+                <div key="footer-buttons" className="flex justify-center space-x-2">
+                    <div className="m-3">
                         <button
-                            onClick={handleDeleteVaccine}
+                            onClick={handleConfirmDeleteDisease}
                             className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
                             <span className="mr-2">Xác nhận</span>
@@ -51,9 +54,9 @@ export const DeleteVaccineModal = ({
                         </button>
                     </div>
 
-                    <div className="m-3" key={'cancel'}>
+                    <div className="m-3">
                         <button
-                            onClick={handleCloseDeleteVaccineModal}
+                            onClick={handleCloseDeleteDiseaseModal}
                             className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-red-500 hover:border-red-600 hover:bg-red-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
                             <span className="mr-2">Hủy bỏ</span>
@@ -72,6 +75,6 @@ export const DeleteVaccineModal = ({
                     </div>
                 </div>,
             ]}
-        ></Modal>
+        />
     )
 }

@@ -315,6 +315,7 @@ export const EmployeeTable = () => {
                         </div>
                     </div>
                 )}
+                bordered
                 columns={employeeColumns}
                 dataSource={filteredEmployeeList}
                 rowKey="employeeId"

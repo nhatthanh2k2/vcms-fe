@@ -12,12 +12,15 @@ export const VaccinePackageTable = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const navigate = useNavigate()
+    const [filteredPackageList, setFilteredPackageList] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
 
     const getVaccinePackageList = () => {
         vaccinePackageService
             .getDefaultPackages()
             .then((response) => {
                 setVaccinePackageList(response.data.result)
+                setFilteredPackageList(response.data.result)
                 setLoading(false)
             })
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy danh mục gói vắc xin.'))
@@ -26,6 +29,17 @@ export const VaccinePackageTable = () => {
     useEffect(() => {
         getVaccinePackageList()
     }, [])
+
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = vaccinePackageList.filter((pack) =>
+                pack.vaccinePackageName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            setFilteredPackageList(filtered)
+        } else {
+            setFilteredPackageList(vaccinePackageList)
+        }
+    }, [searchQuery, vaccinePackageList])
 
     const [isOpenDeleteVaccinePackageModal, setIsOpenDeleteVaccinePackageModal] = useState(false)
     const [vaccinePackageSelected, setVaccinePackageSelected] = useState(null)
@@ -141,6 +155,7 @@ export const VaccinePackageTable = () => {
     return (
         <div className="flex flex-col space-y-5 bg-white shadow-default">
             <Table
+                bordered
                 title={() => (
                     <div className="flex justify-between items-center">
                         <div className="relative w-full max-w-xl">
@@ -150,6 +165,7 @@ export const VaccinePackageTable = () => {
                                 type="text"
                                 name="query"
                                 id="query"
+                                onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <button
                                 type="submit"
@@ -197,7 +213,7 @@ export const VaccinePackageTable = () => {
                     </div>
                 )}
                 rowKey={'vaccinePackageId'}
-                dataSource={vaccinePackageList}
+                dataSource={filteredPackageList}
                 columns={vaccinePackageColumns}
                 loading={loading}
                 pagination={pagination}

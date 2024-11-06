@@ -46,7 +46,7 @@ const options = [
     },
     {
         value: 'CANCELLED',
-        label: 'Hủy',
+        label: 'Hủy hẹn',
     },
 ]
 

@@ -207,7 +207,7 @@ export const AppointmentForm = () => {
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="mt-5 flex flex-col">
+            <div className="my-5 flex flex-col">
                 <div className="flex items-center mb-2">
                     <input
                         type="radio"

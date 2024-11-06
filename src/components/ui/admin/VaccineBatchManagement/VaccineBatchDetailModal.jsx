@@ -21,12 +21,6 @@ const batchDetailColumns = [
         key: 'quantity',
     },
     {
-        title: 'Đơn giá',
-        dataIndex: 'batchDetailVaccinePrice',
-        key: 'price',
-        render: (price) => `${price.toLocaleString()} VND`, // Format the price as currency
-    },
-    {
         title: 'Ngày sản xuất',
         dataIndex: 'batchDetailManufactureDate',
         key: 'manufactureDate',

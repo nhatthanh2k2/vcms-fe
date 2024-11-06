@@ -59,6 +59,7 @@ export const VaccinePricingTable = () => {
                 pagination={false}
                 columns={priceColumns}
                 dataSource={sortedBatchDetail}
+                bordered
             />
         </div>
     )

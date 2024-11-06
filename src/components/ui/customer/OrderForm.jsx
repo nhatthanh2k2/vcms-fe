@@ -61,10 +61,6 @@ export const OrderForm = () => {
     const [selectedWard, setSelectedWard] = useState('')
 
     useEffect(() => {
-        // batchDetailService
-        //     .getDetail()
-        //     .then((response) => setBatchDetailList(response.data.result))
-        //     .catch((err) => console.log('Get Batch Detail Failed!'))
         batchDetailService
             .getDetailOfSampleBatch()
             .then((response) => setBatchDetailList(response.data.result))
@@ -206,24 +202,24 @@ export const OrderForm = () => {
     const orderData = watch()
 
     return (
-        <div className="bg-gray-2 pt-10">
-            <div className="relative mx-10 ">
-                <div className="uppercase text-3xl text-blue-600 font-satoshi font-bold">
+        <div>
+            <div className="relative">
+                <div className="uppercase text-3xl text-blue-700 font-satoshi font-bold">
                     Đặt mua vắc xin
                 </div>
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="flex mx-10 lg:mx-20 space-x-5 mt-10 flex-wrap md:flex-nowrap">
-                <div className="flex flex-col ">
-                    {!showForm && (
-                        <div className="mb-5 min-w-fit">
+            <div className="flex space-x-5 my-5 flex-wrap md:flex-nowrap">
+                <div className="w-125 space-y-5">
+                    {!showForm ? (
+                        <div className="lg:min-w-125 md:w-fit sm:w-fit border-2 border-teal-300 p-5 rounded-lg shadow-default">
                             <form
-                                className="flex flex-col space-y-2 font-semibold w-full"
+                                className="flex flex-col space-y-3 font-semibold w-full"
                                 onSubmit={handleSubmitLookup(onSubmitLookup)}
                             >
                                 <div className="flex flex-col md:flex-row md:space-x-2">
-                                    <div className="flex flex-col space-y-2 flex-1 min-w-[200px]">
+                                    <div className="flex flex-col space-y-2 flex-1">
                                         <label className="block mb-1 font-medium">
                                             Nhập Mã KH / SĐT:
                                         </label>
@@ -235,9 +231,9 @@ export const OrderForm = () => {
                                                 className="input input-bordered input-info w-full"
                                             />
                                             {errorsLookup.customerIdentifier && (
-                                                <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                                <p className=" text-red-500 text-sm">
                                                     {errorsLookup.customerIdentifier.message}
-                                                </span>
+                                                </p>
                                             )}
                                         </div>
                                     </div>
@@ -263,9 +259,9 @@ export const OrderForm = () => {
                                                 style={{ height: '48px' }}
                                             />
                                             {errorsLookup.customerDob && (
-                                                <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                                <p className=" text-red-500 text-sm">
                                                     {errorsLookup.customerDob.message}
-                                                </span>
+                                                </p>
                                             )}
                                         </div>
                                     </div>
@@ -295,10 +291,8 @@ export const OrderForm = () => {
                                 </div>
                             )}
                         </div>
-                    )}
-
-                    {showForm && (
-                        <form className="w-fit">
+                    ) : (
+                        <form>
                             <div>
                                 <span className="text-2xl text-blue-600 uppercase font-bold text-center">
                                     Thông tin người tiêm
@@ -420,7 +414,7 @@ export const OrderForm = () => {
                             </div>
 
                             <div className="flex flex-col mb-5 md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-                                <div className="relative z-0 w-full  group flex flex-col flex-1">
+                                <div className="relative z-0 w-full space-y-1 group flex flex-col flex-1">
                                     <label>Tỉnh/Thành:</label>
                                     <Select
                                         placeholder="Chọn Tỉnh/Thành"
@@ -440,7 +434,7 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-                                <div className="relative z-0 w-full group flex flex-col flex-1">
+                                <div className="relative z-0 w-full group flex flex-col flex-1 space-y-1">
                                     <label>Quận/Huyện:</label>
                                     <Select
                                         placeholder="Chọn quận/huyện"
@@ -475,7 +469,7 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-                                <div className="relative z-0 w-full  group flex flex-col flex-1">
+                                <div className="relative z-0 w-full space-y-1  group flex flex-col flex-1">
                                     <label>Xã/Phường:</label>
                                     <Select
                                         placeholder="Chọn xã/phường"
@@ -532,7 +526,7 @@ export const OrderForm = () => {
                     )}
 
                     <div className="flex flex-col">
-                        <div className="bg-white rounded-lg shadow p-4 flex flex-col space-x-2">
+                        <div className="bg-white rounded-lg border-2 border-teal-200  p-4 flex flex-col space-x-2 shadow-default">
                             <div className="flex space-x-2 items-center justify-center mb-5 w-full">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -582,7 +576,7 @@ export const OrderForm = () => {
                             <div className="mt-5">
                                 {batchDetailSelectedList.length === 0 &&
                                 vaccinePackageSelectedList.length === 0 ? (
-                                    <div className="text-xl text-blue-600 text-center">
+                                    <div className="text-xl text-blue-600 text-center opacity-50">
                                         Danh sách trống
                                     </div>
                                 ) : (
@@ -685,6 +679,14 @@ export const OrderForm = () => {
                                         ))}
                                     </>
                                 )}
+                                <div className=" flex flex-col mt-4">
+                                    <span className="text-xl font-semibold">
+                                        Tổng tiền:{' '}
+                                        <span className="font-bold">
+                                            {formatCurrency(totalAmount)}
+                                        </span>
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="flex flex-col space-y-4 mt-8">
@@ -720,56 +722,53 @@ export const OrderForm = () => {
 
                         {totalAmount > 0 && (
                             <div>
-                                <div className=" flex flex-col mt-4">
-                                    <span className="text-2xl font-semibold">
-                                        Tổng số tiền: {formatCurrency(totalAmount)}
-                                    </span>
-                                </div>
-                                <div className="mt-5">
-                                    {payment === '' ? null : payment === 'PAYPAL' ? (
+                                {payment === '' ? null : payment === 'PAYPAL' ? (
+                                    <div className="mt-5 ">
                                         <PayPalCheckOut
-                                            key={totalAmount}
                                             batchDetailIdList={batchDetailSelectedList}
                                             vaccinePackageIdList={vaccinePackageSelectedList}
-                                            initialTotal={totalAmount}
+                                            totalAmount={totalAmount}
                                             payment={payment}
                                             injectionDate={injectionDate}
                                             customer={existsCustomer}
                                             orderType={orderType}
                                             orderInfo={orderData}
                                         />
-                                    ) : (
-                                        <div className="flex justify-center">
-                                            <button
-                                                type="button"
-                                                className="btn btn-info"
-                                                onClick={() =>
-                                                    document
-                                                        .getElementById('modal_transfer')
-                                                        .showModal()
-                                                }
-                                            >
-                                                <div className="flex items-center space-x-2">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="w-8 h-8"
-                                                        viewBox="0 0 24 24"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path d="M8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 0-2 0v4a3 3 0 0 0 3 3h4a1 1 0 0 0 0-2Zm14-6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 0 0 2h4a3 3 0 0 0 3-3v-4a1 1 0 0 0-1-1ZM20 1h-4a1 1 0 0 0 0 2h4a1 1 0 0 1 1 1v4a1 1 0 0 0 2 0V4a3 3 0 0 0-3-3ZM2 9a1 1 0 0 0 1-1V4a1 1 0 0 1 1-1h4a1 1 0 0 0 0-2H4a3 3 0 0 0-3 3v4a1 1 0 0 0 1 1Zm8-4H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1ZM9 9H7V7h2Zm5 2h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1Zm1-4h2v2h-2Zm-5 6H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-1 4H7v-2h2Zm5-1a1 1 0 0 0 1-1 1 1 0 0 0 0-2h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1Zm4-3a1 1 0 0 0-1 1v3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-4 4a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z" />
-                                                    </svg>
-                                                    <span>Quét mã chuyển khoản</span>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex justify-center">
+                                        <button
+                                            type="button"
+                                            className="btn btn-info"
+                                            onClick={() =>
+                                                document
+                                                    .getElementById('modal_transfer')
+                                                    .showModal()
+                                            }
+                                        >
+                                            <div className="flex items-center space-x-2">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    className="w-8 h-8"
+                                                    viewBox="0 0 24 24"
+                                                    fill="currentColor"
+                                                >
+                                                    <path d="M8 21H4a1 1 0 0 1-1-1v-4a1 1 0 0 0-2 0v4a3 3 0 0 0 3 3h4a1 1 0 0 0 0-2Zm14-6a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 0 0 2h4a3 3 0 0 0 3-3v-4a1 1 0 0 0-1-1ZM20 1h-4a1 1 0 0 0 0 2h4a1 1 0 0 1 1 1v4a1 1 0 0 0 2 0V4a3 3 0 0 0-3-3ZM2 9a1 1 0 0 0 1-1V4a1 1 0 0 1 1-1h4a1 1 0 0 0 0-2H4a3 3 0 0 0-3 3v4a1 1 0 0 0 1 1Zm8-4H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1ZM9 9H7V7h2Zm5 2h4a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1Zm1-4h2v2h-2Zm-5 6H6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-1 4H7v-2h2Zm5-1a1 1 0 0 0 1-1 1 1 0 0 0 0-2h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1Zm4-3a1 1 0 0 0-1 1v3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1Zm-4 4a1 1 0 1 0 1 1 1 1 0 0 0-1-1Z" />
+                                                </svg>
+                                                <span>Quét mã chuyển khoản</span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
 
                 <div className="flex flex-col">
+                    <span className="text-blue-700 size-5 mb-5 w-full font-bold text-2xl text-center">
+                        Chọn vắc xin muốn tiêm
+                    </span>
                     <div role="tablist" className="tabs tabs-lifted ">
                         <input
                             type="radio"
@@ -783,7 +782,7 @@ export const OrderForm = () => {
                             role="tabpanel"
                             className="tab-content bg-base-100 border-base-300 rounded-box p-6 "
                         >
-                            <div className="flex flex-wrap gap-4 flex-grow">
+                            <div className="flex flex-wrap gap-2 flex-grow">
                                 {currentBatchDetails.map((batchDetail, index) => {
                                     const isVaccineSelected = batchDetailSelectedList.find(
                                         (v) => v.batchDetailId === batchDetail.batchDetailId

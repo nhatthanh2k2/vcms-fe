@@ -96,8 +96,54 @@ export const AddVaccineForm = () => {
         setValue('vaccineAgeRange', newSelected)
     }
 
+    const concatenateWithSemicolon = (value) => {
+        if (value && typeof value === 'string') {
+            return (
+                value
+                    .split('\n')
+                    .map((item) => item.trim())
+                    .join(';') + ';'
+            )
+        }
+        return ''
+    }
+
     const onSubmit = async (data) => {
-        console.log(data)
+        // const request = new FormData()
+        // request.append('vaccineName', data.vaccineName)
+        // request.append('vaccineOrigin', data.vaccineOrigin)
+        // if (data.vaccineImage) {
+        //     request.append('vaccineImage', data.vaccineImage[0])
+        // }
+        // request.append('vaccineAgeRange', JSON.stringify(data.vaccineAgeRange))
+        // request.append('vaccineDescription', data.vaccineDescription)
+        // request.append('vaccineInjectionRoute', data.vaccineInjectionRoute)
+        // request.append('vaccineContraindication', data.vaccineContraindication)
+        // request.append('vaccineReaction', data.vaccineReaction)
+        // request.append('vaccineChildDoseCount', data.vaccineChildDoseCount)
+        // request.append('vaccineAdultDoseCount', data.vaccineAdultDoseCount)
+        // request.append('vaccineStorage', data.vaccineStorage)
+        // request.append('vaccineInjectionSchedule', data.vaccineInjectionSchedule)
+        // request.append('vaccinePatient', data.vaccinePatient)
+        // request.append('diseaseId', data.diseaseId)
+        // try {
+        //     const response = await vaccineService.createVaccine(request)
+        //     if (response.data.code === 1000) {
+        //         MyToast('success', 'Thêm vắc xin thành công.')
+        //     } else MyToast('error', 'Xảy ra lỗi khi thêm vắc xin.')
+        // } catch (error) {
+        //     if (error.response)
+        //         if (error.response.status === 400) MyToast('error', 'Hình ảnh không hợp lệ.')
+        // }
+
+        const vaccineDescription = concatenateWithSemicolon(data.vaccineDescription)
+        const vaccinePatient = concatenateWithSemicolon(data.vaccinePatient)
+        const vaccineInjectionRoute = concatenateWithSemicolon(data.vaccineInjectionRoute)
+        const vaccineContraindication = concatenateWithSemicolon(data.vaccineContraindication)
+        const vaccineReaction = concatenateWithSemicolon(data.vaccineReaction)
+        const vaccineStorage = concatenateWithSemicolon(data.vaccineStorage)
+        const vaccineInjectionSchedule = concatenateWithSemicolon(data.vaccineInjectionSchedule)
+
         const request = new FormData()
         request.append('vaccineName', data.vaccineName)
         request.append('vaccineOrigin', data.vaccineOrigin)
@@ -105,16 +151,21 @@ export const AddVaccineForm = () => {
             request.append('vaccineImage', data.vaccineImage[0])
         }
         request.append('vaccineAgeRange', JSON.stringify(data.vaccineAgeRange))
-        request.append('vaccineDescription', data.vaccineDescription)
-        request.append('vaccineInjectionRoute', data.vaccineInjectionRoute)
-        request.append('vaccineContraindication', data.vaccineContraindication)
-        request.append('vaccineReaction', data.vaccineReaction)
+        request.append('vaccineDescription', vaccineDescription)
+        request.append('vaccineInjectionRoute', vaccineInjectionRoute)
+        request.append('vaccineContraindication', vaccineContraindication)
+        request.append('vaccineReaction', vaccineReaction)
         request.append('vaccineChildDoseCount', data.vaccineChildDoseCount)
         request.append('vaccineAdultDoseCount', data.vaccineAdultDoseCount)
-        request.append('vaccineStorage', data.vaccineStorage)
-        request.append('vaccineInjectionSchedule', data.vaccineInjectionSchedule)
-        request.append('vaccinePatient', data.vaccinePatient)
+        request.append('vaccineStorage', vaccineStorage)
+        request.append('vaccineInjectionSchedule', vaccineInjectionSchedule)
+        request.append('vaccinePatient', vaccinePatient)
         request.append('diseaseId', data.diseaseId)
+
+        // request.forEach((value, key) => {
+        //     console.log(`${key}: ${value}`)
+        // })
+
         try {
             const response = await vaccineService.createVaccine(request)
             if (response.data.code === 1000) {
@@ -257,7 +308,7 @@ export const AddVaccineForm = () => {
 
                 <div>
                     <strong className="text-red-500">(*) Lưu ý:</strong> Đối với các thông tin bên
-                    dưới, mỗi ý khác nhau vui lòng đặt dấu ";" ở cuối.
+                    dưới, mỗi ý bạn hãy xuống dòng nhé.
                 </div>
 
                 <div className="flex  space-x-5">

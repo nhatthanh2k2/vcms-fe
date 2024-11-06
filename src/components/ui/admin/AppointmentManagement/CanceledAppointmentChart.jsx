@@ -49,11 +49,10 @@ export const CanceledAppointmentChart = () => {
             .catch((error) => MyToast('Lấy danh sách cuộc hẹn bị hủy thất bại.'))
     }, [])
 
-    console.log(canceledAppointmentList)
-
     return (
         <div>
             <Table
+                bordered
                 columns={columns}
                 dataSource={canceledAppointmentList}
                 rowKey={'appointmentId'}

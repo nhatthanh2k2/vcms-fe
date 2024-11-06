@@ -16,7 +16,7 @@ export const ChatWindow = ({ toggleChat }) => {
 
         try {
             const response = await axios.post('http://localhost:5005/webhooks/rest/webhook', {
-                sender: 'user', // Một identifier để phân biệt người dùng
+                sender: 'user',
                 message: userMessage,
             })
 
@@ -35,11 +35,11 @@ export const ChatWindow = ({ toggleChat }) => {
     return (
         <div
             style={{ boxShadow: '0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)' }}
-            className="z-9999 fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-white p-4 rounded-lg border border-[#e5e7eb] w-[500px] h-[500px]"
+            className="z-9999 fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-white p-4 rounded-lg  border-2 border-black w-[500px] h-[500px]"
         >
             {/* Heading */}
-            <div className="flex justify-between p-3 bg-blue-200 rounded-xl">
-                <div className="font-semibold text-lg tracking-tight">Chat với tư vấn viên AI</div>
+            <div className="flex justify-between p-3 bg-teal-200 rounded-xl">
+                <div className="font-bold text-lg tracking-tight">T-Vax Chatbot</div>
                 <div onClick={toggleChat} className=" cursor-pointer">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@ export const ChatWindow = ({ toggleChat }) => {
                             stroke="#000"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            strokeWidth={2}
+                            strokeWidth={4}
                             d="M12 19V5"
                         />
                     </svg>

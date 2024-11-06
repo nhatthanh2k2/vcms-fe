@@ -49,8 +49,10 @@ export const AddVaccineBatchModal = ({
             } else MyToast('error', 'Xảy ra lỗi khi nhập lô vắc xin.')
         } catch (error) {
             if (error.response) {
-                MyToast('error', 'Nhập lô vắc xin không thành công.')
-            }
+                if (error.response.data.code === 1005) {
+                    MyToast('error', 'Vắc xin trong file excel không có trong dữ liệu.')
+                }
+            } else MyToast('error', 'Nhập lô vắc xin không thành công.')
         }
     }
 

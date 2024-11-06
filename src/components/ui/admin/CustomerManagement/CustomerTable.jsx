@@ -46,6 +46,7 @@ export const CustomerTable = () => {
     return (
         <div className="bg-white shadow-default">
             <Table
+                bordered
                 title={() => (
                     <div className="">
                         <div className="relative w-full max-w-xl">

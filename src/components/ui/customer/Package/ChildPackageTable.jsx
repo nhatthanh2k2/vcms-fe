@@ -39,6 +39,7 @@ export const ChildPackageTable = ({ pack }) => {
 
     return (
         <Table
+            bordered
             title={() => (
                 <div className="text-center text-2xl text-blue-700 font-bold">
                     Danh mục {pack.vaccinePackageName}

@@ -7,13 +7,18 @@ import { AddVaccineBatchModal, VaccineBatchDetailModal } from '.'
 
 export const VaccineBatchTable = () => {
     const [vaccineBatchList, setVaccineBatchList] = useState([])
+    const [filteredBatchList, setFilteredBatchList] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
     const [loading, setLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
 
     const handleGetVaccineBatchList = () => {
         vaccineBatchService
             .getAllBatch()
             .then((response) => {
                 setVaccineBatchList(response.data.result)
+                setFilteredBatchList(response.data.result)
                 setLoading(false)
             })
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy các lô vắc xin.'))
@@ -22,6 +27,17 @@ export const VaccineBatchTable = () => {
     useEffect(() => {
         handleGetVaccineBatchList()
     }, [])
+
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = vaccineBatchList.filter((batch) =>
+                batch.vaccineBatchNumber.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            setFilteredBatchList(filtered)
+        } else {
+            setFilteredBatchList(vaccineBatchList)
+        }
+    }, [searchQuery, vaccineBatchList])
 
     const [isOpenAddVaccineBatchModal, setIsOpenAddVaccineBatchModal] = useState(false)
 
@@ -116,6 +132,7 @@ export const VaccineBatchTable = () => {
                                 type="text"
                                 name="query"
                                 id="query"
+                                onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <button
                                 type="submit"
@@ -162,8 +179,9 @@ export const VaccineBatchTable = () => {
                         </div>
                     </div>
                 )}
+                bordered
                 columns={vaccineBatchColumns}
-                dataSource={vaccineBatchList}
+                dataSource={filteredBatchList}
                 rowKey="vaccineBatchId"
                 loading={loading}
             />

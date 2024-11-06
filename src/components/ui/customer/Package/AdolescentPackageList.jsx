@@ -33,6 +33,13 @@ export const AdolescentPackageList = () => {
                 {adolescentPackageList.map((pack, index) => (
                     <div className="my-5">
                         <AdolescentPackageTable pack={pack} key={index} />
+                        <div>
+                            <img
+                                className="mx-auto mt-5"
+                                src="/images/section-img.png"
+                                alt=""
+                            ></img>
+                        </div>
                     </div>
                 ))}
             </div>
