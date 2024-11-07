@@ -41,7 +41,7 @@ export const refreshToken = async (navigate) => {
             return false
         }
     } catch (error) {
-        MyToast('error', 'Lỗi khi làm mới token. Vui lòng đăng nhập lại.')
+        MyToast('warn', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.')
         sessionStorage.clear()
         navigate('/dang-nhap')
         return false

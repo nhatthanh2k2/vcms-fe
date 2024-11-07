@@ -1,5 +1,8 @@
+import { fetchOrderDetailList } from '@/redux'
 import { Modal, Table } from 'antd'
 import React from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const batchDetailColumns = [
     {
@@ -54,8 +57,17 @@ const vaccinePackageColumns = [
 export const OrderDetailModal = ({
     visibleOrderDetailModal,
     handleCloseOrderDetailModal,
-    orderDetailList,
+    orderRecord,
 }) => {
+    const dispatch = useDispatch()
+    const { orderDetailList } = useSelector((state) => state.order)
+
+    useEffect(() => {
+        if (orderRecord) {
+            dispatch(fetchOrderDetailList(orderRecord?.orderId))
+        }
+    }, [dispatch, orderRecord])
+
     const batchDetailData = orderDetailList
         .filter((orderDetail) => orderDetail.batchDetailResponse !== null)
         .map((detail, index) => ({

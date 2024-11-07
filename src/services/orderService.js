@@ -21,5 +21,8 @@ export const orderService = {
     },
     getAllOrderDetailByOrderId: (orderId) => {
         return api.get(`/orders/detail/${orderId}`)
+    },
+    getMyOrder: (orderId) =>{
+        return axios.get(api_url + `/orders/detail/my-order/${orderId}`)
     }
 }

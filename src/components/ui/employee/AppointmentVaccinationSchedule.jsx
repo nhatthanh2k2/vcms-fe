@@ -3,35 +3,11 @@ import { Table, DatePicker, Select, Tooltip } from 'antd'
 import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
 import { appointmentService } from '@/services'
-import { MyToast } from '../common'
-import { AppointmentInjectionModal, PreInjectionCheckModal } from '.'
+import { LoadingPage, MyToast } from '../common'
+import { AppointmentInjectionModal, PreInjectionCheckModal, sendAppointmentReminder } from '.'
 import { getPatientInfo } from '@/utils'
-import emailjs from '@emailjs/browser'
 
-const overlayStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-}
-
-const loadingBoxStyle = {
-    padding: '1rem 2rem',
-    borderRadius: '8px',
-    backgroundColor: '#1E3A8A',
-    display: 'flex',
-    alignItems: 'center',
-    color: '#FFFFFF',
-    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
-}
-
-const options = [
+const statusOptions = [
     {
         value: 'PENDING',
         label: 'Đang chờ',
@@ -54,7 +30,7 @@ export const AppointmentVaccinationSchedule = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [appointmentList, setAppointmentList] = useState([])
     const [status, setStatus] = useState('')
-    const [appointmentSelected, setAppointmentSelected] = useState()
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         const formatDate = dayjs(selectedDate).format('YYYY-MM-DD')
@@ -64,7 +40,7 @@ export const AppointmentVaccinationSchedule = () => {
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [selectedDate])
 
-    const columns = [
+    const appointmentColumns = [
         {
             title: 'Mã khách hàng',
             dataIndex: 'customerCode',
@@ -103,7 +79,7 @@ export const AppointmentVaccinationSchedule = () => {
                     defaultValue={text}
                     style={{ width: 150 }}
                     onChange={handleChooseStatus}
-                    options={options}
+                    options={statusOptions}
                 ></Select>
             ),
         },
@@ -181,7 +157,7 @@ export const AppointmentVaccinationSchedule = () => {
                     </div>
                     <div
                         onClick={() => {
-                            handleSendVaccinationReminderEmail(record)
+                            sendAppointmentReminder(record, setIsLoading)
                         }}
                     >
                         <Tooltip placement="top" title="Nhắc lịch tiêm">
@@ -207,43 +183,6 @@ export const AppointmentVaccinationSchedule = () => {
             ),
         },
     ]
-
-    const [isLoading, setIsLoading] = useState(false)
-
-    const handleSendVaccinationReminderEmail = (record) => {
-        setIsLoading(true)
-
-        const templateParams = {
-            customerName: record.appointmentCustomerFullName,
-            cutomerEmail: record.appointmentCustomerEmail,
-            vaccineName:
-                record.vaccinePackageResponse === null
-                    ? record.batchDetailResponse.vaccineResponse.vaccineName
-                    : record.vaccinePackageResponse.vaccinePackageName,
-            vacicnePrice:
-                record.vaccinePackageResponse === null
-                    ? record.batchDetailResponse.batchDetailVaccinePrice
-                    : record.vaccinePackageResponse.vaccinePackagePrice,
-            injectionDate: record.appointmentInjectionDate,
-        }
-
-        emailjs
-            .send('service_wwqml4v', 'template_uk1un67', templateParams, {
-                publicKey: 'lhyG5-7O7cRItbFjd',
-            })
-            .then(
-                (response) => {
-                    setIsLoading(false)
-                    MyToast('success', 'Gửi email nhắc lịch tiêm thành công.')
-                },
-                (error) => {
-                    setIsLoading(false)
-                    MyToast('error', 'Xảy ra lỗi khi gửi email nhắc lịch tiêm.')
-
-                    //console.log(error)
-                }
-            )
-    }
 
     const handleChooseStatus = (value) => {
         setStatus(value)
@@ -271,7 +210,6 @@ export const AppointmentVaccinationSchedule = () => {
                 if (error.response.status === 404) MyToast('error', 'Không tìm thấy cuộc hẹn')
             }
         }
-        console.log(updateStatusRequest)
     }
 
     const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
@@ -315,31 +253,10 @@ export const AppointmentVaccinationSchedule = () => {
             </div>
             <div className="w-full">
                 <Table
-                    columns={columns}
+                    columns={appointmentColumns}
                     dataSource={appointmentList}
                     scroll={{ y: 400 }}
                     rowKey={'appointmentId'}
-                    locale={{
-                        emptyText: (
-                            <div className="flex flex-col items-center justify-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-12 h-12"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    style={{ filter: 'blur(1px)' }}
-                                >
-                                    <path fill="#fff" d="M0 0h24v24H0z" />
-                                    <path
-                                        stroke="#000"
-                                        strokeLinejoin="round"
-                                        d="m3 15 .924-11.083A1 1 0 0 1 4.92 3h14.16a1 1 0 0 1 .996.917L21 15M3 15v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5M3 15h6c0 1 .6 3 3 3s3-2 3-3h6"
-                                    />
-                                </svg>
-                                <p>Chưa có lịch hẹn</p>
-                            </div>
-                        ),
-                    }}
                 />
             </div>
 
@@ -355,26 +272,7 @@ export const AppointmentVaccinationSchedule = () => {
                 appointmentRecord={appointmentRecord}
             />
 
-            {isLoading && (
-                <div style={overlayStyle}>
-                    <div
-                        style={loadingBoxStyle}
-                        className="py-2 px-4 flex justify-center items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg max-w-md"
-                    >
-                        <svg
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            className="mr-2 animate-spin"
-                            viewBox="0 0 1792 1792"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
-                        </svg>
-                        Đang gửi email...
-                    </div>
-                </div>
-            )}
+            {isLoading && <LoadingPage title={'Đang gửi email...'} />}
         </section>
     )
 }

@@ -1,5 +1,6 @@
 export * from './BackToTopButton'
-export * from './Loading'
+export * from './LoadingPage'
+export * from './LoadingDot'
 export * from './Toast'
 export * from './ModalTransfer'
 export * from './AlertModal'

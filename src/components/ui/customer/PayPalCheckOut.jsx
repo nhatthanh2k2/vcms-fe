@@ -4,6 +4,8 @@ import dayjs from 'dayjs'
 import { addressService, orderService } from '@/services'
 import { MyToast } from '../common'
 import { convertVNDToUSD } from '@/utils'
+import emailjs from '@emailjs/browser'
+import { sendOrderConfirmation } from '../employee'
 
 const initialOptions = {
     clientId: 'AVFgZHMR6yUFprkAP0XZhbGYzIjYLLcqI8ozAxD4HV4k_giJyLZ62-Jove471Fqd0bSRnenNVfU11dQx',
@@ -11,12 +13,12 @@ const initialOptions = {
     intent: 'capture',
 }
 
-const createOrder = (total, customer, orderType, orderInfo) => (data, actions) => {
+const createOrder = (totalAmount, customer, orderType, orderInfo) => (data, actions) => {
     return actions.order.create({
         purchase_units: [
             {
                 amount: {
-                    value: convertVNDToUSD(total),
+                    value: convertVNDToUSD(totalAmount),
                     currency_code: 'USD',
                 },
                 shipping: {
@@ -55,7 +57,7 @@ const createOrder = (total, customer, orderType, orderInfo) => (data, actions) =
 const onApprove = async (
     data,
     actions,
-    total,
+    totalAmount,
     payment,
     injectionDate,
     batchDetailIdList,
@@ -70,7 +72,7 @@ const onApprove = async (
         const orderWithCodeData = {
             customerIdentifier: customer.customerCode,
             customerDob: customer.customerDob,
-            orderTotal: total,
+            orderTotal: totalAmount,
             orderPayment: payment,
             orderInjectionDate: injectionDate,
             orderBatchDetailIdList: batchDetailIdList.map((item) => item.batchDetailId),
@@ -80,11 +82,11 @@ const onApprove = async (
             const response = await orderService.createOrderWithCustomerCode(orderWithCodeData)
             if (response?.data?.code === 1000) {
                 MyToast('success', 'Đặt hàng thành công')
+                sendOrderConfirmation(response.data.result)
             } else {
                 MyToast('error', 'Đặt hàng không thành công')
             }
         } catch (error) {
-            console.error('Error creating order with customer code:', error)
             MyToast('error', 'Đặt hàng không thành công')
         }
     } else {
@@ -101,7 +103,7 @@ const onApprove = async (
                 orderInfo.orderCustomerDistrict
             ),
             orderCustomerWard: addressService.getWardNameByCode(orderInfo.orderCustomerWard),
-            orderTotal: total,
+            orderTotal: totalAmount,
             orderPayment: payment,
             orderInjectionDate: dayjs(orderInfo.orderInjectionDate).format('DD-MM-YYYY'),
             orderBatchDetailIdList: batchDetailIdList.map((item) => item.batchDetailId),
@@ -112,6 +114,7 @@ const onApprove = async (
             const res = await orderService.createOrder(orderData)
             if (res.status === 200 && res.data.code === 1000) {
                 MyToast('success', 'Đặt hàng thành công')
+                sendOrderConfirmation(res.data.result)
             } else {
                 MyToast('error', 'Đặt hàng không thành công')
             }
@@ -141,7 +144,7 @@ export const PayPalCheckOut = ({
                         onApprove(
                             data,
                             actions,
-                            total,
+                            totalAmount,
                             payment,
                             injectionDate,
                             batchDetailIdList,

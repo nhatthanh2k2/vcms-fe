@@ -6,7 +6,8 @@ import { z } from 'zod'
 import { Select } from 'antd'
 import { diseaseService, vaccineService } from '@/services'
 import { ageRanges } from '@/utils'
-import { MyToast } from '../../common'
+import { LoadingPage, MyToast } from '../../common'
+import { VaccineFieldEditor } from '.'
 
 const updateVaccineSchema = z.object({
     vaccineName: z.string().min(1, 'Vui lòng nhập tên vắc xin'),
@@ -47,6 +48,30 @@ export const EditVaccineForm = () => {
     const [selectedAges, setSelectedAges] = useState(record.vaccineAgeRange)
     const [diseaseList, setDiseaseList] = useState([])
     const navigate = useNavigate()
+
+    const [vaccinePatients, setVaccinePatients] = useState(
+        record.vaccinePatient.split(';').filter(Boolean) || []
+    )
+
+    const [vaccineInjectionRoutes, setVaccineInjectionRoutes] = useState(
+        record.vaccineInjectionRoute.split(';').filter(Boolean) || []
+    )
+
+    const [vaccineContraindications, setVaccineContraindications] = useState(
+        record.vaccineContraindication.split(';').filter(Boolean) || []
+    )
+
+    const [vaccineReactions, setVaccineReactions] = useState(
+        record.vaccineReaction.split(';').filter(Boolean) || []
+    )
+
+    const [vaccineStorages, setVaccineStorages] = useState(
+        record.vaccineStorage.split(';').filter(Boolean) || []
+    )
+
+    const [vaccineInjectionSchedules, setVaccineInjectionSchedules] = useState(
+        record.vaccineInjectionSchedule.split(';').filter(Boolean) || []
+    )
 
     useEffect(() => {
         diseaseService
@@ -94,43 +119,53 @@ export const EditVaccineForm = () => {
         navigate('/admin/quan-ly/vac-xin-le/danh-muc')
     }
 
+    const [loading, setLoanding] = useState(false)
+
     const onSubmit = async (data) => {
+        setLoanding(true)
+
+        const request = {
+            vaccineName: record.vaccineName,
+            vaccineOrigin: record.vaccineOrigin,
+            vaccineAgeRange: record.vaccineAgeRange,
+            vaccineDescription: record.vaccineDescription,
+            vaccineInjectionRoute: vaccineInjectionRoutes.join(';'),
+            vaccineContraindication: vaccineContraindications.join(';'),
+            vaccineReaction: vaccineReactions.join(';'),
+            vaccineChildDoseCount: record.vaccineChildDoseCount,
+            vaccineAdultDoseCount: record.vaccineAdultDoseCount,
+            vaccineStorage: vaccineStorages.join(';'),
+            vaccineInjectionSchedule: vaccineInjectionSchedules.join(';'),
+            vaccinePatient: vaccinePatients.join(';'),
+            diseaseId: record.diseaseResponse?.diseaseId,
+        }
+
         try {
-            const response = await vaccineService.updateVaccineInfo(record.vaccineId, data)
+            const response = await vaccineService.updateVaccineInfo(record.vaccineId, request)
             if (response.data.code === 1000) {
-                MyToast('success', 'Cập nhật thông tin vắc xin thành công.')
-                setRecord(response.data.result)
-            } else
-                MyToast('error', 'Xảy ra lỗi khi cập nhật thông tin vắc xin, vui lòng thử lại sau.')
+                setTimeout(() => {
+                    setLoanding(false)
+                    MyToast('success', 'Cập nhật thông tin vắc xin thành công.')
+                    setRecord(response.data.result)
+                }, 2000)
+            } else {
+                setTimeout(() => {
+                    setLoanding(false)
+                    MyToast(
+                        'error',
+                        'Xảy ra lỗi khi cập nhật thông tin vắc xin, vui lòng thử lại sau.'
+                    )
+                }, 2000)
+            }
         } catch (error) {
             if (error.response) {
-                MyToast('error', 'Cập nhật thông tin vắc xin không thành công.')
+                setTimeout(() => {
+                    setLoanding(false)
+                    MyToast('error', 'Cập nhật thông tin vắc xin không thành công.')
+                }, 2000)
             }
         }
     }
-
-    // xử lý mới
-    const [vaccinePatients, setVaccinePatients] = useState(
-        record.vaccinePatient.split(';').filter(Boolean) || []
-    ) // Chia chuỗi thành mảng và bỏ phần tử trống
-    const handleAddVaccinePatient = () => {
-        setVaccinePatients([...vaccinePatients, ''])
-    }
-
-    // Xóa một mục trong vaccinePatient
-    const handleRemoveVaccinePatient = (index) => {
-        const newVaccinePatients = vaccinePatients.filter((_, idx) => idx !== index)
-        setVaccinePatients(newVaccinePatients)
-    }
-
-    // Cập nhật giá trị cho vaccinePatient
-    const handleVaccinePatientChange = (index, value) => {
-        const newVaccinePatients = [...vaccinePatients]
-        newVaccinePatients[index] = value
-        setVaccinePatients(newVaccinePatients)
-    }
-
-    console.log(vaccinePatients.join(';'))
 
     return (
         <div className="flex flex-col bg-white p-5">
@@ -237,105 +272,57 @@ export const EditVaccineForm = () => {
                         className="textarea textarea-success w-full ro"
                         placeholder="Bio"
                         {...register('vaccineDescription')}
+                        rows={3}
                     ></textarea>
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label className="font-semibold">Đối tượng tiêm:</label>
-                    {vaccinePatients.map((patient, index) => (
-                        <div key={index} className="flex space-x-2">
-                            <input
-                                type="text"
-                                className="input input-bordered input-success w-full input-sm"
-                                value={patient}
-                                onChange={(e) => handleVaccinePatientChange(index, e.target.value)}
-                            />
-                            <button
-                                type="button"
-                                className="text-red-500"
-                                onClick={() => handleRemoveVaccinePatient(index)}
-                            >
-                                Xóa
-                            </button>
-                        </div>
-                    ))}
-                    <button
-                        type="button"
-                        className="text-blue-500"
-                        onClick={handleAddVaccinePatient}
-                    >
-                        Thêm đối tượng
-                    </button>
-                </div>
-
-                <div>
-                    <strong className="text-red-500">(*) Lưu ý:</strong> Đối với các thông tin bên
-                    dưới, mỗi ý khác nhau vui lòng đặt dấu ";" ở cuối.
-                </div>
-
-                <div className="flex  space-x-5">
-                    <div className="flex flex-col space-y-2 flex-grow">
-                        <label className="font-semibold">Đối tượng tiêm:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
-                            placeholder="Bio"
-                            rows={4}
-                            {...register('vaccinePatient')}
-                        ></textarea>
-                    </div>
-
-                    <div className="flex flex-col space-y-2  flex-grow">
-                        <label className="font-semibold">Đường tiêm:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
-                            placeholder="Bio"
-                            rows={4}
-                            {...register('vaccineInjectionRoute')}
-                        ></textarea>
-                    </div>
-                </div>
-
-                <div className="flex  space-x-5">
-                    <div className="flex flex-col space-y-2  flex-grow">
-                        <label className="font-semibold">Chống chỉ định:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
-                            placeholder="Bio"
-                            rows={4}
-                            {...register('vaccineContraindication')}
-                        ></textarea>
-                    </div>
-
-                    <div className="flex flex-col space-y-2  flex-grow">
-                        <label className="font-semibold">Phản ứng sau tiêm:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
-                            placeholder="Bio"
-                            rows={4}
-                            {...register('vaccineReaction')}
-                        ></textarea>
-                    </div>
-                </div>
-
                 <div className="flex space-x-5">
-                    <div className="flex flex-col space-y-2  flex-grow">
-                        <label className="font-semibold">Bảo quản:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
-                            placeholder="Bio"
-                            rows={4}
-                            {...register('vaccineStorage')}
-                        ></textarea>
-                    </div>
+                    <div className="flex flex-col space-y-5 w-1/2">
+                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
+                            <VaccineFieldEditor
+                                label="Đối tượng tiêm"
+                                items={vaccinePatients}
+                                setItems={setVaccinePatients}
+                            />
+                        </div>
 
-                    <div className="flex flex-col space-y-2 flex-grow">
-                        <label className="font-semibold">Phác đồ tiêm:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
-                            placeholder="Bio"
-                            rows={4}
-                            {...register('vaccineInjectionSchedule')}
-                        ></textarea>
+                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
+                            <VaccineFieldEditor
+                                label="Chống chỉ định"
+                                items={vaccineContraindications}
+                                setItems={setVaccineContraindications}
+                            />
+                        </div>
+                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
+                            <VaccineFieldEditor
+                                label="Phản ứng sau tiêm"
+                                items={vaccineReactions}
+                                setItems={setVaccineReactions}
+                            />
+                        </div>
+                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
+                            <VaccineFieldEditor
+                                label="Cách bảo quản"
+                                items={vaccineStorages}
+                                setItems={setVaccineStorages}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col space-y-5 w-1/2">
+                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
+                            <VaccineFieldEditor
+                                label="Đường tiêm"
+                                items={vaccineInjectionRoutes}
+                                setItems={setVaccineInjectionRoutes}
+                            />
+                        </div>
+                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
+                            <VaccineFieldEditor
+                                label="Phác đồ tiêm"
+                                items={vaccineInjectionSchedules}
+                                setItems={setVaccineInjectionSchedules}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -380,6 +367,7 @@ export const EditVaccineForm = () => {
                     </button>
                 </div>
             </form>
+            {loading && <LoadingPage title={'Đang xử lý'} />}
         </div>
     )
 }

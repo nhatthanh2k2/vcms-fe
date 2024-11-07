@@ -3,44 +3,30 @@ import { Table, DatePicker, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import emailjs from '@emailjs/browser'
 import { orderService } from '@/services'
-import { MyToast } from '../common'
+import { LoadingPage, MyToast } from '../common'
 import { convertPaymentType, getPatientInfo } from '@/utils'
 import { OrderDetailModal, OrderInjectionModal, PreInjectionCheckModal } from '.'
-
-const overlayStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-}
-
-const loadingBoxStyle = {
-    padding: '1rem 2rem',
-    borderRadius: '8px',
-    backgroundColor: '#1E3A8A',
-    display: 'flex',
-    alignItems: 'center',
-    color: '#FFFFFF',
-    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
-}
 
 export const OrderVaccinationSchedule = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [orderVaccinationList, setOrderVaccinationList] = useState()
     const [orderDetailList, setOrderDetailList] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [loadingTable, setLoadingTable] = useState(false)
 
     useEffect(() => {
+        setLoadingTable(true)
         const formatDate = dayjs(selectedDate).format('YYYY-MM-DD')
         orderService
             .getOrderListByInjectionDate(formatDate)
-            .then((response) => setOrderVaccinationList(response.data.result))
-            .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
+            .then((response) => {
+                setOrderVaccinationList(response.data.result)
+                setLoadingTable(false)
+            })
+            .catch((error) => {
+                MyToast('error', 'Lỗi lấy dữ liệu')
+                setLoadingTable(false)
+            })
     }, [selectedDate])
 
     const handleGetDetailOrder = async (orderId) => {
@@ -179,8 +165,7 @@ export const OrderVaccinationSchedule = () => {
                     </div>
 
                     <div
-                        onClick={async () => {
-                            await handleGetDetailOrder(record.orderId)
+                        onClick={() => {
                             handleSendVaccinationReminderEmail(record)
                         }}
                     >
@@ -208,16 +193,21 @@ export const OrderVaccinationSchedule = () => {
         },
     ]
 
+    // mo modal chi tiet don hang
     const [isOpenOrderDetailModal, setIsOpenOrderDetailModal] = useState(false)
+    const [orderRecord, setOrderRecord] = useState(null)
 
-    const handleOpenOrderDetailModal = () => {
+    const handleOpenOrderDetailModal = (record) => {
+        setOrderRecord(record)
         setIsOpenOrderDetailModal(true)
     }
 
     const handleCloseOrderDetailModal = () => {
         setIsOpenOrderDetailModal(false)
+        setOrderRecord(null)
     }
 
+    // mo modal tao phieu kham
     const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
     const [patientInfo, setPatientInfo] = useState(null)
 
@@ -229,10 +219,11 @@ export const OrderVaccinationSchedule = () => {
 
     const handleClosePreInjectionCheckModal = () => {
         setIsOpenPreInjectionCheckModal(false)
+        setPatientInfo(null)
     }
 
+    // mo modal tao phieu tiem
     const [isOpenOrderinjectionModal, setIsOpenOrderInjectionModal] = useState(false)
-    const [orderRecord, setOrderRecord] = useState(null)
 
     const handleOpenOrderInjectionModal = (record) => {
         setOrderRecord(record)
@@ -241,85 +232,91 @@ export const OrderVaccinationSchedule = () => {
 
     const handleCloseOrderInjectionModal = () => {
         setIsOpenOrderInjectionModal(false)
+        setOrderRecord(null)
     }
 
-    const [isLoading, setIsLoading] = useState(false)
+    // gui email
+    const handleSendVaccinationReminderEmail = async (record) => {
+        try {
+            setIsLoading(true)
+            const response = await orderService.getAllOrderDetailByOrderId(record.orderId)
 
-    const handleSendVaccinationReminderEmail = (record) => {
-        setIsLoading(true)
+            const contentList = response.data.result
 
-        const productListHtml = orderDetailList
-            .map((detail, index) => {
-                if (detail.batchDetailResponse !== null) {
-                    return `
+            const productListHtml = contentList
+                .map((detail, index) => {
+                    if (detail.batchDetailResponse !== null) {
+                        return `
                     <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12pt;">${
                             index + 1
                         }</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12pt;">${
                             detail.batchDetailResponse.vaccineResponse.vaccineName
                         }</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
-                            detail.batchDetailResponse.batchDetailVaccinePrice
-                        } VNĐ</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12pt;">
+                        ${detail.batchDetailResponse.batchDetailVaccinePrice} VNĐ</td>
                     </tr>
                 `
-                } else {
-                    return `
+                    } else {
+                        return `
                     <tr>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12pt;">${
                             index + 1
                         }</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12pt;">${
                             detail.vaccinePackageResponse.vaccinePackageName
                         }</td>
-                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 14pt;">${
-                            detail.vaccinePackageResponse.vaccinePackagePrice
-                        } VNĐ</td>
+                        <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12pt;">
+                        ${detail.vaccinePackageResponse.vaccinePackagePrice.toLocaleString()} VNĐ</td>
                     </tr>
                 `
-                }
-            })
-            .join('')
+                    }
+                })
+                .join('')
 
-        const emailContent = `
+            const productListContent = `
             
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 14pt;">STT</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 14pt;">Tên vắc xin</th>
-                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 14pt;">Giá vắc xin</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 12pt;">STT</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 12pt;">Tên vắc xin</th>
+                        <th style="border: 1px solid #ddd; padding: 8px; font-size: 12pt;">Giá vắc xin</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${productListHtml}
                 </tbody>
             </table>
-            
+            <p><span style="font-size: 12pt;">Tổng số tiền đã thanh toán: ${record.orderTotal.toLocaleString()} VNĐ</span></p>
         `
 
-        const templateParams = {
-            customerName: record.orderCustomerFullName,
-            cutomerEmail: record.orderCustomerEmail,
-            injectionDate: record.orderInjectionDate,
-            product_list_html: emailContent,
-        }
+            const templateParams = {
+                customerName: record.orderCustomerFullName,
+                cutomerEmail: record.orderCustomerEmail,
+                injectionDate: record.orderInjectionDate,
+                product_list_html: productListContent,
+            }
 
-        emailjs
-            .send('service_wwqml4v', 'template_uk1un67', templateParams, {
-                publicKey: 'lhyG5-7O7cRItbFjd',
-            })
-            .then(
-                (response) => {
-                    setIsLoading(false)
-                    MyToast('success', 'Gửi email nhắc lịch tiêm thành công.')
-                },
-                (error) => {
-                    setIsLoading(false)
-                    MyToast('error', 'Xảy ra lỗi khi gửi email nhắc lịch tiêm.')
-                }
-            )
+            emailjs
+                .send('service_wwqml4v', 'template_uk1un67', templateParams, {
+                    publicKey: 'lhyG5-7O7cRItbFjd',
+                })
+                .then(
+                    (response) => {
+                        setIsLoading(false)
+                        MyToast('success', 'Gửi email nhắc lịch tiêm thành công.')
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                        MyToast('error', 'Xảy ra lỗi khi gửi email nhắc lịch tiêm.')
+                    }
+                )
+        } catch (error) {
+            setIsLoading(false)
+            MyToast('error', 'Không gửi được email. Hãy thử lại sau.')
+        }
     }
 
     return (
@@ -340,38 +337,18 @@ export const OrderVaccinationSchedule = () => {
             </div>
             <div className="w-full">
                 <Table
+                    loading={loadingTable}
                     columns={columns}
                     dataSource={orderVaccinationList}
                     scroll={{ y: 400 }}
                     rowKey={'orderId'}
-                    locale={{
-                        emptyText: (
-                            <div className="flex flex-col items-center justify-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-12 h-12"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    style={{ filter: 'blur(1px)' }}
-                                >
-                                    <path fill="#fff" d="M0 0h24v24H0z" />
-                                    <path
-                                        stroke="#000"
-                                        strokeLinejoin="round"
-                                        d="m3 15 .924-11.083A1 1 0 0 1 4.92 3h14.16a1 1 0 0 1 .996.917L21 15M3 15v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5M3 15h6c0 1 .6 3 3 3s3-2 3-3h6"
-                                    />
-                                </svg>
-                                <p>Chưa có dữ liệu</p>
-                            </div>
-                        ),
-                    }}
                 />
             </div>
 
             <OrderDetailModal
                 visibleOrderDetailModal={isOpenOrderDetailModal}
                 handleCloseOrderDetailModal={handleCloseOrderDetailModal}
-                orderDetailList={orderDetailList}
+                orderRecord={orderRecord}
             />
 
             <PreInjectionCheckModal
@@ -387,26 +364,7 @@ export const OrderVaccinationSchedule = () => {
                 orderDetailList={orderDetailList}
             />
 
-            {isLoading && (
-                <div style={overlayStyle}>
-                    <div
-                        style={loadingBoxStyle}
-                        className="py-2 px-4 flex justify-center items-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg max-w-md"
-                    >
-                        <svg
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            className="mr-2 animate-spin"
-                            viewBox="0 0 1792 1792"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z"></path>
-                        </svg>
-                        Đang gửi email...
-                    </div>
-                </div>
-            )}
+            {isLoading && <LoadingPage title={'Đang gửi email...'} />}
         </section>
     )
 }

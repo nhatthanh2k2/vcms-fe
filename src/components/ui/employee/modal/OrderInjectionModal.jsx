@@ -1,6 +1,6 @@
 import { Modal, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { record, z } from 'zod'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import {
@@ -11,6 +11,8 @@ import {
 } from '@/services'
 import { MyToast } from '../../common'
 import { convertPaymentType } from '@/utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchOrderDetailList } from '@/redux'
 
 const orderInjectionSchema = z.object({
     vaccineId: z
@@ -45,7 +47,7 @@ export const OrderInjectionModal = ({
     visibleOrderInjectionModal,
     handleCloseOrderInjectionModal,
     orderRecord,
-    orderDetailList,
+    //orderDetailList,
 }) => {
     const {
         register,
@@ -68,24 +70,18 @@ export const OrderInjectionModal = ({
         },
     })
 
+    const dispatch = useDispatch()
+    const { orderDetailList } = useSelector((state) => state.order)
+
+    useEffect(() => {
+        if (orderRecord) {
+            dispatch(fetchOrderDetailList(orderRecord?.orderId))
+        }
+    }, [dispatch, orderRecord])
+
     const [vaccineBatchList, setVaccineBatchList] = useState([])
     const [batchDetailList, setBatchDetailList] = useState([])
     const employee = JSON.parse(sessionStorage.getItem('employeeProfile'))
-
-    useEffect(() => {
-        vaccineBatchService
-            .getAllBatch()
-            .then((response) => setVaccineBatchList(response.data.result))
-            .catch((error) => MyToast('error', 'Lỗi lấy lô hàng.'))
-        // batchDetailService
-        //     .getDetail()
-        //     .then((response) => setBatchDetailList(response.data.result))
-        //     .catch((error) => MyToast('error', 'Lỗi lấy chi tiết lô vắc xin'))
-        batchDetailService
-            .getDetailOfSampleBatch()
-            .then((response) => setBatchDetailList(response.data.result))
-            .catch((err) => console.log('Get Batch Detail Failed!'))
-    }, [])
 
     const batchDetailData = orderDetailList.filter(
         (orderDetail) => orderDetail.batchDetailResponse !== null
@@ -94,9 +90,21 @@ export const OrderInjectionModal = ({
         (detail) => detail.vaccinePackageResponse !== null
     )
 
-    const [vaccineData, setVaccineData] = useState(batchDetailData)
+    const [vaccineData, setVaccineData] = useState([])
+
     useEffect(() => {
-        if (getValues('vaccinePackageId') !== null) {
+        vaccineBatchService
+            .getAllBatch()
+            .then((response) => setVaccineBatchList(response.data.result))
+            .catch((error) => MyToast('error', 'Lỗi lấy lô hàng.'))
+        batchDetailService
+            .getDetailOfSampleBatch()
+            .then((response) => setBatchDetailList(response.data.result))
+            .catch((err) => console.log('Get Batch Detail Failed!'))
+    }, [])
+
+    useEffect(() => {
+        if (getValues('vaccinePackageId') !== null && getValues('vaccinePackageId') !== -1) {
             vaccinePackageService
                 .getDetailsOfPackage(getValues('vaccinePackageId'))
                 .then((response) => setVaccineData(response.data.result))
@@ -275,7 +283,7 @@ export const OrderInjectionModal = ({
                                                     </span>
                                                 ),
                                             }))}
-                                            placeholder="Chọn vắc xin"
+                                            placeholder="Chọn gói vắc xin trước"
                                             {...register('vaccineId')}
                                             onChange={(value) => {
                                                 setValue('vaccineId', value)

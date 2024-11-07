@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ForgotPasswordModal, MyToast } from '@/components'
+import { ForgotPasswordModal, LoadingDot, LoadingPage, MyToast } from '@/components'
 import { authService } from '@/services'
 import { jwtDecode } from 'jwt-decode'
 
@@ -10,6 +10,7 @@ export const Login = () => {
         password: '',
     })
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleInputChange = (event) => {
         const { name, value } = event.target
@@ -18,6 +19,7 @@ export const Login = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
+        setIsLoading(true)
 
         const authEmployeeDTO = {
             username: account.username,
@@ -32,17 +34,20 @@ export const Login = () => {
             }
             sessionStorage.setItem('token', JSON.stringify({ token }))
             sessionStorage.setItem('employeeProfile', JSON.stringify({ employeeProfile }))
-            MyToast('success', 'Đăng Nhập Thành Công')
-
             const decodedToken = jwtDecode(token)
             const role = decodedToken.scope
 
             setTimeout(() => {
+                setIsLoading(false)
+                MyToast('success', 'Đăng Nhập Thành Công')
                 if (role === 'ADMIN') navigate('/admin/trang-chu')
                 else navigate('/nhan-vien')
             }, 2000)
         } catch (error) {
-            MyToast('error', 'Đăng Nhập Không Thành Công')
+            setTimeout(() => {
+                setIsLoading(false)
+                MyToast('error', 'Đăng Nhập Không Thành Công')
+            }, 2000)
         }
     }
 
@@ -212,6 +217,7 @@ export const Login = () => {
                 visibleForgotPasswordModal={isOpenForgetPasswordModal}
                 handleCloseForgotPasswordModal={handleCloseForgotPasswordModal}
             />
+            {isLoading && <LoadingDot />}
         </div>
     )
 }
