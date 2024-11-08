@@ -266,6 +266,10 @@ export const AddEmployeeModal = ({
                                     label: <span>Bác sĩ khám sàng lọc</span>,
                                 },
                                 { value: 'Quản lý Y khoa', label: <span>Quản lý Y khoa</span> },
+                                {
+                                    value: 'Phó Giám đốc Y khoa',
+                                    label: <span>Phó Giám đốc Y khoa</span>,
+                                },
                                 { value: 'Giám đốc Y khoa', label: <span>Giám đốc Y khoa</span> },
                             ]}
                             {...register('employeePosition')}

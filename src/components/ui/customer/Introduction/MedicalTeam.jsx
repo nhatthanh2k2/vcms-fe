@@ -52,11 +52,10 @@ export const MedicalTeam = () => {
                                 />
 
                                 <div className="py-4 px-6">
-                                    <h1 className="text-2xl font-semibold text-gray-800">
-                                        {employee.employeeQualification}.{' '}
-                                        {employee.employeeFullName}
+                                    <h1 className="text-lg font-semibold text-gray-800">
+                                        {employee.employeeQualification} {employee.employeeFullName}
                                     </h1>
-                                    <p className="py-2 text-lg text-gray-700">
+                                    <p className="py-2 text-base text-gray-700">
                                         {employee.employeePosition}
                                     </p>
                                 </div>

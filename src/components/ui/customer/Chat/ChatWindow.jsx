@@ -249,7 +249,7 @@ export const ChatWindow = ({ toggleChat }) => {
                 ))}
             </div>
 
-            <div className="flex items-center pt-0">
+            <div className="flex items-center pt-2">
                 <form
                     className="flex items-center justify-center w-full space-x-2"
                     onSubmit={sendMessage}

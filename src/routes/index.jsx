@@ -1,5 +1,5 @@
 import React from 'react'
-import { AdminLayout, CustomerLayout } from '@/components/layouts'
+import { AdminLayout, CustomerLayout, EmployeeLayout } from '@/components/layouts'
 import {
     OrderPage,
     AppointmentPage,
@@ -32,7 +32,7 @@ import {
     DiseaseManagementPage,
     VaccinePriceManagementPage,
 } from '@/pages'
-import { ADMIN_PATH, PATH } from '@/constant'
+import { ADMIN_PATH, EMPLOYEE_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
 
 export const router = [
@@ -117,11 +117,11 @@ export const router = [
         ],
     },
     {
-        path: PATH.login,
+        path: EMPLOYEE_PATH.login,
         element: <Login />,
     },
     {
-        path: '/admin',
+        path: ADMIN_PATH.admin,
         element: <AdminLayout />,
         children: [
             {
@@ -211,9 +211,8 @@ export const router = [
             },
         ],
     },
-
     {
-        path: '/nhan-vien',
+        path: EMPLOYEE_PATH.employee,
         element: <EmplyeeHomePage />,
     },
 ]

@@ -65,7 +65,7 @@ export const CarouselDoctor = () => {
                             }
                         />
                         <div className="text-center mt-2 font-bold">
-                            {employee.employeeQualification}. {employee.employeeFullName}
+                            {employee.employeeQualification} {employee.employeeFullName}
                         </div>
                     </div>
                 ))}

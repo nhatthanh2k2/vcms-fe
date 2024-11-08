@@ -50,10 +50,6 @@ export const PrintRecord = () => {
         setVaccinationRecordSelected(null)
     }
 
-    const handlePrint = (recordCode) => {
-        console.log(`Printing record with code: ${recordCode}`)
-    }
-
     const screeningColumns = [
         {
             title: 'Mã phiếu khám',
@@ -116,8 +112,6 @@ export const PrintRecord = () => {
             ),
         },
     ]
-
-    console.log(vaccinationRecordList)
 
     const vaccinationColumns = [
         {

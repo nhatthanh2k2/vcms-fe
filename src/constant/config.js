@@ -9,14 +9,13 @@ export const PATH = {
     VaccinePricing: 'bang-gia-vac-xin',
     vaccineList: 'thong-tin-vac-xin',
     vaccinationHistory: 'tra-cuu-lich-su-tiem',
-    login: 'dang-nhap',
-    reception: 'le-tan',
     childPackage: 'goi-tiem-tre-em',
     adultPackage: 'goi-tiem-nguoi-truong-thanh',
     adolescentPackage: 'goi-tiem-vi-thanh-nien-va-thanh-nien'
 }
 
 export const ADMIN_PATH = {
+    admin: '/admin',
     home: 'trang-chu',
     management: 'quan-ly',
     catalog: 'danh-muc',
@@ -38,7 +37,8 @@ export const ADMIN_PATH = {
 }
 
 export const EMPLOYEE_PATH = {
-    home: 'nhan-vien',
+    employee: '/nhan-vien',
+    login: 'dang-nhap',
     customerLookup: 'tra-cuu-khach-hang',
     appointmentSchedule: 'lich-hen-tiem',
     orderSchedule: 'lich-tiem-tu-don-hang',
