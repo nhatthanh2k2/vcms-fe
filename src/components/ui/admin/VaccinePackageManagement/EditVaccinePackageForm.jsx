@@ -5,7 +5,6 @@ import { MyToast } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDetailOfSampleBatch } from '@/redux'
 import { Select, Table } from 'antd'
-import { convertVaccineType } from '@/utils'
 
 export const EditVaccinePackageForm = () => {
     const dispatch = useDispatch()
@@ -169,7 +168,7 @@ export const EditVaccinePackageForm = () => {
                 { text: 'Người Lớn', value: 'ADULT' },
             ],
             filterMultiple: false,
-            render: (text, record) => text + ' ' + convertVaccineType(record.vaccineType),
+            render: (text, record) => text,
         },
         {
             title: 'Nguồn gốc',

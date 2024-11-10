@@ -1,5 +1,5 @@
 import { vaccineBatchService, vaccinePackageService } from '@/services'
-import { convertVaccineType } from '@/utils'
+
 import { Modal, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 
@@ -8,7 +8,6 @@ const batchDetailColumns = [
         title: 'Tên vắc xin',
         dataIndex: ['vaccineResponse', 'vaccineName'],
         key: 'vaccineName',
-        render: (name, record) => name + ' ' + convertVaccineType(record.vaccineType),
     },
     {
         title: 'Phòng bệnh',

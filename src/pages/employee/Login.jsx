@@ -19,7 +19,7 @@ export const Login = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
-        setIsLoading(true)
+        //setIsLoading(true)
 
         const authEmployeeDTO = {
             username: account.username,
@@ -37,12 +37,15 @@ export const Login = () => {
             const decodedToken = jwtDecode(token)
             const role = decodedToken.scope
 
-            setTimeout(() => {
-                setIsLoading(false)
-                MyToast('success', 'Đăng Nhập Thành Công')
-                if (role === 'ADMIN') navigate('/admin/trang-chu')
-                else navigate('/nhan-vien')
-            }, 2000)
+            if (role === 'ADMIN') navigate('/admin/trang-chu')
+            else navigate('/nhan-vien')
+            MyToast('success', 'Đăng Nhập Thành Công')
+            // setTimeout(() => {
+            //     setIsLoading(false)
+            //     MyToast('success', 'Đăng Nhập Thành Công')
+            //     if (role === 'ADMIN') navigate('/admin/trang-chu')
+            //     else navigate('/nhan-vien')
+            // }, 2000)
         } catch (error) {
             setTimeout(() => {
                 setIsLoading(false)

@@ -7,13 +7,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyToast } from '../common'
-import {
-    disabledDoB,
-    formatCurrency,
-    disabledPastDate,
-    convertVaccineType,
-    phoneNumberPattern,
-} from '@/utils'
+import { disabledDoB, formatCurrency, disabledPastDate, phoneNumberPattern } from '@/utils'
 
 const appointmentSchema = z.object({
     appointmentCustomerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
@@ -667,9 +661,6 @@ export const AppointmentForm = () => {
                                                             {batchDetail.vaccineResponse
                                                                 ?.vaccineName ||
                                                                 'Không có dữ liệu'}{' '}
-                                                            {convertVaccineType(
-                                                                batchDetail.vaccineType
-                                                            )}
                                                         </h2>
                                                         <input
                                                             type="radio"

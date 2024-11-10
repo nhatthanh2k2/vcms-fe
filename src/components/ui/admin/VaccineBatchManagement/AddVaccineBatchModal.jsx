@@ -8,12 +8,6 @@ import { MyToast } from '../../common'
 
 const vaccineBatchSchema = z.object({
     vaccineBatchNumber: z.string().nonempty('Số lô vắc xin không được trống'),
-    vaccineBatchQuantity: z
-        .number({ invalid_type_error: 'Số lượng không được trống' })
-        .positive('Số lượng phải lớn hơn 0'),
-    vaccineBatchValue: z
-        .number({ invalid_type_error: 'Giá trị lô vắc xin không được trống' })
-        .positive('Giá trị phải lớn hơn 0'),
     batchDetailFile: z
         .instanceof(FileList)
         .refine((files) => files?.length > 0, 'Bạn chưa chọn file'),
@@ -35,12 +29,9 @@ export const AddVaccineBatchModal = ({
     })
 
     const onSubmit = async (data) => {
-        console.log(data)
         try {
             const request = new FormData()
             request.append('vaccineBatchNumber', data.vaccineBatchNumber)
-            request.append('vaccineBatchQuantity', data.vaccineBatchQuantity)
-            request.append('vaccineBatchValue', data.vaccineBatchValue)
             request.append('batchDetailFile', data.batchDetailFile[0])
             const response = await vaccineBatchService.createBatch(request)
             if (response.data.code === 1000) {
@@ -88,36 +79,6 @@ export const AddVaccineBatchModal = ({
                         <div className="text-red-500 pl-50">
                             {errors.vaccineBatchNumber.message}
                         </div>
-                    )}
-                </div>
-
-                <div className="flex flex-col">
-                    <div className="flex items-center space-x-5 ">
-                        <label className="font-semibold w-1/3">Số lượng vắc xin trong lô:</label>
-                        <input
-                            type="number"
-                            className="input input-bordered input-success w-2/3 input-sm"
-                            {...register('vaccineBatchQuantity', { valueAsNumber: true })}
-                        />
-                    </div>{' '}
-                    {errors.vaccineBatchQuantity && (
-                        <div className="text-red-500 pl-50">
-                            {errors.vaccineBatchQuantity.message}
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex flex-col">
-                    <div className="flex items-center space-x-5 ">
-                        <label className="font-semibold w-1/3">Giá trị lô vắc xin:</label>
-                        <input
-                            type="number"
-                            className="input input-bordered input-success w-2/3 input-sm"
-                            {...register('vaccineBatchValue', { valueAsNumber: true })}
-                        />
-                    </div>
-                    {errors.vaccineBatchValue && (
-                        <div className="text-red-500 pl-50">{errors.vaccineBatchValue.message}</div>
                     )}
                 </div>
 

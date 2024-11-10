@@ -1,16 +1,3 @@
-export const convertVaccineType = (type) => {
-    switch (type) {
-        case 'BOTH':
-            return ''
-        case 'ADULT':
-            return ''
-        case 'CHILD':
-            return ''
-        default:
-            return type
-    }
-}
-
 export const convertAppointmentStatus = (status) => {
     switch (status) {
         case 'PENDING':

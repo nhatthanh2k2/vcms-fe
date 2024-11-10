@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDetailOfSampleBatch } from '@/redux'
 import { Input, Table, Tooltip } from 'antd'
-import { convertVaccineType } from '@/utils'
+
 import dayjs from 'dayjs'
 import { batchDetailService } from '@/services'
 import { MyToast } from '../../common'
@@ -38,7 +38,7 @@ export const VaccinePriceTable = () => {
             title: 'Tên vắc xin',
             dataIndex: ['vaccineResponse', 'vaccineName'],
             key: 'vaccineName',
-            render: (name, record) => name + ' ' + convertVaccineType(record.vaccineType),
+            render: (name, record) => name,
         },
         {
             title: 'Đơn giá',
