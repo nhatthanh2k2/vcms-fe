@@ -46,19 +46,16 @@ button {
   background-color: #fffbe6 !important;
 }
 
-.even-row {
-  background-color: #e3f2fd; 
-}
-
-.odd-row {
-  background-color: #ffffff; 
-}
-
 .ant-table {
   font-size: 16px !important;
   line-height: 24px !important;
 }
 
+.ant-table-thead > tr > th {
+  background-color: #4CAF50; /* Màu nền */
+  color: #fff;               /* Màu chữ */
+  font-weight: bold;         /* Đậm chữ */
+}
 
 
 /* :root {

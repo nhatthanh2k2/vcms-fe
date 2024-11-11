@@ -139,19 +139,11 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
         return foundPackage ? foundPackage.vaccinePackagePrice : ''
     }
 
-    const dataSourceWithTotal = [
-        ...detailPackage,
-        {
-            vaccinePkgDetailId: 'Tổng',
-            vaccineResponse: { vaccineName: 'Tổng' },
-            diseaseResponse: { diseaseName: formatCurrency(findPriceById(packageSelected)) },
-            doseCount: totalDoseCount,
-        },
-    ]
+    const dataSourceWithTotal = [...detailPackage]
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
                 Đăng ký vắc xin
             </h1>
             <form className="space-y-4 mt-5" onSubmit={handleSubmit(onSubmit)}>
@@ -395,7 +387,6 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                     columns={columns}
                     dataSource={dataSourceWithTotal.map((item, index) => ({ ...item, key: index }))}
                     pagination={false}
-                    rowClassName={(record, index) => (index % 2 === 0 ? 'even-row' : 'odd-row')}
                 />
             </Modal>
         </section>

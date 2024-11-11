@@ -1,5 +1,5 @@
 import React from 'react'
-import { AdminLayout, CustomerLayout, EmployeeLayout } from '@/components/layouts'
+import { AdminLayout, CustomerLayout } from '@/components/layouts'
 import {
     OrderPage,
     AppointmentPage,

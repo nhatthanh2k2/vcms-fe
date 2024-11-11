@@ -277,7 +277,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
                 Đăng ký gói tiêm theo yêu cầu
             </h1>
             <form className="space-y-4 mt-5" onSubmit={handleSubmit(onSubmit)}>

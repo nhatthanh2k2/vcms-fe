@@ -167,7 +167,7 @@ export const PrintRecord = () => {
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
                 In phiếu khám / phiếu tiêm
             </h1>
             <div className="flex items-center my-4">
@@ -186,7 +186,7 @@ export const PrintRecord = () => {
                     type="radio"
                     name="record_tabs"
                     role="tab"
-                    className="tab font-bold text-base text-orange-500 text-nowrap"
+                    className="tab font-bold text-base text-orange-600 text-nowrap"
                     aria-label="Phiếu khám sàng lọc"
                     defaultChecked
                 />
@@ -205,7 +205,7 @@ export const PrintRecord = () => {
                     type="radio"
                     name="record_tabs"
                     role="tab"
-                    className="tab font-bold text-base text-orange-500 text-nowrap"
+                    className="tab font-bold text-base text-orange-600 text-nowrap"
                     aria-label="Phiếu tiêm"
                 />
                 <div

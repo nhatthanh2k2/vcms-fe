@@ -126,8 +126,8 @@ export const CustomerLookup = () => {
 
     return (
         <section className="flex-col">
-            <div className=" bg-base-100 shadow-md flex flex-col p-4 space-y-2">
-                <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-500  font-sans font-bold border-teal-400  dark:text-gray-200">
+            <div className=" bg-base-100 shadow-md flex flex-col p-4 space-y-2 rounded-lg">
+                <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
                     Tra cứu thông tin khách hàng
                 </h1>
 
@@ -187,7 +187,7 @@ export const CustomerLookup = () => {
                     type="radio"
                     name="customer_tabs"
                     role="tab"
-                    className="tab font-bold text-base text-orange-500 text-nowrap"
+                    className="tab font-bold text-base text-orange-600 text-nowrap"
                     aria-label="Thông tin khách hàng"
                     defaultChecked
                 />
@@ -319,7 +319,7 @@ export const CustomerLookup = () => {
                     type="radio"
                     name="customer_tabs"
                     role="tab"
-                    className="tab font-bold text-base text-orange-500 text-nowrap"
+                    className="tab font-bold text-base text-orange-600 text-nowrap"
                     aria-label="Lịch sử tiêm chủng"
                 />
                 <div
