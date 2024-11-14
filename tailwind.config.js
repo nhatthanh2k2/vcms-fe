@@ -80,7 +80,8 @@ module.exports = {
         danger: "#D34053",
         warning: "#FFA70B",
         'admin': 'rgb(241, 245, 249)', 
-        'employee': "#F0F8FF"
+        'employee': "#F0F8FF",
+        info: '#00B5E2',
                
       },
       fontSize: {

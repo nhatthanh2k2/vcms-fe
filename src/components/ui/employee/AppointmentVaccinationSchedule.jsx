@@ -29,14 +29,19 @@ const statusOptions = [
 export const AppointmentVaccinationSchedule = () => {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [appointmentList, setAppointmentList] = useState([])
+    const [filterdAppointmentList, setFilterdAppointmentList] = useState([])
     const [status, setStatus] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
         const formatDate = dayjs(selectedDate).format('YYYY-MM-DD')
         appointmentService
             .getAppointmentListByInjectionDate(formatDate)
-            .then((response) => setAppointmentList(response.data.result))
+            .then((response) => {
+                setAppointmentList(response.data.result)
+                setFilterdAppointmentList(response.data.result)
+            })
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [selectedDate])
 
@@ -236,25 +241,59 @@ export const AppointmentVaccinationSchedule = () => {
         setIsOpenAppointmentInjectionModal(false)
     }
 
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = appointmentList.filter((appt) =>
+                appt.appointmentCustomerFullName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            setFilterdAppointmentList(filtered)
+        } else {
+            setFilterdAppointmentList(appointmentList)
+        }
+    }, [searchQuery, appointmentList])
+
     return (
         <section className="bg-white rounded-lg shadow p-6">
             <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
                 Lịch hẹn tiêm
             </h1>
-            <div className="flex items-center my-5">
-                <span className="font-semibold">Chọn ngày muốn xem lịch hẹn:</span>
-                <DatePicker
-                    defaultValue={dayjs(selectedDate)}
-                    isClearable
-                    format="DD-MM-YYYY"
-                    className="mx-4"
-                    onChange={(date) => setSelectedDate(date)}
-                />
+            <div className="flex space-x-10 items-center">
+                <div className="flex items-center my-5">
+                    <span className="font-semibold">Chọn ngày muốn xem lịch hẹn:</span>
+                    <DatePicker
+                        defaultValue={dayjs(selectedDate)}
+                        isClearable
+                        format="DD-MM-YYYY"
+                        className="mx-4"
+                        onChange={(date) => setSelectedDate(date)}
+                    />
+                </div>
+                <label className="input input-bordered input-info input-sm flex items-center gap-2 w-75">
+                    <input
+                        type="text"
+                        className="grow"
+                        placeholder="Tên khách hàng"
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        className="h-4 w-4 opacity-70"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </label>
             </div>
+
             <div className="w-full">
                 <Table
                     columns={appointmentColumns}
-                    dataSource={appointmentList}
+                    dataSource={filterdAppointmentList}
                     scroll={{ y: 400 }}
                     rowKey={'appointmentId'}
                 />

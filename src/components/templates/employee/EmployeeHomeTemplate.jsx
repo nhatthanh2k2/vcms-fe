@@ -11,7 +11,7 @@ import {
     UpdateEmployeeProfileModal,
     PrintRecord,
     ConfirmLogoutModal,
-    NewsForm,
+    MyNewsTable,
 } from '@/components/ui'
 import { Link, Outlet } from 'react-router-dom'
 
@@ -63,8 +63,8 @@ export const EmployeeHomeTemplate = () => {
                         batchDetailList={batchDetailList}
                     />
                 )
-            case 'newsForm':
-                return <NewsForm employee={employee} />
+            case 'myNews':
+                return <MyNewsTable employee={employee} />
             default:
                 return null
         }
@@ -111,24 +111,25 @@ export const EmployeeHomeTemplate = () => {
     }
 
     return (
-        <div className=" bg-employee overflow-hidden flex items-start min-h-screen ">
+        <div className="bg-teal-50 overflow-hidden flex items-start min-h-screen ">
             <aside className="w-1/5 bg-white shadow-md h-screen fixed top-0 left-0 rounded-md">
                 <div className="flex flex-col justify-between h-full">
                     <div className="flex-grow">
                         <div className="px-4 py-6 text-center ">
                             <div className="text-3xl font-bold leading-tight ">
-                                <span className="inline text-blue-700 rounded">T-Vax</span> Company
+                                <span className="inline text-cyan-500 rounded">T-Vax</span> Company
                             </div>
                         </div>
-                        <div className="border-2 border-yellow-500"></div>
+                        <div className="border-4 border-t-blue-500 border-b-green-500"></div>
+
                         <div className="p-4">
                             <ul className="space-y-1">
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('customerLookup')}
-                                        className={`flex items-center cursor-pointer hover:bg-blue-200 hover:text-black rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex items-center cursor-pointer hover:bg-cyan-100 hover:text-black rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'customerLookup'
-                                                ? 'bg-blue-200'
+                                                ? 'bg-cyan-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -146,7 +147,7 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={handleOpenAddCustomerModal}
-                                        className="flex items-center cursor-pointer hover:bg-blue-200 hover:text-black rounded-xl font-bold text-sm py-3 px-4"
+                                        className="flex items-center cursor-pointer hover:bg-cyan-100 hover:text-black rounded-xl font-bold text-sm py-3 px-4"
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -170,9 +171,9 @@ export const EmployeeHomeTemplate = () => {
                                         onClick={() =>
                                             setActiveTab('AppointmentVaccinationSchedule')
                                         }
-                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'AppointmentVaccinationSchedule'
-                                                ? 'bg-blue-200'
+                                                ? 'bg-cyan-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -192,9 +193,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('OrderVaccinationSchedule')}
-                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'OrderVaccinationSchedule'
-                                                ? 'bg-blue-200'
+                                                ? 'bg-cyan-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -214,9 +215,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('bookVaccination')}
-                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'bookVaccination'
-                                                ? 'bg-blue-200'
+                                                ? 'bg-cyan-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -230,15 +231,15 @@ export const EmployeeHomeTemplate = () => {
                                                 data-name="Path 184"
                                             />
                                         </svg>
-                                        Đăng ký vắc xin
+                                        Đặt vắc xin
                                     </div>
                                 </li>
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('CustomizableVaccinePackage')}
-                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'CustomizableVaccinePackage'
-                                                ? 'bg-blue-200'
+                                                ? 'bg-cyan-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -260,9 +261,9 @@ export const EmployeeHomeTemplate = () => {
                                 <li>
                                     <div
                                         onClick={() => setActiveTab('printVaccinationRecord')}
-                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
+                                        className={`flex cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm py-3 px-4 ${
                                             activeTab === 'printVaccinationRecord'
-                                                ? 'bg-blue-200'
+                                                ? 'bg-cyan-200'
                                                 : 'bg-white'
                                         }`}
                                     >
@@ -295,9 +296,9 @@ export const EmployeeHomeTemplate = () => {
                                 </li>
                                 <li>
                                     <div
-                                        onClick={() => setActiveTab('newsForm')}
-                                        className={`flex cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm py-3 px-4 ${
-                                            activeTab === 'newsForm' ? 'bg-blue-200' : 'bg-white'
+                                        onClick={() => setActiveTab('myNews')}
+                                        className={`flex cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm py-3 px-4 ${
+                                            activeTab === 'myNews' ? 'bg-cyan-200' : 'bg-white'
                                         }`}
                                     >
                                         <svg
@@ -308,7 +309,7 @@ export const EmployeeHomeTemplate = () => {
                                             <path d="M19.875 3H4.125C2.953 3 2 3.897 2 5v14c0 1.103.953 2 2.125 2h15.75C21.047 21 22 20.103 22 19V5c0-1.103-.953-2-2.125-2zm0 16H4.125c-.057 0-.096-.016-.113-.016-.007 0-.011.002-.012.008L3.988 5.046c.007-.01.052-.046.137-.046h15.75c.079.001.122.028.125.008l.012 13.946c-.007.01-.052.046-.137.046z" />
                                             <path d="M6 7h6v6H6zm7 8H6v2h12v-2h-4zm1-4h4v2h-4zm0-4h4v2h-4z" />
                                         </svg>
-                                        Tạo bài viết
+                                        Bài viết của tôi
                                     </div>
                                 </li>
                             </ul>
@@ -320,7 +321,7 @@ export const EmployeeHomeTemplate = () => {
                             <Link
                                 to={'/admin/trang-chu'}
                                 className="
-                            flex bg-white cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm text-black py-3 px-4"
+                            flex bg-white cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm text-black py-3 px-4"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -345,7 +346,7 @@ export const EmployeeHomeTemplate = () => {
                         <div
                             className="
                             dropdown dropdown-hover dropdown-right dropdown-end
-                            flex bg-white cursor-pointer hover:bg-blue-200 rounded-xl font-bold text-sm text-black py-3 px-4"
+                            flex bg-white cursor-pointer hover:bg-cyan-100 rounded-xl font-bold text-sm text-black py-3 px-4"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -374,7 +375,7 @@ export const EmployeeHomeTemplate = () => {
                                 //onClick={handleLogout}
                                 onClick={handleOpenConfirmLogoutModal}
                                 type="button"
-                                className="inline-flex items-center justify-center hover:bg-blue-200 h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
+                                className="inline-flex items-center justify-center hover:bg-cyan-100 h-9 px-4 rounded-xl bg-gray-900 text-gray-300 text-sm font-semibold transition"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

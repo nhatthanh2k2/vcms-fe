@@ -164,9 +164,12 @@ export const VaccinationHistoryLookup = () => {
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="mt-5">
-                <form className="flex flex-row space-x-4" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex flex-col space-y-2 font-semibold flex-1">
+            <div className="mt-5 flex space-x-5">
+                <form
+                    className="flex flex-col font-semibold space-y-3"
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    <div className="flex flex-col">
                         <label className="block mb-1 font-medium">Nhập Mã KH / SĐT:</label>
                         <div className=" relative">
                             <input
@@ -183,7 +186,7 @@ export const VaccinationHistoryLookup = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col space-y-2 font-semibold flex-1">
+                    <div className="flex flex-col">
                         <label className="block mb-1 font-medium">Ngày/tháng/năm sinh:</label>
                         <div className="relative flex flex-col">
                             <DatePicker
@@ -207,7 +210,7 @@ export const VaccinationHistoryLookup = () => {
                         </div>
                     </div>
 
-                    <div className="flex-1 p-10">
+                    <div>
                         <button
                             type="submit"
                             className="text-base rounded-full border-l-0 border-r-0 hover:scale-110 focus:outline-none flex justify-center px-4 py-2  font-bold cursor-pointer 
@@ -217,84 +220,82 @@ export const VaccinationHistoryLookup = () => {
                         </button>
                     </div>
                 </form>
-            </div>
+                {customer ? (
+                    <div className="w-full">
+                        <div>
+                            <span className="text-xl font-bold text-blue-600">
+                                Thông tin khách hàng
+                            </span>
+                            <div className="flex space-x-5 mt-2">
+                                <input
+                                    value={customer?.customerFullName}
+                                    readOnly
+                                    type="text"
+                                    placeholder="Họ và tên"
+                                    className="input input-bordered input-success input-sm w-full max-w-xs"
+                                />
 
-            {customer ? (
-                <div>
-                    <div>
-                        <span className="text-xl font-bold text-blue-600">
-                            Thông tin khách hàng
-                        </span>
-                        <div className="flex space-x-5 mt-2">
-                            <input
-                                value={customer?.customerFullName}
-                                readOnly
-                                type="text"
-                                placeholder="Họ và tên"
-                                className="input input-bordered input-success input-sm w-full max-w-xs"
-                            />
+                                <input
+                                    value={customer?.customerPhone}
+                                    readOnly
+                                    type="text"
+                                    placeholder="Số điện thoại:"
+                                    className="input input-bordered input-success input-sm w-full max-w-xs"
+                                />
 
-                            <input
-                                value={customer?.customerPhone}
-                                readOnly
-                                type="text"
-                                placeholder="Số điện thoại:"
-                                className="input input-bordered input-success input-sm w-full max-w-xs"
-                            />
-
-                            <input
-                                value={
-                                    customer?.customerProvince &&
-                                    customer?.customerDistrict &&
-                                    customer?.customerWard
-                                        ? customer.customerWard +
-                                          ', ' +
-                                          customer.customerDistrict +
-                                          ', ' +
-                                          customer.customerProvince
-                                        : ''
-                                }
-                                readOnly
-                                type="text"
-                                placeholder="Địa chỉ:"
-                                className="input input-bordered input-success input-sm w-full max-w-lg"
-                            />
+                                <input
+                                    value={
+                                        customer?.customerProvince &&
+                                        customer?.customerDistrict &&
+                                        customer?.customerWard
+                                            ? customer.customerWard +
+                                              ', ' +
+                                              customer.customerDistrict +
+                                              ', ' +
+                                              customer.customerProvince
+                                            : ''
+                                    }
+                                    readOnly
+                                    type="text"
+                                    placeholder="Địa chỉ:"
+                                    className="input input-bordered input-success input-sm w-full max-w-lg"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="mt-2">
-                        <span className="text-xl font-bold text-blue-600">
-                            Vắc xin bạn nên tiêm
-                        </span>
-                        <div className="flex flex-wrap">
-                            {recommendedPackageList.map((detail, index) => (
-                                <div key={index} className="w-1/4 p-2">
-                                    <div className="border rounded-lg p-4">
-                                        <h3>{detail.vaccineResponse.vaccineName}</h3>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="mt-5">
                         <div className="mt-2">
+                            <span className="text-xl font-bold text-blue-600">
+                                Vắc xin bạn nên tiêm
+                            </span>
+                            <div className="flex flex-wrap">
+                                {recommendedPackageList.map((detail, index) => (
+                                    <div key={index} className="w-1/4 mr-2">
+                                        <div className="border rounded-lg p-4">
+                                            <h3>{detail.vaccineResponse.vaccineName}</h3>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-5">
+                            <span className="text-xl font-bold text-blue-600">Lịch sử tiêm</span>
                             <VaccinationHistoryTable
                                 vaccinationRecordList={vaccinationRecordList}
                             />
                         </div>
                     </div>
-                </div>
-            ) : (
-                <div className="flex justify-center">
-                    <img src="/images/lookup-user.png" className=" h-100 object-cover" />
-                    <div className="chat chat-start">
-                        <div className="chat-bubble chat-bubble-accent text-lg font-semibold">
-                            Nhập thông tin bên trên để tra cứu nhé!
+                ) : (
+                    <div className="flex justify-center">
+                        <img src="/images/lookup-user.png" className=" h-100 object-cover" />
+                        <div className="chat chat-start">
+                            <div className="chat-bubble chat-bubble-accent text-lg font-semibold">
+                                Nhập thông tin của bạn để tra cứu nhé!
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     )
 }

@@ -526,7 +526,7 @@ export const OrderForm = () => {
                     )}
 
                     <div className="flex flex-col">
-                        <div className="bg-white rounded-lg border-2 border-teal-200  p-4 flex flex-col space-x-2 shadow-default">
+                        <div className="bg-white rounded-lg border-2 border-teal-300  p-4 flex flex-col space-x-2 shadow-default">
                             <div className="flex space-x-2 items-center justify-center mb-5 w-full">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -765,149 +765,141 @@ export const OrderForm = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col">
-                    <span className="text-blue-700 size-5 mb-5 w-full font-bold text-2xl text-center">
-                        Chọn vắc xin muốn tiêm
-                    </span>
-                    <div role="tablist" className="tabs tabs-lifted ">
-                        <input
-                            type="radio"
-                            name="my_tabs_2"
-                            role="tab"
-                            className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
-                            aria-label="Vắc xin lẻ"
-                            defaultChecked
-                        />
-                        <div
-                            role="tabpanel"
-                            className="tab-content bg-base-100 border-base-300 rounded-box p-6 "
-                        >
-                            <div className="flex flex-wrap gap-2 flex-grow">
-                                {currentBatchDetails.map((batchDetail, index) => {
-                                    const isVaccineSelected = batchDetailSelectedList.find(
-                                        (v) => v.batchDetailId === batchDetail.batchDetailId
-                                    )
+                <div role="tablist" className="tabs tabs-lifted ">
+                    <input
+                        type="radio"
+                        name="my_tabs_2"
+                        role="tab"
+                        className="tab font-bold text-base text-nowrap  [--tab-bg:DeepSkyBlue] [--tab-border-color:blue]"
+                        aria-label="Vắc xin lẻ"
+                        defaultChecked
+                    />
+                    <div
+                        role="tabpanel"
+                        className="tab-content bg-base-100  border-blue-700 rounded-box p-6 "
+                    >
+                        <div className="flex flex-wrap gap-2 flex-grow">
+                            {currentBatchDetails.map((batchDetail, index) => {
+                                const isVaccineSelected = batchDetailSelectedList.find(
+                                    (v) => v.batchDetailId === batchDetail.batchDetailId
+                                )
 
+                                return (
+                                    <div
+                                        className="card card-compact bg-base-100 w-70 shadow-xl"
+                                        key={index}
+                                    >
+                                        <div className="card-body">
+                                            <h2 className="card-title">
+                                                {batchDetail.vaccineResponse.vaccineName}{' '}
+                                            </h2>
+                                            <p>Phòng: {batchDetail.diseaseResponse.diseaseName}</p>
+                                            <p className="text-lg font-semibold text-blue-700">
+                                                Giá chỉ:{' '}
+                                                {formatCurrency(
+                                                    batchDetail.batchDetailVaccinePrice
+                                                )}
+                                            </p>
+                                            <div className="card-actions justify-end">
+                                                {isVaccineSelected ? (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRemoveVaccine(
+                                                                batchDetail.batchDetailId
+                                                            )
+                                                        }
+                                                        className="btn btn-outline btn-accent"
+                                                    >
+                                                        Đã Chọn
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleSelectVaccine(batchDetail)
+                                                        }
+                                                        className="btn btn-outline btn-info"
+                                                    >
+                                                        Chọn
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+
+                        {batchDetailList.length > pageSize && (
+                            <div className="pagination flex  mt-5 justify-center">
+                                <Pagination
+                                    current={currentPage}
+                                    pageSize={pageSize}
+                                    total={batchDetailList.length}
+                                    onChange={handlePageChange}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    <input
+                        type="radio"
+                        name="my_tabs_2"
+                        role="tab"
+                        className="tab font-bold text-base text-nowrap [--tab-bg:DeepSkyBlue] [--tab-border-color:blue] "
+                        aria-label="Gói vắc xin"
+                    />
+                    <div
+                        role="tabpanel"
+                        className="tab-content bg-base-100  border-blue-700 rounded-box p-6"
+                    >
+                        <div className="flex flex-col ">
+                            <div className="flex flex-wrap gap-2 flex-grow">
+                                {packageList.map((pack, index) => {
+                                    const isPackageSelected = vaccinePackageSelectedList.find(
+                                        (p) => p.vaccinePackageId === pack.vaccinePackageId
+                                    )
                                     return (
                                         <div
-                                            className="card card-compact bg-base-100 w-70 shadow-xl"
                                             key={index}
+                                            className="card bg-base-100 w-70 shadow-xl flex-shrink-0 "
                                         >
                                             <div className="card-body">
-                                                <h2 className="card-title">
-                                                    {batchDetail.vaccineResponse.vaccineName}{' '}
+                                                <h2 className="card-title ">
+                                                    {pack.vaccinePackageName}{' '}
                                                 </h2>
-                                                <p>
-                                                    Phòng: {batchDetail.diseaseResponse.diseaseName}
-                                                </p>
-                                                <p>
-                                                    Giá chỉ:{' '}
-                                                    {formatCurrency(
-                                                        batchDetail.batchDetailVaccinePrice
-                                                    )}
+
+                                                <p className="text-lg text-blue-700 font-semibold">
+                                                    Giá: {formatCurrency(pack.vaccinePackagePrice)}
                                                 </p>
                                                 <div className="card-actions justify-end">
-                                                    {isVaccineSelected ? (
-                                                        <button
-                                                            onClick={() =>
-                                                                handleRemoveVaccine(
-                                                                    batchDetail.batchDetailId
-                                                                )
-                                                            }
-                                                            className="btn btn-outline btn-accent"
-                                                        >
-                                                            Đã Chọn
-                                                        </button>
-                                                    ) : (
-                                                        <button
-                                                            onClick={() =>
-                                                                handleSelectVaccine(batchDetail)
-                                                            }
-                                                            className="btn btn-outline btn-info"
-                                                        >
-                                                            Chọn
-                                                        </button>
-                                                    )}
+                                                    <div className="card-actions justify-end">
+                                                        {isPackageSelected ? (
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleRemovePackage(
+                                                                        pack.vaccinePackageId
+                                                                    )
+                                                                }
+                                                                className="btn btn-outline btn-accent"
+                                                            >
+                                                                Đã Chọn
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleSelectPackage(pack)
+                                                                }
+                                                                className="btn btn-outline btn-info"
+                                                            >
+                                                                Chọn
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     )
                                 })}
-                            </div>
-
-                            {batchDetailList.length > pageSize && (
-                                <div className="pagination flex  mt-5 justify-center">
-                                    <Pagination
-                                        current={currentPage}
-                                        pageSize={pageSize}
-                                        total={batchDetailList.length}
-                                        onChange={handlePageChange}
-                                    />
-                                </div>
-                            )}
-                        </div>
-
-                        <input
-                            type="radio"
-                            name="my_tabs_2"
-                            role="tab"
-                            className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
-                            aria-label="Gói vắc xin"
-                        />
-                        <div
-                            role="tabpanel"
-                            className="tab-content bg-base-100 border-base-300 rounded-box p-6"
-                        >
-                            <div className="flex flex-col ">
-                                <div className="flex flex-wrap gap-2 flex-grow">
-                                    {packageList.map((pack, index) => {
-                                        const isPackageSelected = vaccinePackageSelectedList.find(
-                                            (p) => p.vaccinePackageId === pack.vaccinePackageId
-                                        )
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="card bg-base-100 w-70 shadow-xl flex-shrink-0 "
-                                            >
-                                                <div className="card-body">
-                                                    <h2 className="card-title ">
-                                                        {pack.vaccinePackageName}{' '}
-                                                    </h2>
-
-                                                    <p>
-                                                        Giá:{' '}
-                                                        {formatCurrency(pack.vaccinePackagePrice)}
-                                                    </p>
-                                                    <div className="card-actions justify-end">
-                                                        <div className="card-actions justify-end">
-                                                            {isPackageSelected ? (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        handleRemovePackage(
-                                                                            pack.vaccinePackageId
-                                                                        )
-                                                                    }
-                                                                    className="btn btn-outline btn-accent"
-                                                                >
-                                                                    Đã Chọn
-                                                                </button>
-                                                            ) : (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        handleSelectPackage(pack)
-                                                                    }
-                                                                    className="btn btn-outline btn-info"
-                                                                >
-                                                                    Chọn
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
                             </div>
                         </div>
                     </div>

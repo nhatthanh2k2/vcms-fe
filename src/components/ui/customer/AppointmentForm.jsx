@@ -195,8 +195,8 @@ export const AppointmentForm = () => {
     return (
         <div>
             <div className="relative">
-                <div className="uppercase text-3xl text-blue-600 font-satoshi font-bold">
-                    Đăng ký lịch tiêm chủng
+                <div className="uppercase text-3xl text-blue-700 font-satoshi font-bold">
+                    Đặt lịch tiêm
                 </div>
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
@@ -563,7 +563,7 @@ export const AppointmentForm = () => {
                                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 />
                                 <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                    Mã khách hàng
+                                    Mã khách hàng / SĐT
                                 </label>
                                 {errorsWithCode.customerIdentifier && (
                                     <span className="w-70 text-red-500 text-sm">
@@ -639,13 +639,13 @@ export const AppointmentForm = () => {
                             type="radio"
                             name="vaccine_tabs"
                             role="tab"
-                            className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
+                            className="tab font-bold text-base text-nowrap [--tab-bg:DeepSkyBlue] [--tab-border-color:blue]"
                             aria-label="Vắc xin lẻ"
                             defaultChecked
                         />
                         <div
                             role="tabpanel"
-                            className="tab-content bg-base-100 border-base-300 rounded-box p-6 "
+                            className="tab-content bg-base-100 border-blue-700 rounded-box p-6 "
                         >
                             <div className="flex flex-col ">
                                 <div className="flex flex-wrap gap-2 flex-grow">
@@ -715,12 +715,12 @@ export const AppointmentForm = () => {
                             type="radio"
                             name="vaccine_tabs"
                             role="tab"
-                            className="tab font-bold text-base text-nowrap [--tab-bg:yellow] [--tab-border-color:orange]"
+                            className="tab font-bold text-base text-nowrap [--tab-bg:DeepSkyBlue] [--tab-border-color:blue]"
                             aria-label="Gói vắc xin"
                         />
                         <div
                             role="tabpanel"
-                            className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                            className="tab-content bg-base-100 border-blue-700 rounded-box p-6"
                         >
                             <div className="flex flex-col ">
                                 <div className="flex flex-wrap gap-2 flex-grow">

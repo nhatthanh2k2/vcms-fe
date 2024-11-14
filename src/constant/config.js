@@ -1,6 +1,6 @@
 export const PATH = {
     home: 'trang-chu',
-    appointment: 'dang-ky-lich-tiem',
+    appointment: 'dat-lich-tiem',
     order: 'dat-mua-vac-xin',
     introduction: 'trung-tam',
     medicalTeam: 'doi-ngu-bac-si',

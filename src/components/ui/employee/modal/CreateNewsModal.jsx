@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import 'quill/dist/quill.snow.css'
 import Quill from 'quill'
-import { NewsService } from '@/services'
-import { MyToast } from '../common'
+import { newsService } from '@/services'
+import { MyToast } from '../../common'
+import { Modal } from 'antd'
 
 const options = {
     debug: 'error',
@@ -13,7 +14,12 @@ const options = {
     theme: 'snow',
 }
 
-export const NewsForm = ({ employee }) => {
+export const CreateNewsModal = ({
+    visivleCreateNewsModal,
+    handleCloseCreateNewsModal,
+    author,
+    handleGetMyNews,
+}) => {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [image, setImage] = useState(null)
@@ -23,7 +29,7 @@ export const NewsForm = ({ employee }) => {
     const handleEditorInit = () => {
         if (quillRef.current) return
 
-        const quill = new Quill('#editor', options)
+        const quill = new Quill('#editorCreate', options)
         quillRef.current = quill
 
         quill.root.addEventListener(
@@ -40,8 +46,10 @@ export const NewsForm = ({ employee }) => {
     }
 
     useEffect(() => {
-        handleEditorInit()
-    }, [])
+        if (visivleCreateNewsModal) {
+            handleEditorInit()
+        }
+    }, [visivleCreateNewsModal])
 
     const handleImageChange = (event) => {
         setImage(event.target.files[0])
@@ -54,11 +62,10 @@ export const NewsForm = ({ employee }) => {
         formData.append('newsTitle', title)
         formData.append('newsContent', content)
         formData.append('newsImage', image)
-        formData.append('employeeId', employee.employeeProfile.employeeId)
+        formData.append('employeeId', author.employeeProfile.employeeId)
 
         try {
-            const response = await NewsService.createNews(formData)
-            console.log(response)
+            const response = await newsService.createNews(formData)
 
             if (response.data.code === 1000) {
                 MyToast('success', 'Tạo bài viết thành công.')
@@ -72,6 +79,7 @@ export const NewsForm = ({ employee }) => {
                 setImage(null)
 
                 document.querySelector('input[type="file"]').value = null
+                handleGetMyNews()
             } else {
                 MyToast('error', 'Tạo bài viết thất bại.')
             }
@@ -83,10 +91,16 @@ export const NewsForm = ({ employee }) => {
     }
 
     return (
-        <section className="bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
-                Tạo bài viết
-            </h1>
+        <Modal
+            open={visivleCreateNewsModal}
+            onCancel={handleCloseCreateNewsModal}
+            title={<div className="text-center font-bold text-2xl">Bài viết mới</div>}
+            footer={null}
+            width={1000}
+            style={{
+                top: 40,
+            }}
+        >
             <form onSubmit={handleSubmit}>
                 <div className="flex flex-row space-x-4">
                     <div className="flex flex-col space-y-2 font-semibold w-2/3">
@@ -113,7 +127,7 @@ export const NewsForm = ({ employee }) => {
 
                 <div className="mt-2">
                     <label className="block mb-1 font-medium">Nội dung bài viết:</label>
-                    <div className="min-h-80 z-10" id="editor"></div>
+                    <div className="min-h-80 z-10" id="editorCreate"></div>
                 </div>
 
                 <div className="m-3 flex justify-end">
@@ -146,6 +160,6 @@ export const NewsForm = ({ employee }) => {
                     </button>
                 </div>
             </form>
-        </section>
+        </Modal>
     )
 }

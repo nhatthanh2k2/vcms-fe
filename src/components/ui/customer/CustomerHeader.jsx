@@ -190,16 +190,16 @@ export const CustomerHeader = () => {
 
                         <div>
                             <a
-                                href="/trang-chu/dang-ky-lich-tiem"
+                                href="/trang-chu/dat-lich-tiem"
                                 className={`text-gray-700 relative md:hover:text-blue-700 hover:after:scale-x-100 after:absolute
                     after:left-0 after:bottom-[-5px] after:w-full after:h-[2px] after:bg-[#10b981]
                     after:scale-x-0 after:origin-left after:transition-transform after:duration-500 ${
-                        location.pathname === '/trang-chu/dang-ky-lich-tiem'
+                        location.pathname === '/trang-chu/dat-lich-tiem'
                             ? 'after:scale-x-100 text-blue-700'
                             : ''
                     }`}
                             >
-                                Đăng ký lịch tiêm
+                                Đặt lịch tiêm
                             </a>
                         </div>
 

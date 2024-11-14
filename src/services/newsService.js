@@ -7,12 +7,18 @@ const news_api = apiInstance({
     baseURL: news_url,
   });
 
-export const NewsService = {
+export const newsService = {
     createNews: (request) => {
         return news_api.post("/create", request, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
+    },
+    getAllMyNews: (employeeId) => {
+        return news_api.get(`/my-news/${employeeId}`)
+    },
+    getMyNewsDetailById: (newsId) => {
+        return news_api.get(`/my-news/detail/${newsId}`)
     }
 }

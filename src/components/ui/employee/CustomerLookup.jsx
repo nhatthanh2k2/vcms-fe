@@ -138,8 +138,7 @@ export const CustomerLookup = () => {
                             <input
                                 {...registerLookup('customerIdentifier')}
                                 type="text"
-                                placeholder="Số điện thoại / Mã KH"
-                                className="input input-bordered input-info w-full  h-12"
+                                className="input input-bordered input-info w-full h-12"
                             />
                             {errorsLookup.customerIdentifier && (
                                 <span className="w-fit text-red-500 text-sm">

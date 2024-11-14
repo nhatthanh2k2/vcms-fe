@@ -141,10 +141,12 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
 
     const dataSourceWithTotal = [...detailPackage]
 
+    console.log(batchDetailList)
+
     return (
         <section className="bg-white rounded-lg shadow p-6">
             <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
-                Đăng ký vắc xin
+                Đặt vắc xin
             </h1>
             <form className="space-y-4 mt-5" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex space-x-5">
@@ -216,7 +218,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                         <label htmlFor="">Vắc xin lẻ</label>
                         <input
                             type="radio"
-                            name="vaccinationType" // Sử dụng name duy nhất cho nhóm vắc xin
+                            name="vaccinationType"
                             className="radio radio-info"
                             onChange={() => setInjectionType('SINGLE')}
                             checked={injectionType === 'SINGLE'}
@@ -227,7 +229,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                         <label htmlFor="">Vắc xin gói</label>
                         <input
                             type="radio"
-                            name="vaccinationType" // Sử dụng name duy nhất cho nhóm vắc xin
+                            name="vaccinationType"
                             className="radio radio-info"
                             checked={injectionType === 'PACKAGE'}
                             onChange={() => setInjectionType('PACKAGE')}
@@ -244,27 +246,38 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                                 placeholder="Chọn vắc xin"
                                 options={batchDetailList.map((batchDetail) => ({
                                     value: batchDetail.batchDetailId,
-                                    label: <span>{batchDetail.vaccineResponse.vaccineName} </span>,
+                                    label: (
+                                        <span>
+                                            {batchDetail.vaccineResponse.vaccineName} -{' '}
+                                            {batchDetail.batchDetailVaccinePrice.toLocaleString()}
+                                            {' VNĐ'}
+                                        </span>
+                                    ),
                                 }))}
                                 style={{
-                                    width: 384,
+                                    width: 500,
                                     height: 40,
                                 }}
                             />
                         </div>
                     ) : (
                         <div className="flex gap-5 ">
-                            <div className="flex-1">
+                            <div className="flex-1 w-full">
                                 <Select
                                     value={packageSelected}
                                     onChange={handleChosePackage}
                                     placeholder="Chọn gói vắc xin"
                                     options={vaccinePackageList.map((pack) => ({
                                         value: pack.vaccinePackageId,
-                                        label: <span>{pack.vaccinePackageName}</span>,
+                                        label: (
+                                            <span>
+                                                {pack.vaccinePackageName} -{' '}
+                                                {pack.vaccinePackagePrice.toLocaleString()} {' VNĐ'}
+                                            </span>
+                                        ),
                                     }))}
                                     style={{
-                                        width: 384,
+                                        width: 600,
                                         height: 40,
                                     }}
                                 />
@@ -274,20 +287,9 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                                 <button
                                     type="button"
                                     onClick={handleViewPackage}
-                                    className="bg-white text-gray-800 font-bold rounded border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                                    className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                                 >
-                                    <span className="mr-2">Xem gói</span>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            fill="currentColor"
-                                            d="M12 5c-7.633 0-11.599 6.211-11.946 6.789a1 1 0 0 0 0 .422C.401 12.789 4.367 19 12 19s11.599-6.211 11.946-6.789a1 1 0 0 0 0-.422C23.599 11.211 19.633 5 12 5zm0 12c-4.83 0-8.216-3.89-9.523-5 1.307-1.11 4.693-5 9.523-5 4.83 0 8.216 3.89 9.523 5-1.307 1.11-4.693 5-9.523 5zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"
-                                        />
-                                    </svg>
+                                    <span>Xem gói</span>
                                 </button>
                             </div>
                         </div>
@@ -349,7 +351,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                     <div className="m-3">
                         <button
                             type="submit"
-                            className="bg-white text-gray-800 font-bold rounded border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
                             <span className="mr-2">Đặt Vắc Xin</span>
                             <svg
