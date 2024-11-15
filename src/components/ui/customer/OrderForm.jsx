@@ -40,6 +40,7 @@ const lookupSchema = z.object({
 
 export const OrderForm = () => {
     const [showForm, setShowForm] = useState(false)
+    const [isCustomer, setIsCustomer] = useState(0)
     const [packageList, setPackageList] = useState([])
     const [batchDetailList, setBatchDetailList] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -280,7 +281,7 @@ export const OrderForm = () => {
 
                             {existsCustomer && (
                                 <div className="relative flex z-0 w-full mb-5 group space-x-2 mt-5 gap-5 items-center">
-                                    <label>Ngày mong muốn tiêm: </label>
+                                    <label className="font-medium">Ngày mong muốn tiêm: </label>
                                     <DatePicker
                                         format="DD-MM-YYYY"
                                         disabledDate={disabledPastDate}

@@ -1,28 +1,31 @@
 import axios from "axios"
 import { apiInstance } from "@/constant";
 
-const api_url = import.meta.env.VITE_VCMS_API
+const appt_url = import.meta.env.VITE_VCMS_APPT_API
 
-const api = apiInstance({
-    baseURL: api_url,
+const appt_api = apiInstance({
+    baseURL: appt_url,
   });
 
 export const appointmentService = {
     createAppointmentWithOutCustCode: (request) => {
-        return axios.post(api_url + "/appointments/create", request)
+        return axios.post(appt_url + "/create", request)
     },
     createAppointmentWithCustCode: (request) => {
-        return axios.post(api_url + "/appointments/create-code", request)
+        return axios.post(appt_url + "/create-code", request)
     },
     getAppointmentListByInjectionDate: (selectedDate) => {
-        return api.get("/appointments/list/injection-date", {
+        return appt_api.get("/list/injection-date", {
             params: { selectedDate }
         });
     },
     updateAppointmentStatus: (request) => {
-        return api.put("/appointments/update/appointment-status", request)
+        return appt_api.put("/update/appointment-status", request)
     },
     getCanceledAppointmentList: () => {
-        return api.get("/appointments/list/canceled-list")
+        return appt_api.get("/list/canceled-list")
+    },
+    getAllAppointment: (page, size) => {
+        return appt_api.get(`/list/all?page=${page}&size=${size}`)
     }
 }

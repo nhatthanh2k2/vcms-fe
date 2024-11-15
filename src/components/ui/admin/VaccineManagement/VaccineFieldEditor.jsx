@@ -2,7 +2,8 @@ import { Tooltip } from 'antd'
 import React from 'react'
 
 export const VaccineFieldEditor = ({ label, items, setItems }) => {
-    const handleAddItem = () => {
+    const handleAddItem = (e) => {
+        e.preventDefault()
         setItems([...items, ''])
     }
 
@@ -71,7 +72,7 @@ export const VaccineFieldEditor = ({ label, items, setItems }) => {
                 </div>
             ))}
 
-            <button className="btn">
+            <button className="btn" onClick={(e) => handleAddItem(e)}>
                 Thêm {label.toLowerCase()}
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

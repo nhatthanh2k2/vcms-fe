@@ -8,6 +8,9 @@ const news_api = apiInstance({
   });
 
 export const newsService = {
+    getAllNews: () => {
+        return news_api.get("/all")
+    },
     createNews: (request) => {
         return news_api.post("/create", request, {
             headers: {

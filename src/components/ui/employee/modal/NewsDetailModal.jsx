@@ -53,8 +53,10 @@ export const NewsDetailModal = ({ visibleNewsDetailModal, hanldeCloseNewsDetailM
             width={1200}
             style={{
                 top: 40,
+            }}
+            styles={{
                 body: {
-                    height: '500px', // Set the height for the modal body
+                    maxHeight: '600px',
                     overflowY: 'auto',
                 },
             }}
@@ -69,13 +71,14 @@ export const NewsDetailModal = ({ visibleNewsDetailModal, hanldeCloseNewsDetailM
                         className="input input-bordered input-info w-full h-12"
                     />
                 </div>
-                <div className="flex">
+                <div className="flex space-x-5">
                     <div className="mt-2 w-2/3">
                         <label className="block mb-1 font-medium">Nội dung bài viết:</label>
                         <div id="editorUpdate"></div>
                     </div>
 
                     <div className="mt-2 w-1/3">
+                        <label className="block mb-1 font-medium">Ảnh bài viết:</label>
                         <img
                             src={image ? import.meta.env.VITE_VCMS_IMAGE + '/news/' + image : ''}
                         />

@@ -33,6 +33,7 @@ export const ADMIN_PATH = {
     statistics: 'thong-ke',
     revenue: 'doanh-thu',
     doseCount: 'so-mui-tiem',
+    appointment: 'cuoc-hen',
     canceledAppointment: 'cuoc-hen-bi-huy'
 }
 

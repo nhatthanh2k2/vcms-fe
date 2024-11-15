@@ -33,6 +33,8 @@ export const VaccinePriceTable = () => {
         }
     }, [searchQuery, batchDetailList])
 
+    console.log(batchDetailList)
+
     const vaccinePriceColumns = [
         {
             title: 'Tên vắc xin',
@@ -45,19 +47,19 @@ export const VaccinePriceTable = () => {
             dataIndex: 'batchDetailVaccinePrice',
             key: 'price',
             render: (price, record) => (
-                <Input value={price} onChange={(e) => handlePriceChange(e, record)} suffix="VND" />
+                <Input value={price} onChange={(e) => handlePriceChange(e, record)} suffix="VNĐ" />
             ),
         },
         {
             title: 'Ngày tạo',
-            dataIndex: 'batchDetailCreateAt',
-            key: 'batchDetailCreateAt',
+            dataIndex: ['vaccineResponse', 'vaccineCreateAt'],
+            key: 'vaccineCreateAt',
             render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
         },
         {
             title: 'Ngày cập nhật',
-            dataIndex: 'batchDetailUpdateAt',
-            key: 'batchDetailUpdateAt',
+            dataIndex: ['vaccineResponse', 'vaccineUpdateAt'],
+            key: 'vaccineUpdateAt',
             render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
         },
         {

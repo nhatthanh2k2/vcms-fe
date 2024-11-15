@@ -357,6 +357,27 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
+                            <li>
+                                <NavLink
+                                    to="/admin/quan-ly/danh-muc-bai-viet"
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                        pathname.includes('danh-muc-bai-viet') &&
+                                        'bg-graydark dark:bg-meta-4'
+                                    }`}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="#DEE4EE"
+                                        baseProfile="tiny"
+                                        viewBox="0 0 24 24"
+                                        className="w-5 h-5"
+                                    >
+                                        <path d="M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM3 6h8v12H3V6zm18 12h-9V6h9.003L21 18zm-1-4.5c0-.275-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5v3c0 .275.225.5.5.5h1c.275 0 .5-.225.5-.5v-3zm-3-6c0-.275-.225-.5-.5-.5h-3c-.275 0-.5.225-.5.5v5c0 .275.225.5.5.5h3c.275 0 .5-.225.5-.5v-5zm1.5 2.5h1c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5s.225.5.5.5zm0 2h1c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5s.225.5.5.5zm-5 3h3c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-3c-.275 0-.5.225-.5.5s.225.5.5.5zm3 1h-3c-.275 0-.5.225-.5.5s.225.5.5.5h3c.275 0 .5-.225.5-.5s-.225-.5-.5-.5zm2-8h1c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5s.225.5.5.5zM10 7.5c0-.275-.225-.5-.5-.5h-5c-.275 0-.5.225-.5.5v3c0 .275.225.5.5.5h5c.275 0 .5-.225.5-.5v-3zM9.501 14h-5c-.274 0-.5.225-.5.5s.226.5.5.5h5c.274 0 .499-.225.499-.5s-.225-.5-.499-.5zm0-2h-5c-.274 0-.5.225-.5.5s.226.5.5.5h5c.274 0 .499-.225.499-.5s-.225-.5-.499-.5zm0 4h-5c-.274 0-.5.225-.5.5s.226.5.5.5h5c.274 0 .499-.225.499-.5s-.225-.5-.499-.5z" />
+                                    </svg>
+                                    Danh mục bài viết
+                                </NavLink>
+                            </li>
+
                             {/* CAI DAT */}
                             <SidebarLinkGroup
                                 activeCondition={
@@ -468,7 +489,8 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 <NavLink
                                     to="/admin/quan-ly/khach-hang"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('chart') && 'bg-graydark dark:bg-meta-4'
+                                        pathname.includes('khach-hang') &&
+                                        'bg-graydark dark:bg-meta-4'
                                     }`}
                                 >
                                     <svg
@@ -486,6 +508,28 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                         />
                                     </svg>
                                     Khách hàng
+                                </NavLink>
+                            </li>
+
+                            <li>
+                                <NavLink
+                                    to="/admin/quan-ly/cuoc-hen"
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                        pathname.includes('cuoc-hen') &&
+                                        'bg-graydark dark:bg-meta-4'
+                                    }`}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="#DEE4EE"
+                                        data-name="Layer 1"
+                                        viewBox="0 0 24 24"
+                                        className="w-5 h-5"
+                                    >
+                                        <title />
+                                        <path d="M18 5V3a1 1 0 0 0-2 0v2H8V3a1 1 0 0 0-2 0v2H2v16h20V5Zm2 14H4V7h16Zm-8-7a1.5 1.5 0 1 0-1.5-1.5A1.5 1.5 0 0 0 12 12Zm3 2.21a5.35 5.35 0 0 0-6 0V16h6Z" />
+                                    </svg>
+                                    Cuộc hẹn
                                 </NavLink>
                             </li>
 

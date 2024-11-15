@@ -5,13 +5,69 @@ import { newsService } from '@/services'
 import { MyToast } from '../../common'
 import { Modal } from 'antd'
 
+// const options = {
+//     debug: 'error',
+//     modules: {
+//         toolbar: true,
+//     },
+//     placeholder: 'Viết nội dung vào đây...',
+//     theme: 'snow',
+// }
+
 const options = {
-    debug: 'error',
+    debug: 'false', // Set debug level: 'info', 'warn', 'error', or false to disable
     modules: {
-        toolbar: true,
+        toolbar: [
+            // Toolbar options: Array of arrays or format strings
+            [{ header: [1, 2, 3, false] }], // Header dropdown
+            ['bold', 'italic', 'underline', 'strike'], // Formatting buttons
+            [{ list: 'ordered' }, { list: 'bullet' }], // List options
+            [{ script: 'sub' }, { script: 'super' }], // Superscript/Subscript
+            [{ indent: '-1' }, { indent: '+1' }], // Indent buttons
+            [{ direction: 'rtl' }], // Text direction
+            [{ size: ['small', false, 'large', 'huge'] }], // Font size
+            [{ color: [] }, { background: [] }], // Color and background
+            [{ font: [] }], // Font family
+            [{ align: [] }], // Text alignment
+            ['link', 'image', 'video'], // Media
+            ['clean'], // Clear formatting
+        ],
+        clipboard: {
+            // Match pasted content to Quill's format
+            matchVisual: true,
+        },
+        history: {
+            // Enable undo/redo functionality
+            delay: 1000,
+            maxStack: 100,
+            userOnly: false,
+        },
+        keyboard: {
+            // Add custom keyboard bindings
+            bindings: {},
+        },
     },
-    placeholder: 'Viết nội dung vào đây...',
-    theme: 'snow',
+    placeholder: 'Viết nội dung vào đây...', // Placeholder text
+    readOnly: false, // Make the editor read-only
+    theme: 'snow', // Theme: 'snow' (default) or 'bubble'
+    formats: [
+        // Define the formats you want to support in the editor
+        'header',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'list',
+        'indent',
+        'link',
+        'image',
+        'video',
+        'color',
+        'background',
+        'font',
+        'align',
+        'script',
+    ],
 }
 
 export const CreateNewsModal = ({

@@ -31,6 +31,7 @@ import {
     CanceledAppointmentPage,
     DiseaseManagementPage,
     VaccinePriceManagementPage,
+    AppointmentManagementPage,
 } from '@/pages'
 import { ADMIN_PATH, EMPLOYEE_PATH, PATH } from '@/constant'
 import { Navigate } from 'react-router-dom'
@@ -189,6 +190,10 @@ export const router = [
                     {
                         path: ADMIN_PATH.customerManagement,
                         element: <CustomerManagementPage />,
+                    },
+                    {
+                        path: ADMIN_PATH.appointment,
+                        element: <AppointmentManagementPage />,
                     },
                 ],
             },
