@@ -10,7 +10,7 @@ const overlayStyle = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1000,
+    zIndex: 9999,
 }
 
 const loadingBoxStyle = {

@@ -41,16 +41,16 @@ export const EditEmployeeModal = ({
     } = useForm({
         resolver: zodResolver(updateInfoSchema),
         defaultValues: {
-            employeeFullName: '',
-            employeeDob: '',
-            employeeEmail: '',
-            employeePhone: '',
-            employeeGender: '',
+            // employeeFullName: '',
+            // employeeDob: '',
+            // employeeEmail: '',
+            // employeePhone: '',
+            // employeeGender: '',
             employeeQualification: '',
             employeePosition: '',
-            employeeProvince: '',
-            employeeDistrict: '',
-            employeeWard: '',
+            // employeeProvince: '',
+            // employeeDistrict: '',
+            // employeeWard: '',
         },
     })
 
@@ -163,21 +163,21 @@ export const EditEmployeeModal = ({
                             <div className="flex gap-2">
                                 <label htmlFor="">Nam</label>
                                 <input
-                                    {...register('employeeGender')}
+                                    // {...register('employeeGender')}
                                     type="radio"
                                     value="MALE"
                                     className="radio radio-info"
-                                    checked={getValues('employeeGender') === 'MALE'}
+                                    checked={employeeInfo?.employeeGender === 'MALE'}
                                 />
                             </div>
                             <div className="flex gap-2">
                                 <label htmlFor="">Nữ</label>
                                 <input
-                                    {...register('employeeGender')}
+                                    // {...register('employeeGender')}
                                     type="radio"
                                     value="FEMALE"
                                     className="radio radio-info"
-                                    checked={getValues('employeeGender') === 'FEMALE'}
+                                    checked={employeeInfo?.employeeGender === 'FEMALE'}
                                 />
                             </div>
                         </div>

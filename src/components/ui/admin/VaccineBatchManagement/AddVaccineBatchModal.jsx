@@ -18,6 +18,12 @@ export const AddVaccineBatchModal = ({
     handleCloseAddVaccineBatchModal,
     handleGetVaccineBatchList,
 }) => {
+    const handleCloseModal = () => {
+        handleCloseAddVaccineBatchModal()
+        reset()
+        clearErrors()
+    }
+
     const {
         register,
         handleSubmit,
@@ -37,20 +43,15 @@ export const AddVaccineBatchModal = ({
             if (response.data.code === 1000) {
                 MyToast('success', 'Nhập lô vắc xin thành công.')
                 handleGetVaccineBatchList()
+                handleCloseModal()
             } else MyToast('error', 'Xảy ra lỗi khi nhập lô vắc xin.')
         } catch (error) {
             if (error.response) {
                 if (error.response.data.code === 1005) {
-                    MyToast('error', 'Vắc xin trong file excel không có trong dữ liệu.')
+                    MyToast('error', 'Vắc xin trong file excel không có sẵn trong dữ liệu.')
                 }
             } else MyToast('error', 'Nhập lô vắc xin không thành công.')
         }
-    }
-
-    const handleCloseModal = () => {
-        handleCloseAddVaccineBatchModal()
-        reset()
-        clearErrors()
     }
 
     return (

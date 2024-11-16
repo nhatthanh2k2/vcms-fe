@@ -168,7 +168,7 @@ export const EditVaccineForm = () => {
     }
 
     return (
-        <div className="flex flex-col bg-white p-5">
+        <div className="flex flex-col bg-white border border-stroke shadow-default rounded-lg p-5">
             <form className="flex flex-col space-y-5 " onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex space-x-5">
                     <div className="space-y-2 flex-1">
@@ -177,6 +177,7 @@ export const EditVaccineForm = () => {
                             <input
                                 type="text"
                                 className="input input-bordered input-success w-full input-sm"
+                                readOnly
                                 {...register('vaccineName')}
                             />
                         </div>
@@ -185,6 +186,7 @@ export const EditVaccineForm = () => {
                             <input
                                 type="text"
                                 className="input input-bordered input-success w-full input-sm"
+                                readOnly
                                 {...register('vaccineOrigin')}
                             />
                         </div>
@@ -198,7 +200,7 @@ export const EditVaccineForm = () => {
                             className="h-64 w-72 mx-auto object-contain "
                             alt=""
                         />
-                        <span htmlFor="file-upload" className="font-semibold mr-2">
+                        {/* <span htmlFor="file-upload" className="font-semibold mr-2">
                             Chọn ảnh mới
                         </span>
                         <input
@@ -208,7 +210,7 @@ export const EditVaccineForm = () => {
                             className="file-input file-input-bordered file-input-success w-full max-w-xs file-input-sm"
                             //{...register('vaccineImage')}
                             //onChange={handleFileChange}
-                        />
+                        /> */}
                     </div>
                 </div>
 
@@ -277,52 +279,52 @@ export const EditVaccineForm = () => {
                 </div>
 
                 <div className="flex space-x-5">
-                    <div className="flex flex-col space-y-5 w-1/2">
-                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
-                            <VaccineFieldEditor
-                                label="Đối tượng tiêm"
-                                items={vaccinePatients}
-                                setItems={setVaccinePatients}
-                            />
-                        </div>
-
-                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
-                            <VaccineFieldEditor
-                                label="Chống chỉ định"
-                                items={vaccineContraindications}
-                                setItems={setVaccineContraindications}
-                            />
-                        </div>
-                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
-                            <VaccineFieldEditor
-                                label="Phản ứng sau tiêm"
-                                items={vaccineReactions}
-                                setItems={setVaccineReactions}
-                            />
-                        </div>
-                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
-                            <VaccineFieldEditor
-                                label="Cách bảo quản"
-                                items={vaccineStorages}
-                                setItems={setVaccineStorages}
-                            />
-                        </div>
+                    <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl flex-1">
+                        <VaccineFieldEditor
+                            label="Đối tượng tiêm"
+                            items={vaccinePatients}
+                            setItems={setVaccinePatients}
+                        />
                     </div>
-                    <div className="flex flex-col space-y-5 w-1/2">
-                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
-                            <VaccineFieldEditor
-                                label="Đường tiêm"
-                                items={vaccineInjectionRoutes}
-                                setItems={setVaccineInjectionRoutes}
-                            />
-                        </div>
-                        <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl">
-                            <VaccineFieldEditor
-                                label="Phác đồ tiêm"
-                                items={vaccineInjectionSchedules}
-                                setItems={setVaccineInjectionSchedules}
-                            />
-                        </div>
+                    <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl flex-1">
+                        <VaccineFieldEditor
+                            label="Đường tiêm"
+                            items={vaccineInjectionRoutes}
+                            setItems={setVaccineInjectionRoutes}
+                        />
+                    </div>
+                </div>
+
+                <div className="flex space-x-5">
+                    <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl flex-1">
+                        <VaccineFieldEditor
+                            label="Chống chỉ định"
+                            items={vaccineContraindications}
+                            setItems={setVaccineContraindications}
+                        />
+                    </div>
+                    <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl flex-1">
+                        <VaccineFieldEditor
+                            label="Phản ứng sau tiêm"
+                            items={vaccineReactions}
+                            setItems={setVaccineReactions}
+                        />
+                    </div>
+                </div>
+                <div className="flex  space-x-5 ">
+                    <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl flex-1">
+                        <VaccineFieldEditor
+                            label="Cách bảo quản"
+                            items={vaccineStorages}
+                            setItems={setVaccineStorages}
+                        />
+                    </div>
+                    <div className="border-2 border-teal-200 p-3 shadow-default rounded-xl flex-1">
+                        <VaccineFieldEditor
+                            label="Phác đồ tiêm"
+                            items={vaccineInjectionSchedules}
+                            setItems={setVaccineInjectionSchedules}
+                        />
                     </div>
                 </div>
 

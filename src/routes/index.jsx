@@ -191,10 +191,6 @@ export const router = [
                         path: ADMIN_PATH.customerManagement,
                         element: <CustomerManagementPage />,
                     },
-                    {
-                        path: ADMIN_PATH.appointment,
-                        element: <AppointmentManagementPage />,
-                    },
                 ],
             },
             {
@@ -211,6 +207,10 @@ export const router = [
                     {
                         path: ADMIN_PATH.canceledAppointment,
                         element: <CanceledAppointmentPage />,
+                    },
+                    {
+                        path: ADMIN_PATH.appointment,
+                        element: <AppointmentManagementPage />,
                     },
                 ],
             },

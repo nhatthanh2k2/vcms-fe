@@ -31,7 +31,7 @@ export const MonthlyDoseCountOfQuarterChart = () => {
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5 space-y-5">
+        <div className="bg-white shadow-default rounded-lg border border-stroke px-5 pb-5 pt-7.5 space-y-5">
             <div className="flex justify-between items-center font-bold">
                 <span>
                     Số lượt tiêm theo tháng trong quý {quarterSelected} năm {yearSelected}

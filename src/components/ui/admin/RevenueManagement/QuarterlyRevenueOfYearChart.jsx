@@ -49,7 +49,7 @@ export const QuarterlyRevenueOfYearChart = () => {
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+        <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex justify-between font-bold">
                 <span>Doanh thu theo quý năm {yearSelected}</span>
                 <span>

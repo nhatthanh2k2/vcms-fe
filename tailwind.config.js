@@ -79,10 +79,10 @@ module.exports = {
         success: "#219653",
         danger: "#D34053",
         warning: "#FFA70B",
-        'admin': 'rgb(241, 245, 249)', 
-        'employee': "#F0F8FF",
+        'admin': '#F5FFFA', 
+        'employee': "#F5FFFA",
         info: '#00B5E2',
-               
+        section: '#F8F8F8',
       },
       fontSize: {
         "title-xxl": ["44px", "55px"],
@@ -244,7 +244,7 @@ module.exports = {
                 'slider3': "url('/images/slider3.jpg')",
                 'bg-vaccination': "url('/images/bg-vaccination.png')",
                 'order-vaccine-list': "url('/images/order-vaccine-list.jpg')",
-                'modal': "url('/images/bg-modal.jpg')",
+                'login': "url('/images/login.jpg')",
                 'vaccination-request': "url('/images/vaccination-request.jpg')",
                 'vaccination-pregnant': "url('/images/vaccination-pregnant.jpg')",
                 'vaccination-for-child': "url('/images/vaccination-for-child.jpg')",

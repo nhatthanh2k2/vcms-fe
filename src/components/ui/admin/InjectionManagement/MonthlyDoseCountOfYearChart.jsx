@@ -49,7 +49,7 @@ export const MonthlyDoseCountOfYearChart = () => {
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+        <div className="bg-white shadow-default rounded-lg border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex font-bold justify-between">
                 <span>Biểu đồ số lượt tiêm hàng tháng năm {yearSelected}</span>
             </div>

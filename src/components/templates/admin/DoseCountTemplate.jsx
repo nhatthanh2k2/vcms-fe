@@ -34,17 +34,20 @@ export const DoseCountTemplate = () => {
         }
     }
     return (
-        <div className="flex flex-col space-y-10">
+        <div className="">
             <Breadcrumb pageName={'Số lượt tiêm'} />
-            <div className="mb-5">
-                <Select
-                    options={options}
-                    style={{ width: '100%' }}
-                    onChange={(value) => setSelectedChart(value)}
-                    value={selectedChart}
-                />
+            <div className="flex space-x-2 items-center mb-5 ">
+                <label className="font-semibold">Chọn thời gian để xem doanh thu:</label>
+                <div className="w-80">
+                    <Select
+                        options={options}
+                        style={{ width: '100%' }}
+                        onChange={(value) => setSelectedChart(value)}
+                        value={selectedChart}
+                    />
+                </div>
             </div>
-            <div>{renderChart()}</div>
+            <div className="mb-5">{renderChart()}</div>
             <DoseCountForNextMonthTable />
         </div>
     )

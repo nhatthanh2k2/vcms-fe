@@ -1,4 +1,4 @@
-import { vaccineBatchService, vaccinePackageService } from '@/services'
+import { vaccineBatchService } from '@/services'
 
 import { Modal, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
@@ -15,7 +15,12 @@ const batchDetailColumns = [
         key: 'diseaseName',
     },
     {
-        title: 'Số lượng',
+        title: 'Tổng Số lượng',
+        dataIndex: 'batchDetailTotalVaccineQuantity',
+        key: 'quantity',
+    },
+    {
+        title: 'Số lượng còn lại',
         dataIndex: 'batchDetailVaccineQuantity',
         key: 'quantity',
     },

@@ -35,17 +35,28 @@ export const DailyDoseCountOfWeekChart = () => {
         plugins: {
             legend: {
                 position: 'top',
+                labels: {
+                    color: '#000',
+                },
             },
         },
         scales: {
+            x: {
+                ticks: {
+                    color: '#000', // Màu chữ của trục X
+                },
+            },
             y: {
                 beginAtZero: true,
+                ticks: {
+                    color: '#000', // Màu chữ của trục X
+                },
             },
         },
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-8 pt-7.5">
+        <div className="bg-white shadow-default rounded-lg border border-stroke px-5 pb-8 pt-7.5">
             <h2 className="font-bold">Biểu đồ số lượt tiêm trong tuần này</h2>
             <div className="mt-2 h-100">
                 <Line data={dailyDoseCountOfWeekData} options={options} />

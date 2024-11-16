@@ -33,7 +33,7 @@ export const EmployeeQualificationChart = () => {
     }
 
     return (
-        <div className="h-80 sm:px-7.5 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="h-80 sm:px-7.5 rounded-lg border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
             <label className="flex-1 text-xl font-semibold">
                 Biểu đồ nhân viên theo trình độ chuyên môn
             </label>

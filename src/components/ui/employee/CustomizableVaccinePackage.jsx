@@ -31,8 +31,10 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
     const [packageSelected, setPackageSelected] = useState(null)
     const [packageDetailList, setPackageDetailList] = useState([])
     const [filteredVaccineList, setFilteredVaccineList] = useState([])
+    const [currentList, setCurrentList] = useState([])
     const [payment, setPayment] = useState('')
     const [packagePrice, setPackagePrice] = useState(0)
+    const [searchQuery, setSearchQuery] = useState('')
 
     // console.log('Package Selected:', packageSelected)
     // console.log('Package Detail List:', packageDetailList)
@@ -60,6 +62,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                 )
         )
         setFilteredVaccineList(filteredData)
+        setCurrentList(filteredData)
     }, [packageDetailList])
 
     const {
@@ -143,6 +146,11 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                     (vaccine) => vaccine.vaccineId !== batchDetailToAdd.vaccineResponse.vaccineId
                 )
             )
+            setCurrentList((prev) =>
+                prev.filter(
+                    (vaccine) => vaccine.vaccineId !== batchDetailToAdd.vaccineResponse.vaccineId
+                )
+            )
         }
     }
 
@@ -164,6 +172,13 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
             }
 
             setFilteredVaccineList((prev) => [
+                ...prev,
+                {
+                    vaccineResponse: vaccineToRemove.vaccineResponse,
+                },
+            ])
+
+            setCurrentList((prev) => [
                 ...prev,
                 {
                     vaccineResponse: vaccineToRemove.vaccineResponse,
@@ -275,6 +290,19 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
         },
     ]
 
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = filteredVaccineList.filter((detail) =>
+                detail.vaccineResponse.vaccineDescription
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase())
+            )
+            setFilteredVaccineList(filtered)
+        } else {
+            setFilteredVaccineList(currentList)
+        }
+    }, [searchQuery])
+
     return (
         <section className="bg-white rounded-lg shadow p-6">
             <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
@@ -366,35 +394,54 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                 {packageSelected && (
                     <div className="flex flex-col space-y-5">
                         <div>
+                            <div className="text-xl mb-2 font-semibold">Vắc xin trong gói</div>
+
                             <Table
                                 columns={packageDetailColumns}
                                 dataSource={packageDetailList}
                                 rowKey={'vaccinePkgDetailId'}
                                 pagination={false}
+                                bordered
                                 scroll={{
                                     y: 400,
                                 }}
-                                title={() => (
-                                    <div className="text-center text-lg text-orange-500 font-semibold">
-                                        Vắc Xin Trong Gói
-                                    </div>
-                                )}
-                                rowClassName={(record, index) =>
-                                    index % 2 === 0 ? 'even-row' : 'odd-row'
-                                }
                                 footer={() => (
                                     <div className="text-center text-xl font-semibold">
-                                        Tổng giá: {packagePrice.toLocaleString()} VND
+                                        Tổng giá: {(packagePrice * 1.1).toLocaleString()} VND
                                     </div>
                                 )}
                             />
                         </div>
 
                         <div>
+                            <div className="flex justify-between mb-2">
+                                <span className="text-xl mb-2 font-semibold">Danh mục vắc xin</span>
+                                <label className="input input-bordered input-info input-sm flex items-center gap-2 w-75">
+                                    <input
+                                        type="text"
+                                        className="grow"
+                                        placeholder="Tìm kiếm vắc xin"
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 16 16"
+                                        fill="currentColor"
+                                        className="h-4 w-4 opacity-70"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                </label>
+                            </div>
                             <Table
                                 columns={batchDetailColumns}
                                 dataSource={filteredVaccineList}
                                 rowKey={'batchDetailId'}
+                                bordered
                                 pagination={{
                                     pageSize: 10,
                                     showSizeChanger: false,
@@ -403,14 +450,6 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                                 scroll={{
                                     y: 400,
                                 }}
-                                title={() => (
-                                    <div className="text-center text-lg text-orange-500 font-semibold">
-                                        Danh Mục Vắc Xin
-                                    </div>
-                                )}
-                                rowClassName={(record, index) =>
-                                    index % 2 === 0 ? 'even-row' : 'odd-row'
-                                }
                             />
                         </div>
                     </div>

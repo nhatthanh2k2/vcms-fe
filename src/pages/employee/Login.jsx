@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ForgotPasswordModal, LoadingDot, LoadingPage, MyToast } from '@/components'
+import { ForgotPasswordModal, LoadingDot, MyToast } from '@/components'
 import { authService } from '@/services'
 import { jwtDecode } from 'jwt-decode'
 
@@ -19,7 +19,7 @@ export const Login = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
-        //setIsLoading(true)
+        setIsLoading(true)
 
         const authEmployeeDTO = {
             username: account.username,
@@ -37,15 +37,12 @@ export const Login = () => {
             const decodedToken = jwtDecode(token)
             const role = decodedToken.scope
 
-            if (role === 'ADMIN') navigate('/admin/trang-chu')
-            else navigate('/nhan-vien')
-            MyToast('success', 'Đăng Nhập Thành Công')
-            // setTimeout(() => {
-            //     setIsLoading(false)
-            //     MyToast('success', 'Đăng Nhập Thành Công')
-            //     if (role === 'ADMIN') navigate('/admin/trang-chu')
-            //     else navigate('/nhan-vien')
-            // }, 2000)
+            setTimeout(() => {
+                setIsLoading(false)
+                MyToast('success', 'Đăng Nhập Thành Công')
+                if (role === 'ADMIN') navigate('/admin/trang-chu')
+                else navigate('/nhan-vien')
+            }, 2000)
         } catch (error) {
             setTimeout(() => {
                 setIsLoading(false)
@@ -71,7 +68,7 @@ export const Login = () => {
     }
 
     return (
-        <div className="relative py-8 min-h-screen bg-modal bg-cover from-sky-50 to-gray-200">
+        <div className="relative py-8 min-h-screen bg-login bg-cover from-sky-50 to-gray-200">
             <div className="relative container m-auto px-6 md:px-12 xl:px-40">
                 <div className="m-auto md:w-8/12 lg:w-6/12 xl:w-6/12">
                     <div className="rounded-xl bg-white shadow-xl">

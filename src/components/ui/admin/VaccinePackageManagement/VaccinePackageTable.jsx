@@ -91,6 +91,12 @@ export const VaccinePackageTable = () => {
             render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
         },
         {
+            title: 'Ngày tạo gói',
+            dataIndex: 'vaccinePackageUpdateAt',
+            key: 'vaccinePackageUpdateAt',
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+        },
+        {
             title: '',
             dataIndex: 'actions',
             key: 'actions',

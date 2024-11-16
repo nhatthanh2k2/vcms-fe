@@ -36,13 +36,16 @@ export const RevenueTemplate = () => {
         <div>
             <Breadcrumb pageName={'Doanh thu'} />
 
-            <div className="mb-5">
-                <Select
-                    options={options}
-                    style={{ width: '100%' }}
-                    onChange={(value) => setSelectedChart(value)}
-                    value={selectedChart}
-                />
+            <div className="mb-5 flex items-center space-x-5">
+                <label className="font-semibold">Chọn thời gian xem doanh thu:</label>
+                <div className="w-75">
+                    <Select
+                        options={options}
+                        style={{ width: '100%' }}
+                        onChange={(value) => setSelectedChart(value)}
+                        value={selectedChart}
+                    />
+                </div>
             </div>
 
             <div>{renderChart()}</div>

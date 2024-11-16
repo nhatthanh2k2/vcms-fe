@@ -29,14 +29,12 @@ export const DoseCountForNextMonthTable = () => {
     console.log(doseCountList)
 
     return (
-        <div className=" shadow-default bg-white">
+        <div>
+            <div className="text-lg font-semibold mb-3">
+                Thống kê số vắc xin được đăng ký trong 1 tháng tiếp theo
+            </div>
             <Table
                 bordered
-                title={() => (
-                    <div className="font-bold text-blue-600 text-xl">
-                        Số mũi vắc xin đăng ký tiêm trong 1 tháng kế tiếp
-                    </div>
-                )}
                 columns={columns}
                 dataSource={doseCountList.map((item, index) => ({ ...item, key: index }))}
             />

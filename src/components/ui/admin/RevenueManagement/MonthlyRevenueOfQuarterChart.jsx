@@ -53,7 +53,7 @@ export const MonthlyRevenueOfQuarterChart = () => {
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5 space-y-5">
+        <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5 space-y-5">
             <div className="flex justify-between items-center font-bold">
                 <span>
                     Doanh thu theo tháng trong quý {quarterSelected} năm {yearSelected}

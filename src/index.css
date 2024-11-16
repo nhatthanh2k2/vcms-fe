@@ -41,7 +41,7 @@ button {
 
 .ant-table-row:hover .ant-table-cell {
     color: #000000;
-    background-color: #f0faff !important;
+    background-color: #a0d8ff !important;
     cursor: pointer;
 }
 
@@ -51,10 +51,20 @@ button {
 }
 
 .ant-table-thead > tr > th {
-    /* background-color: #87CEEB !important;  */
-    color: #000000; 
-    font-weight: bold !important; /* Đậm chữ */
+    background-color: #E8E8E8 !important; 
+    color: #000000;
+    font-weight: bold !important;
 }
+
+/* .ant-table {
+    border: 1px solid #333 !important; 
+}
+
+.ant-table td,
+.ant-table th {
+    border-width: 1px !important; 
+    border-color: #333 !important; 
+} */
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

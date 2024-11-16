@@ -76,18 +76,19 @@ export const VaccineTable = () => {
             title: 'Mã Vaccine',
             dataIndex: 'vaccineCode',
             key: 'vaccineCode',
+            width: 100,
         },
         {
             title: 'Tên Vaccine',
             dataIndex: 'vaccineName',
             key: 'vaccineName',
-            width: 300,
+            width: 200,
         },
         {
             title: 'Nguồn gốc',
             dataIndex: 'vaccineOrigin',
             key: 'vaccineOrigin',
-            width: 400,
+            width: 300,
         },
         {
             title: 'Ngày thêm',

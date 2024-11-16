@@ -9,7 +9,8 @@ export const VaccineBatchTable = () => {
     const [vaccineBatchList, setVaccineBatchList] = useState([])
     const [filteredBatchList, setFilteredBatchList] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
-    const [loading, setLoading] = useState(true)
+    const [loadingTable, setLoadingTable] = useState(true)
+
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
@@ -19,7 +20,7 @@ export const VaccineBatchTable = () => {
             .then((response) => {
                 setVaccineBatchList(response.data.result)
                 setFilteredBatchList(response.data.result)
-                setLoading(false)
+                setLoadingTable(false)
             })
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy các lô vắc xin.'))
     }
@@ -60,6 +61,15 @@ export const VaccineBatchTable = () => {
     const handleCloseVaccineBatchDetailModal = () => {
         setIsOpenVaccineBatchDetailModal(false)
         setBatchSelected(null)
+    }
+
+    const handleDownloadFile = () => {
+        const link = document.createElement('a')
+        link.href = '/files/Mau-lo-vac-xin.xlsx' // Đường dẫn file trong thư mục public
+        link.download = 'Mau-lo-vac-xin.xlsx' // Tên file khi tải về
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
     }
 
     const vaccineBatchColumns = [
@@ -157,6 +167,28 @@ export const VaccineBatchTable = () => {
                         </div>
                         <div>
                             <button
+                                onClick={handleDownloadFile}
+                                className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                            >
+                                <span className="mr-2">Tải file Excel mẫu</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    className="w-6 h-6"
+                                >
+                                    <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 17h.01m.39-3h.6c.932 0 1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C21 15.602 21 16.068 21 17c0 .932 0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C19.398 20 18.932 20 18 20H6c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C3 18.398 3 17.932 3 17c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C4.602 14 5.068 14 6 14h.6m5.4 1V4m0 11-3-3m3 3 3-3"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                        <div>
+                            <button
                                 onClick={handleOpenAddVaccineBatchModal}
                                 className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                             >
@@ -183,7 +215,7 @@ export const VaccineBatchTable = () => {
                 columns={vaccineBatchColumns}
                 dataSource={filteredBatchList}
                 rowKey="vaccineBatchId"
-                loading={loading}
+                loading={loadingTable}
             />
 
             <AddVaccineBatchModal

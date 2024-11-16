@@ -30,7 +30,7 @@ export const QuarterlyDoseCountOfYearChart = () => {
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+        <div className="bg-white shadow-default rounded-lg border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex justify-between font-bold">
                 <span>Số lượt tiêm theo quý năm {yearSelected}</span>
             </div>

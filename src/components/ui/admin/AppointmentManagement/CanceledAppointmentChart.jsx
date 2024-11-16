@@ -56,6 +56,9 @@ export const CanceledAppointmentChart = () => {
                 columns={columns}
                 dataSource={canceledAppointmentList}
                 rowKey={'appointmentId'}
+                locale={{
+                    emptyText: <span>Không có dữ liệu</span>,
+                }}
             />
         </div>
     )

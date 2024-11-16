@@ -127,9 +127,11 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
     }
 
     const handleViewPackage = async () => {
-        const response = await vaccinePackageService.getDetailsOfPackage(packageSelected)
-        setDetailPackage(response.data.result)
-        showModal()
+        if (packageSelected) {
+            const response = await vaccinePackageService.getDetailsOfPackage(packageSelected)
+            setDetailPackage(response.data.result)
+            showModal()
+        } else MyToast('warn', 'Bạn chưa chọn gói vắc xin.')
     }
 
     const totalDoseCount = detailPackage.reduce((total, item) => total + item.doseCount, 0)
@@ -140,8 +142,6 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
     }
 
     const dataSourceWithTotal = [...detailPackage]
-
-    console.log(batchDetailList)
 
     return (
         <section className="bg-white rounded-lg shadow p-6">

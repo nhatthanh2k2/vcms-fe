@@ -65,8 +65,8 @@ export const AppointmentForm = () => {
     const [packageList, setPackageList] = useState([])
 
     const [injectionType, setInjectionType] = useState('SINGLE')
-    const [batchDetailSelected, setBatchDetailSelected] = useState()
-    const [vaccinePackageSelected, setVaccinePackageSelected] = useState()
+    const [batchDetailSelected, setBatchDetailSelected] = useState(0)
+    const [vaccinePackageSelected, setVaccinePackageSelected] = useState(0)
 
     // Lay danh sach vaccine va goi vaccine
     useEffect(() => {
@@ -98,6 +98,7 @@ export const AppointmentForm = () => {
         formState: { errors },
         setValue,
         clearErrors,
+        reset,
     } = useForm({
         resolver: zodResolver(appointmentSchema),
         defaultValues: {
@@ -122,6 +123,7 @@ export const AppointmentForm = () => {
         formState: { errors: errorsWithCode },
         setValue: setValueWithCode,
         clearErrors: clearErrorsWithCode,
+        reset: resetWithCode,
     } = useForm({
         resolver: zodResolver(apptCodeSchema),
         defaultValues: {
@@ -132,6 +134,13 @@ export const AppointmentForm = () => {
     })
 
     const onSubmit = async (data) => {
+        if (
+            (injectionType === 'SINGLE' && batchDetailSelected === 0) ||
+            (injectionType === 'PACKAGE' && vaccinePackageSelected === 0)
+        ) {
+            MyToast('warn', 'Bạn chưa chọn vắc xin.')
+            return
+        }
         try {
             const request = {
                 ...data,
@@ -152,7 +161,6 @@ export const AppointmentForm = () => {
 
             const response = await appointmentService.createAppointmentWithOutCustCode(request)
 
-            //console.log(response.data)
             if (response.data.code === 1000) {
                 MyToast('success', 'Đăng Ký Thành Công')
             } else {
@@ -165,6 +173,13 @@ export const AppointmentForm = () => {
     }
 
     const onSubmitWithCode = async (data) => {
+        if (
+            (injectionType === 'SINGLE' && batchDetailSelected === 0) ||
+            (injectionType === 'PACKAGE' && vaccinePackageSelected === 0)
+        ) {
+            MyToast('warn', 'Bạn chưa chọn vắc xin.')
+            return
+        }
         try {
             const request = {
                 ...data,
@@ -178,10 +193,9 @@ export const AppointmentForm = () => {
             }
 
             const response = await appointmentService.createAppointmentWithCustCode(request)
-            if (response.status === 200) {
-                if (response.data.code === 1000) {
-                    MyToast('success', 'Đăng Ký Thành Công')
-                }
+
+            if (response.data.code === 1000) {
+                MyToast('success', 'Đăng Ký Thành Công')
             } else {
                 MyToast('error', 'Xảy ra lỗi trong quá trình đăng ký')
             }
@@ -207,7 +221,10 @@ export const AppointmentForm = () => {
                         type="radio"
                         name="isCustomer"
                         className="radio radio-accent mr-4"
-                        onChange={() => setIsCustomer(1)}
+                        onChange={() => {
+                            setIsCustomer(1)
+                            registerWithCode()
+                        }}
                         checked={isCustomer === 1}
                     />
                     <span>Bạn đã có mã khách hàng tại trung tâm.</span>
@@ -218,7 +235,10 @@ export const AppointmentForm = () => {
                         type="radio"
                         name="isCustomer"
                         className="radio radio-accent mr-4"
-                        onChange={() => setIsCustomer(0)}
+                        onChange={() => {
+                            setIsCustomer(0)
+                            reset()
+                        }}
                         checked={isCustomer === 0}
                     />
                     <span>Bạn chưa có mã khách hàng tại trung tâm.</span>
@@ -634,7 +654,6 @@ export const AppointmentForm = () => {
                         <input
                             onChange={() => {
                                 setInjectionType('SINGLE')
-                                setVaccinePackageSelected(0)
                             }}
                             type="radio"
                             name="vaccine_tabs"
@@ -710,7 +729,6 @@ export const AppointmentForm = () => {
                         <input
                             onChange={() => {
                                 setInjectionType('PACKAGE')
-                                setBatchDetailSelected(0)
                             }}
                             type="radio"
                             name="vaccine_tabs"

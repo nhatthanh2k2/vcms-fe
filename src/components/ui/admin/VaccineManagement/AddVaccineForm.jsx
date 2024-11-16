@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Select } from 'antd'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,6 +7,17 @@ import { diseaseService, vaccineService } from '@/services'
 import { MyToast } from '../../common'
 import { AddDiseaseModal } from '../DiseaseManagement'
 import { ageRanges } from '@/utils'
+import 'quill/dist/quill.snow.css'
+import Quill from 'quill'
+
+const options = {
+    debug: 'error',
+    modules: {
+        toolbar: true,
+    },
+    placeholder: 'Nhập nội dung vào đây...',
+    theme: 'snow',
+}
 
 const addVaccineSchema = z.object({
     vaccineName: z.string().min(1, 'Vui lòng nhập tên vắc xin'),
@@ -36,8 +47,10 @@ const addVaccineSchema = z.object({
 })
 
 export const AddVaccineForm = () => {
+    const quillRefs = useRef({})
     const [selectedAges, setSelectedAges] = useState([])
     const [diseaseList, setDiseaseList] = useState([])
+    const [isOpenAddDiseaseModal, setIsOpenAddDiseaseModal] = useState(false)
 
     const getDiseaseList = () => {
         diseaseService
@@ -56,6 +69,8 @@ export const AddVaccineForm = () => {
         control,
         formState: { errors },
         setValue,
+        clearErrors,
+        reset,
     } = useForm({
         resolver: zodResolver(addVaccineSchema),
         defaultValues: {
@@ -76,8 +91,6 @@ export const AddVaccineForm = () => {
         },
     })
 
-    const [isOpenAddDiseaseModal, setIsOpenAddDiseaseModal] = useState(false)
-
     const handleOpenAddDiseaseModal = (e) => {
         e.preventDefault()
         setIsOpenAddDiseaseModal(true)
@@ -96,54 +109,47 @@ export const AddVaccineForm = () => {
         setValue('vaccineAgeRange', newSelected)
     }
 
-    const concatenateWithSemicolon = (value) => {
-        if (value && typeof value === 'string') {
-            return (
-                value
-                    .split('\n')
-                    .map((item) => item.trim())
-                    .join(';') + ';'
-            )
+    const handleEditorInit = (fieldId) => {
+        if (quillRefs.current[fieldId]) return
+
+        const quill = new Quill(`#${fieldId}`, options)
+        quillRefs.current[fieldId] = quill
+
+        const handleScroll = (event) => {
+            event.stopImmediatePropagation()
         }
-        return ''
+
+        quill.root.addEventListener('scroll', handleScroll, { passive: true })
+
+        quill.on('text-change', () => {
+            setValue(fieldId, quill.root.innerHTML)
+            clearErrors(fieldId)
+        })
+
+        quillRefs.current[fieldId].scrollHandler = handleScroll
     }
 
+    useEffect(() => {
+        ;[
+            'vaccineInjectionRoute',
+            'vaccineContraindication',
+            'vaccineReaction',
+            'vaccineStorage',
+            'vaccineInjectionSchedule',
+            'vaccinePatient',
+        ].forEach(handleEditorInit)
+
+        return () => {
+            Object.keys(quillRefs.current).forEach((fieldId) => {
+                const quillInstance = quillRefs.current[fieldId]
+                if (quillInstance) {
+                    quillInstance.root.removeEventListener('scroll', quillInstance.scrollHandler)
+                }
+            })
+        }
+    }, [])
+
     const onSubmit = async (data) => {
-        // const request = new FormData()
-        // request.append('vaccineName', data.vaccineName)
-        // request.append('vaccineOrigin', data.vaccineOrigin)
-        // if (data.vaccineImage) {
-        //     request.append('vaccineImage', data.vaccineImage[0])
-        // }
-        // request.append('vaccineAgeRange', JSON.stringify(data.vaccineAgeRange))
-        // request.append('vaccineDescription', data.vaccineDescription)
-        // request.append('vaccineInjectionRoute', data.vaccineInjectionRoute)
-        // request.append('vaccineContraindication', data.vaccineContraindication)
-        // request.append('vaccineReaction', data.vaccineReaction)
-        // request.append('vaccineChildDoseCount', data.vaccineChildDoseCount)
-        // request.append('vaccineAdultDoseCount', data.vaccineAdultDoseCount)
-        // request.append('vaccineStorage', data.vaccineStorage)
-        // request.append('vaccineInjectionSchedule', data.vaccineInjectionSchedule)
-        // request.append('vaccinePatient', data.vaccinePatient)
-        // request.append('diseaseId', data.diseaseId)
-        // try {
-        //     const response = await vaccineService.createVaccine(request)
-        //     if (response.data.code === 1000) {
-        //         MyToast('success', 'Thêm vắc xin thành công.')
-        //     } else MyToast('error', 'Xảy ra lỗi khi thêm vắc xin.')
-        // } catch (error) {
-        //     if (error.response)
-        //         if (error.response.status === 400) MyToast('error', 'Hình ảnh không hợp lệ.')
-        // }
-
-        const vaccineDescription = concatenateWithSemicolon(data.vaccineDescription)
-        const vaccinePatient = concatenateWithSemicolon(data.vaccinePatient)
-        const vaccineInjectionRoute = concatenateWithSemicolon(data.vaccineInjectionRoute)
-        const vaccineContraindication = concatenateWithSemicolon(data.vaccineContraindication)
-        const vaccineReaction = concatenateWithSemicolon(data.vaccineReaction)
-        const vaccineStorage = concatenateWithSemicolon(data.vaccineStorage)
-        const vaccineInjectionSchedule = concatenateWithSemicolon(data.vaccineInjectionSchedule)
-
         const request = new FormData()
         request.append('vaccineName', data.vaccineName)
         request.append('vaccineOrigin', data.vaccineOrigin)
@@ -151,25 +157,22 @@ export const AddVaccineForm = () => {
             request.append('vaccineImage', data.vaccineImage[0])
         }
         request.append('vaccineAgeRange', JSON.stringify(data.vaccineAgeRange))
-        request.append('vaccineDescription', vaccineDescription)
-        request.append('vaccineInjectionRoute', vaccineInjectionRoute)
-        request.append('vaccineContraindication', vaccineContraindication)
-        request.append('vaccineReaction', vaccineReaction)
+        request.append('vaccineDescription', data.vaccineDescription)
+        request.append('vaccineInjectionRoute', data.vaccineInjectionRoute)
+        request.append('vaccineContraindication', data.vaccineContraindication)
+        request.append('vaccineReaction', data.vaccineReaction)
         request.append('vaccineChildDoseCount', data.vaccineChildDoseCount)
         request.append('vaccineAdultDoseCount', data.vaccineAdultDoseCount)
-        request.append('vaccineStorage', vaccineStorage)
-        request.append('vaccineInjectionSchedule', vaccineInjectionSchedule)
-        request.append('vaccinePatient', vaccinePatient)
+        request.append('vaccineStorage', data.vaccineStorage)
+        request.append('vaccineInjectionSchedule', data.vaccineInjectionSchedule)
+        request.append('vaccinePatient', data.vaccinePatient)
         request.append('diseaseId', data.diseaseId)
-
-        // request.forEach((value, key) => {
-        //     console.log(`${key}: ${value}`)
-        // })
 
         try {
             const response = await vaccineService.createVaccine(request)
             if (response.data.code === 1000) {
                 MyToast('success', 'Thêm vắc xin thành công.')
+                reset()
             } else MyToast('error', 'Xảy ra lỗi khi thêm vắc xin.')
         } catch (error) {
             if (error.response)
@@ -178,7 +181,7 @@ export const AddVaccineForm = () => {
     }
 
     return (
-        <div className="flex flex-col bg-white px-10 py-5">
+        <div className="flex flex-col bg-white border border-stroke rounded-lg shadow-default px-10 py-5">
             <form className="flex flex-col space-y-5 " onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex space-x-5">
                     <div className="flex-1 space-y-2">
@@ -210,7 +213,6 @@ export const AddVaccineForm = () => {
                             accept=".jpg,.jpeg,.png"
                             className="file-input file-input-bordered file-input-success w-full max-w-xs file-input-sm"
                             {...register('vaccineImage')}
-                            //onChange={handleFileChange}
                         />
                         {errors.vaccineImage && (
                             <p className="text-red-500">{errors.vaccineImage.message}</p>
@@ -231,7 +233,10 @@ export const AddVaccineForm = () => {
                                     type="checkbox"
                                     className="checkbox checkbox-success"
                                     checked={selectedAges.includes(age)}
-                                    onChange={() => handleSelectedAge(age)}
+                                    onChange={() => {
+                                        handleSelectedAge(age)
+                                        clearErrors('vaccineAgeRange')
+                                    }}
                                 />
                                 <span className="label-text ml-2">{age}</span>
                             </div>
@@ -306,20 +311,17 @@ export const AddVaccineForm = () => {
                     )}
                 </div>
 
-                <div>
-                    <strong className="text-red-500">(*) Lưu ý:</strong> Đối với các thông tin bên
-                    dưới, mỗi ý bạn hãy xuống dòng nhé.
-                </div>
-
                 <div className="flex  space-x-5">
                     <div className="flex flex-col space-y-2 flex-grow">
                         <label className="font-semibold">Đối tượng tiêm:</label>
-                        <textarea
+                        {/* <textarea
                             className="textarea textarea-success w-full ro"
                             placeholder="Bio"
                             rows={4}
                             {...register('vaccinePatient')}
-                        ></textarea>
+                        ></textarea> */}
+
+                        <div className="min-h-12 " id="vaccinePatient"></div>
                         {errors.vaccinePatient && (
                             <p className="text-red-500">{errors.vaccinePatient.message}</p>
                         )}
@@ -327,12 +329,13 @@ export const AddVaccineForm = () => {
 
                     <div className="flex flex-col space-y-2  flex-grow">
                         <label className="font-semibold">Đường tiêm:</label>
-                        <textarea
-                            className="textarea textarea-success w-full ro"
+                        {/* <textarea
+                            className="textarea textarea-success w-full hidden"
                             placeholder="Bio"
                             rows={4}
                             {...register('vaccineInjectionRoute')}
-                        ></textarea>
+                        ></textarea> */}
+                        <div className="min-h-12 " id="vaccineInjectionRoute"></div>
                         {errors.vaccineInjectionRoute && (
                             <p className="text-red-500">{errors.vaccineInjectionRoute.message}</p>
                         )}
@@ -342,12 +345,13 @@ export const AddVaccineForm = () => {
                 <div className="flex  space-x-5">
                     <div className="flex flex-col space-y-2  flex-grow">
                         <label className="font-semibold">Chống chỉ định:</label>
-                        <textarea
+                        {/* <textarea
                             className="textarea textarea-success w-full ro"
                             placeholder="Bio"
                             rows={4}
                             {...register('vaccineContraindication')}
-                        ></textarea>
+                        ></textarea> */}
+                        <div className="min-h-12 " id="vaccineContraindication"></div>
                         {errors.vaccineContraindication && (
                             <p className="text-red-500">{errors.vaccineContraindication.message}</p>
                         )}
@@ -355,12 +359,13 @@ export const AddVaccineForm = () => {
 
                     <div className="flex flex-col space-y-2  flex-grow">
                         <label className="font-semibold">Phản ứng sau tiêm:</label>
-                        <textarea
+                        {/* <textarea
                             className="textarea textarea-success w-full ro"
                             placeholder="Bio"
                             rows={4}
                             {...register('vaccineReaction')}
-                        ></textarea>
+                        ></textarea> */}
+                        <div className="min-h-12 " id="vaccineReaction"></div>
                         {errors.vaccineReaction && (
                             <p className="text-red-500">{errors.vaccineReaction.message}</p>
                         )}
@@ -370,12 +375,13 @@ export const AddVaccineForm = () => {
                 <div className="flex space-x-5">
                     <div className="flex flex-col space-y-2  flex-grow">
                         <label className="font-semibold">Bảo quản:</label>
-                        <textarea
+                        {/* <textarea
                             className="textarea textarea-success w-full ro"
                             placeholder="Bio"
                             rows={4}
                             {...register('vaccineStorage')}
-                        ></textarea>
+                        ></textarea> */}
+                        <div className="min-h-12 " id="vaccineStorage"></div>
                         {errors.vaccineStorage && (
                             <p className="text-red-500">{errors.vaccineStorage.message}</p>
                         )}
@@ -383,12 +389,13 @@ export const AddVaccineForm = () => {
 
                     <div className="flex flex-col space-y-2 flex-grow">
                         <label className="font-semibold">Phác đồ tiêm:</label>
-                        <textarea
+                        {/* <textarea
                             className="textarea textarea-success w-full ro"
                             placeholder="Bio"
                             rows={4}
                             {...register('vaccineInjectionSchedule')}
-                        ></textarea>
+                        ></textarea> */}
+                        <div className="min-h-12 " id="vaccineInjectionSchedule"></div>
                         {errors.vaccineInjectionSchedule && (
                             <p className="text-red-500">
                                 {errors.vaccineInjectionSchedule.message}

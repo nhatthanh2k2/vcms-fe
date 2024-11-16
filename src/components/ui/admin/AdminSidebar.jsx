@@ -357,27 +357,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
-                            <li>
-                                <NavLink
-                                    to="/admin/quan-ly/danh-muc-bai-viet"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('danh-muc-bai-viet') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="#DEE4EE"
-                                        baseProfile="tiny"
-                                        viewBox="0 0 24 24"
-                                        className="w-5 h-5"
-                                    >
-                                        <path d="M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM3 6h8v12H3V6zm18 12h-9V6h9.003L21 18zm-1-4.5c0-.275-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5v3c0 .275.225.5.5.5h1c.275 0 .5-.225.5-.5v-3zm-3-6c0-.275-.225-.5-.5-.5h-3c-.275 0-.5.225-.5.5v5c0 .275.225.5.5.5h3c.275 0 .5-.225.5-.5v-5zm1.5 2.5h1c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5s.225.5.5.5zm0 2h1c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5s.225.5.5.5zm-5 3h3c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-3c-.275 0-.5.225-.5.5s.225.5.5.5zm3 1h-3c-.275 0-.5.225-.5.5s.225.5.5.5h3c.275 0 .5-.225.5-.5s-.225-.5-.5-.5zm2-8h1c.275 0 .5-.225.5-.5s-.225-.5-.5-.5h-1c-.275 0-.5.225-.5.5s.225.5.5.5zM10 7.5c0-.275-.225-.5-.5-.5h-5c-.275 0-.5.225-.5.5v3c0 .275.225.5.5.5h5c.275 0 .5-.225.5-.5v-3zM9.501 14h-5c-.274 0-.5.225-.5.5s.226.5.5.5h5c.274 0 .499-.225.499-.5s-.225-.5-.499-.5zm0-2h-5c-.274 0-.5.225-.5.5s.226.5.5.5h5c.274 0 .499-.225.499-.5s-.225-.5-.499-.5zm0 4h-5c-.274 0-.5.225-.5.5s.226.5.5.5h5c.274 0 .499-.225.499-.5s-.225-.5-.499-.5z" />
-                                    </svg>
-                                    Danh mục bài viết
-                                </NavLink>
-                            </li>
-
                             {/* CAI DAT */}
                             <SidebarLinkGroup
                                 activeCondition={
@@ -511,11 +490,97 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
+                            <SidebarLinkGroup
+                                activeCondition={
+                                    pathname === '/forms' || pathname.includes('forms')
+                                }
+                            >
+                                {(handleClick, open) => {
+                                    return (
+                                        <React.Fragment>
+                                            <NavLink
+                                                to="#"
+                                                className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                                    pathname.includes('cuoc-hen') &&
+                                                    'bg-graydark dark:bg-meta-4'
+                                                }`}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    sidebarExpanded
+                                                        ? handleClick()
+                                                        : setSidebarExpanded(true)
+                                                }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="#DEE4EE"
+                                                    data-name="Layer 1"
+                                                    viewBox="0 0 24 24"
+                                                    className="w-5 h-5"
+                                                >
+                                                    <title />
+                                                    <path d="M18 5V3a1 1 0 0 0-2 0v2H8V3a1 1 0 0 0-2 0v2H2v16h20V5Zm2 14H4V7h16Zm-8-7a1.5 1.5 0 1 0-1.5-1.5A1.5 1.5 0 0 0 12 12Zm3 2.21a5.35 5.35 0 0 0-6 0V16h6Z" />
+                                                </svg>
+                                                Cuộc hẹn
+                                                <svg
+                                                    className={`w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                                                        open && 'rotate-180'
+                                                    }`}
+                                                    viewBox="0 0 20 20"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        clipRule="evenodd"
+                                                        d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                                                        fill=""
+                                                    />
+                                                </svg>
+                                            </NavLink>
+                                            {/* <!-- Dropdown Menu Start --> */}
+                                            <div
+                                                className={`translate transform overflow-hidden ${
+                                                    !open && 'hidden'
+                                                }`}
+                                            >
+                                                <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                                                    <li>
+                                                        <NavLink
+                                                            to="/admin/thong-ke/cuoc-hen"
+                                                            className={({ isActive }) =>
+                                                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                                                (isActive && '!text-white')
+                                                            }
+                                                        >
+                                                            Danh sách cuộc hẹn
+                                                        </NavLink>
+                                                    </li>
+
+                                                    <li>
+                                                        <NavLink
+                                                            to="/admin/thong-ke/cuoc-hen-bi-huy"
+                                                            className={({ isActive }) =>
+                                                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                                                (isActive && '!text-white')
+                                                            }
+                                                        >
+                                                            Cuộc hẹn bị hủy
+                                                        </NavLink>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {/* <!-- Dropdown Menu End --> */}
+                                        </React.Fragment>
+                                    )
+                                }}
+                            </SidebarLinkGroup>
+
                             <li>
                                 <NavLink
-                                    to="/admin/quan-ly/cuoc-hen"
+                                    // to="/admin/quan-ly/khach-hang"
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('cuoc-hen') &&
+                                        pathname.includes('khach-hang') &&
                                         'bg-graydark dark:bg-meta-4'
                                     }`}
                                 >
@@ -526,10 +591,9 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                         viewBox="0 0 24 24"
                                         className="w-5 h-5"
                                     >
-                                        <title />
-                                        <path d="M18 5V3a1 1 0 0 0-2 0v2H8V3a1 1 0 0 0-2 0v2H2v16h20V5Zm2 14H4V7h16Zm-8-7a1.5 1.5 0 1 0-1.5-1.5A1.5 1.5 0 0 0 12 12Zm3 2.21a5.35 5.35 0 0 0-6 0V16h6Z" />
+                                        <path d="M9.5 10.5H12a1 1 0 0 0 0-2h-1V8a1 1 0 0 0-2 0v.55a2.5 2.5 0 0 0 .5 4.95h1a.5.5 0 0 1 0 1H8a1 1 0 0 0 0 2h1v.5a1 1 0 0 0 2 0v-.55a2.5 2.5 0 0 0-.5-4.95h-1a.5.5 0 0 1 0-1ZM21 12h-3V3a1 1 0 0 0-.5-.87 1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0l-3 1.72-3-1.72a1 1 0 0 0-1 0A1 1 0 0 0 2 3v16a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1ZM5 20a1 1 0 0 1-1-1V4.73l2 1.14a1.08 1.08 0 0 0 1 0l3-1.72 3 1.72a1.08 1.08 0 0 0 1 0l2-1.14V19a3 3 0 0 0 .18 1Zm15-1a1 1 0 0 1-2 0v-5h2Z" />
                                     </svg>
-                                    Cuộc hẹn
+                                    Đơn hàng
                                 </NavLink>
                             </li>
 
@@ -545,7 +609,8 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                             <NavLink
                                                 to="#"
                                                 className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                                    pathname.includes('thong-ke') &&
+                                                    (pathname.includes('doanh-thu') ||
+                                                        pathname.includes('so-luot-tiem')) &&
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                                 onClick={(e) => {
@@ -628,17 +693,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                             Số lượt tiêm
                                                         </NavLink>
                                                     </li>
-                                                    <li>
-                                                        <NavLink
-                                                            to="/admin/thong-ke/cuoc-hen-bi-huy"
-                                                            className={({ isActive }) =>
-                                                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive && '!text-white')
-                                                            }
-                                                        >
-                                                            Cuộc hẹn bị hủy
-                                                        </NavLink>
-                                                    </li>
                                                 </ul>
                                             </div>
                                             {/* <!-- Dropdown Menu End --> */}
@@ -646,31 +700,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                     )
                                 }}
                             </SidebarLinkGroup>
-
-                            <li>
-                                <NavLink
-                                    to="/chart"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('chart') && 'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-5 h-5"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <g stroke="#fff" strokeLinecap="round" strokeWidth={2}>
-                                            <path
-                                                strokeLinejoin="round"
-                                                d="m4 7 6.2 4.65a3 3 0 0 0 3.6 0L20 7"
-                                            />
-                                            <rect width={18} height={14} x={3} y={5} rx={2} />
-                                        </g>
-                                    </svg>
-                                    Email
-                                </NavLink>
-                            </li>
 
                             <li>
                                 <NavLink

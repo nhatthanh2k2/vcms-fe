@@ -37,58 +37,102 @@ export const VaccineDetail = () => {
                             </div>
 
                             <div>
-                                <span>
-                                    <strong>Nguồn gốc:</strong> {vaccineDetail.vaccineOrigin}
-                                </span>
+                                <label className="block">
+                                    <strong>Nguồn gốc:</strong>
+                                </label>
+                                <span>{vaccineDetail.vaccineOrigin}</span>
                             </div>
 
                             <div>
-                                <span>
+                                <label className="block">
                                     <strong>Đường tiêm:</strong>
-                                    <ul className="px-10 list-disc">
-                                        {vaccineDetail.vaccineInjectionRoute
-                                            .split(';')
+                                </label>
+                                <span>
+                                    {vaccineDetail.vaccineInjectionRoute.trim().includes(';') ? (
+                                        <ul className="px-10 list-disc">
+                                            {vaccineDetail.vaccineInjectionRoute
+                                                .split(';')
 
-                                            .map((item, index) => (
-                                                <li key={index}>{item}</li>
-                                            ))}
-                                    </ul>
+                                                .map((item, index) => (
+                                                    <li key={index}>{item}</li>
+                                                ))}
+                                        </ul>
+                                    ) : (
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: vaccineDetail.vaccineInjectionRoute,
+                                            }}
+                                        ></span>
+                                    )}
                                 </span>
                             </div>
 
                             <div>
-                                <span>
+                                <label className="block">
+                                    {' '}
                                     <strong>Chống chỉ định:</strong>
-                                    <ul className="px-10 list-disc">
-                                        {vaccineDetail.vaccineContraindication
-                                            .split(';')
-                                            .map((item, index) => (
-                                                <li key={index}>{item}</li>
-                                            ))}
-                                    </ul>
+                                </label>
+                                <span>
+                                    {vaccineDetail.vaccineContraindication.trim().includes(';') ? (
+                                        <ul className="px-10 list-disc">
+                                            {vaccineDetail.vaccineContraindication
+                                                .split(';')
+                                                .map((item, index) => (
+                                                    <li key={index}>{item}</li>
+                                                ))}
+                                        </ul>
+                                    ) : (
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: vaccineDetail.vaccineContraindication,
+                                            }}
+                                        ></span>
+                                    )}
                                 </span>
                             </div>
 
                             <div>
                                 <span>
-                                    <strong>Phản ứng sau tiêm:</strong>
-                                    <ul className="px-10 list-disc">
-                                        {vaccineDetail.vaccineReaction
-                                            .split(';')
-                                            .map((item, index) => (
-                                                <li key={index}>{item}</li>
-                                            ))}
-                                    </ul>
+                                    <label className="block">
+                                        <strong>Phản ứng sau tiêm:</strong>
+                                    </label>
+                                    {vaccineDetail.vaccineReaction.trim().includes(';') ? (
+                                        <ul className="px-10 list-disc">
+                                            {vaccineDetail.vaccineReaction
+                                                .split(';')
+                                                .map((item, index) => (
+                                                    <li key={index}>{item}</li>
+                                                ))}
+                                        </ul>
+                                    ) : (
+                                        <span
+                                            dangerouslySetInnerHTML={{
+                                                __html: vaccineDetail.vaccineReaction,
+                                            }}
+                                        ></span>
+                                    )}
                                 </span>
                             </div>
 
                             <div>
-                                <strong>Bảo quản:</strong>
-                                <p>
-                                    {vaccineDetail.vaccineStorage.split(';').map((item, index) => (
-                                        <ol key={index}>{item}</ol>
-                                    ))}
-                                </p>
+                                <label className="block">
+                                    <strong>Bảo quản:</strong>
+                                </label>
+                                {vaccineDetail.vaccineStorage.trim().includes(';') ? (
+                                    <ul>
+                                        {vaccineDetail.vaccineStorage
+                                            .split(';')
+                                            .map((item, index) => (
+                                                <ol key={index}>{item}</ol>
+                                            ))}
+                                    </ul>
+                                ) : (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: vaccineDetail.vaccineStorage,
+                                        }}
+                                    ></span>
+                                )}
                             </div>
                         </div>
 
@@ -96,39 +140,55 @@ export const VaccineDetail = () => {
                             id="schedule"
                             className="border p-6 border-blue-200 rounded-md shadow-sm"
                         >
-                            <span className="text-2xl text-blue-700 font-bold">Phác đồ tiêm</span>
-                            <p>
-                                <ul>
-                                    {vaccineDetail.vaccineInjectionSchedule
-                                        .split(';')
-                                        .map((item) => item.trim())
-                                        .filter((item) => item.length > 0)
-                                        .map((item, index) => {
-                                            const hasMui = item.includes('Mũi')
-                                            return (
-                                                <li key={index}>
-                                                    {hasMui ? (
-                                                        <span className="px-5">• {item}</span>
-                                                    ) : (
-                                                        item
-                                                    )}
-                                                </li>
-                                            )
-                                        })}
-                                </ul>
-                            </p>
+                            <div className="text-2xl text-blue-700 font-bold">Phác đồ tiêm</div>
+                            <span>
+                                {vaccineDetail.vaccineInjectionSchedule.trim().includes(';') ? (
+                                    <ul>
+                                        {vaccineDetail.vaccineInjectionSchedule
+                                            .split(';')
+                                            .map((item) => item.trim())
+                                            .filter((item) => item.length > 0)
+                                            .map((item, index) => {
+                                                const hasMui = item.includes('Mũi')
+                                                return (
+                                                    <li key={index}>
+                                                        {hasMui ? (
+                                                            <span className="px-5">• {item}</span>
+                                                        ) : (
+                                                            item
+                                                        )}
+                                                    </li>
+                                                )
+                                            })}
+                                    </ul>
+                                ) : (
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: vaccineDetail.vaccineInjectionSchedule,
+                                        }}
+                                    ></span>
+                                )}
+                            </span>
                         </div>
 
                         <div
                             id="patient"
                             className="border p-6 border-blue-200 rounded-md shadow-sm"
                         >
-                            <span className="text-2xl text-blue-700 font-bold">Đối tượng tiêm</span>
-                            <p>
-                                {vaccineDetail.vaccinePatient.split(';').map((item, index) => (
-                                    <ol key={index}>{item}</ol>
-                                ))}
-                            </p>
+                            <div className="text-2xl text-blue-700 font-bold">Đối tượng tiêm</div>
+                            {vaccineDetail.vaccinePatient.trim().includes(';') ? (
+                                <ul>
+                                    {vaccineDetail.vaccinePatient.split(';').map((item, index) => (
+                                        <ol key={index}>{item}</ol>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <span
+                                    dangerouslySetInnerHTML={{
+                                        __html: vaccineDetail.vaccinePatient,
+                                    }}
+                                ></span>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -55,7 +55,7 @@ export const MonthlyRevenueOfYearChart = () => {
     }
 
     return (
-        <div className="bg-white shadow-default border-stroke px-5 pb-5 pt-7.5">
+        <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex font-bold justify-between">
                 <span>Biểu đồ doanh thu hàng tháng năm {yearSelected}</span>
                 <span>
