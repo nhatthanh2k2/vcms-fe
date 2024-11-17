@@ -15,34 +15,39 @@ export const QuarterlyRevenueOfYearChart = () => {
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [yearSelected])
 
-    const quarterOfYearLabels = quarterlyRevenueOfYearList.map((data) => data.period)
-    const orderRevenues = quarterlyRevenueOfYearList.map((data) => data.orderRevenue)
-    const recordRevenues = quarterlyRevenueOfYearList.map((data) => data.recordRevenue)
+    const quarterOfYearLabels = quarterlyRevenueOfYearList.map((data) => `Quý ${data.period}`)
+    const revenues = quarterlyRevenueOfYearList.map((data) => data.revenue)
+    const costs = quarterlyRevenueOfYearList.map((data) => data.cost)
+    const profits = quarterlyRevenueOfYearList.map((data) => data.profit)
 
-    const totalOrderRevenue = orderRevenues.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-    )
-    const totalRecordRevenue = recordRevenues.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-    )
+    // Tính tổng
+    const totalRevenue = revenues.reduce((acc, curr) => acc + curr, 0)
+    const totalCost = costs.reduce((acc, curr) => acc + curr, 0)
+    const totalProfit = profits.reduce((acc, curr) => acc + curr, 0)
 
+    // Dữ liệu biểu đồ
     const quarterlyOfYearData = {
         labels: quarterOfYearLabels,
         datasets: [
             {
-                label: 'Doanh thu từ đơn hàng',
-                data: orderRevenues,
+                label: 'Doanh thu',
+                data: revenues,
                 backgroundColor: '#007bff',
                 borderColor: '#007bff',
                 borderWidth: 1,
             },
             {
-                label: 'Doanh thu từ hồ sơ tiêm chủng',
-                data: recordRevenues,
+                label: 'Chi phí',
+                data: costs,
                 backgroundColor: '#ff5733',
                 borderColor: '#ff5733',
+                borderWidth: 1,
+            },
+            {
+                label: 'Lợi nhuận',
+                data: profits,
+                backgroundColor: '#28a745',
+                borderColor: '#28a745',
                 borderWidth: 1,
             },
         ],
@@ -51,14 +56,14 @@ export const QuarterlyRevenueOfYearChart = () => {
     return (
         <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex justify-between font-bold">
-                <span>Doanh thu theo quý năm {yearSelected}</span>
+                <span>Doanh thu, chi phí và lợi nhuận theo quý năm {yearSelected}</span>
                 <span>
-                    Tổng doanh thu từ đơn hàng:{' '}
-                    <span className="text-blue-600">{totalOrderRevenue.toLocaleString()} VNĐ</span>
-                    &nbsp;| Tổng doanh thu từ hồ sơ:{' '}
-                    <span className="text-orange-600">
-                        {totalRecordRevenue.toLocaleString()} VNĐ
-                    </span>
+                    Tổng doanh thu:{' '}
+                    <span className="text-blue-600">{totalRevenue.toLocaleString()} VNĐ</span>
+                    &nbsp;| Tổng chi phí:{' '}
+                    <span className="text-orange-600">{totalCost.toLocaleString()} VNĐ</span>
+                    &nbsp;| Tổng lợi nhuận:{' '}
+                    <span className="text-green-600">{totalProfit.toLocaleString()} VNĐ</span>
                 </span>
             </div>
 

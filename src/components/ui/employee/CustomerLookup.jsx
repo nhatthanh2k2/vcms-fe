@@ -19,39 +19,6 @@ const lookupSchema = z.object({
     customerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
 })
 
-const columns = [
-    {
-        title: 'Mã vắc xin',
-        dataIndex: 'code',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
-    },
-    {
-        title: 'Tên vắc xin',
-        dataIndex: 'code',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
-    },
-    {
-        title: 'Liều lượng',
-        dataIndex: 'code',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
-    },
-    {
-        title: 'Mũi tiêm',
-        dataIndex: 'code',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
-    },
-    {
-        title: 'Ngày tiêm',
-        dataIndex: 'code',
-        key: 'customerCode',
-        render: (text) => <span className="font-semibold">{text}</span>,
-    },
-]
-
 export const CustomerLookup = () => {
     const [customer, setCustomer] = useState(null)
     const formLookupCustomer = useRef(null)
@@ -79,13 +46,16 @@ export const CustomerLookup = () => {
                 setVaccinationRecordList(recordList)
 
                 if (recordList.length === 0) {
-                    MyToast('info', 'Bạn chưa có dữ liệu tiêm chủng tại trung tâm')
+                    //MyToast('info', 'Bạn chưa có dữ liệu tiêm chủng tại trung tâm')
+                    console.log('Bạn chưa có dữ liệu tiêm chủng tại trung tâm.')
                 } else {
-                    MyToast('success', 'Lấy lịch sử tiêm thành công')
+                    //MyToast('success', 'Lấy lịch sử tiêm thành công')
+                    console.log('Lấy lịch sử tiêm thành công.')
                 }
             }
         } catch (error) {
-            MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+            //MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+            console.log('Không thể lấy lịch sử tiêm chủng.')
         }
     }
 
@@ -102,24 +72,18 @@ export const CustomerLookup = () => {
         try {
             const response = await customerService.lookupCustomer(lookupdata)
 
-            if (response.status === 200) {
-                if (response.data.code === 1000) {
-                    setCustomer(response.data.result)
-                    document.getElementById('modal_info').showModal()
-                    getMyVaccinationReordHistory(lookupdata)
-                } else {
-                    document.getElementById('modal_no_info').showModal()
-                }
+            if (response.data.code === 1000) {
+                setCustomer(response.data.result)
+                //document.getElementById('modal_info').showModal()
+                MyToast('success', 'Tra cứu khách hàng thành công.')
+                getMyVaccinationReordHistory(lookupdata)
+            } else {
+                // document.getElementById('modal_no_info').showModal()
+                MyToast('error', 'Xảy ra lỗi khi tìm kiếm.')
             }
         } catch (error) {
             if (error.response) {
-                if (error.response.status === 404) {
-                    document.getElementById('modal_no_info').showModal()
-                } else {
-                    MyToast('error', 'Xảy ra lỗi khi tìm kiếm')
-                }
-            } else {
-                MyToast('error', 'Xảy ra lỗi khi tìm kiếm')
+                MyToast('error', 'Khách hàng chưa có thông tin.')
             }
         }
     }
@@ -132,8 +96,8 @@ export const CustomerLookup = () => {
                 </h1>
 
                 <form ref={formLookupCustomer} onSubmit={handleSubmitLookup(onSubmitLookup)}>
-                    <div className="flex flex-row space-x-4">
-                        <div className="flex flex-col space-y-2 font-semibold flex-1">
+                    <div className="flex flex-row items-center justify-between space-x-5">
+                        <div className="flex flex-col space-y-2 font-semibold">
                             <label className="block mb-1 font-medium">Nhập Mã KH / SĐT:</label>
                             <input
                                 {...registerLookup('customerIdentifier')}
@@ -147,7 +111,7 @@ export const CustomerLookup = () => {
                             )}
                         </div>
 
-                        <div className="flex flex-col space-y-2 font-semibold flex-1">
+                        <div className="flex flex-col space-y-2 font-semibold ">
                             <label className="block mb-1 font-medium">Ngày/tháng/năm sinh:</label>
                             <DatePicker
                                 {...registerLookup('customerDob', {
@@ -168,13 +132,26 @@ export const CustomerLookup = () => {
                                 </span>
                             )}
                         </div>
-                        <div className="flex-1 p-8">
+
+                        <div className="m-3 flex-1">
                             <button
-                                type="button"
-                                onClick={handleLookupCustomer}
-                                className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md  h-12"
+                                type="submit"
+                                className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                             >
-                                Tra cứu khách hàng
+                                <span className="mr-2">Tra cứu khách hàng</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        fill="currentColor"
+                                        fillRule="evenodd"
+                                        d="M9 2a7 7 0 1 0 4.192 12.606l7.1 7.101a1 1 0 0 0 1.415-1.414l-7.1-7.1A7 7 0 0 0 9 2ZM4 9a5 5 0 1 1 10 0A5 5 0 0 1 4 9Z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
                             </button>
                         </div>
                     </div>

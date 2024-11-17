@@ -158,15 +158,15 @@ export const VaccinationHistoryLookup = () => {
     return (
         <div className="flex flex-col mx-20 mt-10">
             <div className="relative">
-                <div className="uppercase text-2xl text-blue-600 font-satoshi font-bold">
+                <div className="uppercase text-2xl text-blue-700 font-satoshi font-bold">
                     Tra cứu lịch sử tiêm chủng
                 </div>
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="mt-5 flex space-x-5">
+            <div className="mt-5 flex justify-center space-x-5">
                 <form
-                    className="flex flex-col font-semibold space-y-3"
+                    className=" flex flex-col font-semibold space-y-3"
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="flex flex-col">
@@ -223,7 +223,7 @@ export const VaccinationHistoryLookup = () => {
                 {customer ? (
                     <div className="w-full">
                         <div>
-                            <span className="text-xl font-bold text-blue-600">
+                            <span className="text-xl font-bold text-teal-700">
                                 Thông tin khách hàng
                             </span>
                             <div className="flex space-x-5 mt-2">
@@ -264,14 +264,17 @@ export const VaccinationHistoryLookup = () => {
                         </div>
 
                         <div className="mt-2">
-                            <span className="text-xl font-bold text-blue-600">
+                            <span className="text-xl font-bold text-teal-700">
                                 Vắc xin bạn nên tiêm
                             </span>
-                            <div className="flex flex-wrap">
+                            <div className="flex flex-wrap mt-2">
                                 {recommendedPackageList.map((detail, index) => (
-                                    <div key={index} className="w-1/4 mr-2">
+                                    <div key={index} className="w-fit mr-2">
                                         <div className="border rounded-lg p-4">
                                             <h3>{detail.vaccineResponse.vaccineName}</h3>
+                                            <h3>
+                                                Phòng bệnh: {detail.diseaseResponse.diseaseName}
+                                            </h3>
                                         </div>
                                     </div>
                                 ))}
@@ -279,7 +282,7 @@ export const VaccinationHistoryLookup = () => {
                         </div>
 
                         <div className="mt-5">
-                            <span className="text-xl font-bold text-blue-600">Lịch sử tiêm</span>
+                            <span className="text-xl font-bold text-teal-700">Lịch sử tiêm</span>
                             <VaccinationHistoryTable
                                 vaccinationRecordList={vaccinationRecordList}
                             />

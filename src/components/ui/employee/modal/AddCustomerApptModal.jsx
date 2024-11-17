@@ -8,7 +8,7 @@ import { DatePicker, Modal, Select } from 'antd'
 import { disabledDoB } from '@/utils'
 import { MyToast } from '../../common'
 
-const addCustomerSchema = z.object({
+const addCustomerApptSchema = z.object({
     customerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
     customerEmail: z.string().email({ message: 'Địa chỉ email không hợp lệ' }),
     customerPhone: z.string().regex(/^0[3-9]\d{8}$/, {
@@ -26,7 +26,11 @@ const addCustomerSchema = z.object({
     relativesRelationship: z.string().min(1, { message: 'Mối quan hệ là bắt buộc' }),
 })
 
-export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustomerModal }) => {
+export const AddCustomerApptModal = ({
+    visibleAddCustomerModal,
+    handleCloseAddCustomerModal,
+    appointmentRecord,
+}) => {
     const formAddCustomer = useRef(null)
 
     const handleAddCustomer = () => {
@@ -38,10 +42,11 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
         handleSubmit,
         formState: { errors },
         setValue,
+        getValues,
         clearErrors,
         reset,
     } = useForm({
-        resolver: zodResolver(addCustomerSchema),
+        resolver: zodResolver(addCustomerApptSchema),
         defaultValues: {
             customerFullName: '',
             customerEmail: '',
@@ -69,6 +74,51 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
         setDistrictList(addressService.getDistrictList())
         setWardList(addressService.getWardList())
     }, [])
+
+    useEffect(() => {
+        if (appointmentRecord) {
+            reset({
+                customerFullName: appointmentRecord?.appointmentCustomerFullName,
+                customerEmail: appointmentRecord?.appointmentCustomerEmail,
+                customerPhone: appointmentRecord?.appointmentCustomerPhone,
+                customerDob: appointmentRecord?.appointmentCustomerDob,
+                customerGender: appointmentRecord?.appointmentCustomerGender,
+                customerProvince: appointmentRecord?.appointmentCustomerProvince,
+                customerDistrict: appointmentRecord?.appointmentCustomerDistrict,
+                customerWard: appointmentRecord?.appointmentCustomerWard,
+                relativesFullName: appointmentRecord?.appointmentRelativesFullName,
+                relativesPhone: appointmentRecord?.appointmentRelativesPhone,
+                relativesRelationship: appointmentRecord?.appointmentRelativesRelationship,
+            })
+        }
+    }, [appointmentRecord, reset])
+
+    useEffect(() => {
+        if (appointmentRecord) {
+            const provinceCode = addressService.getProvinceCodeByName(getValues('customerProvince'))
+            setSelectedProvince(provinceCode)
+            if (provinceCode) {
+                const districtsForProvince = addressService
+                    .getDistrictList()
+                    .filter((district) => district.province_code === provinceCode)
+                setDistrictList(districtsForProvince)
+
+                const districtCode = addressService.getDistrictCodeByProvinceCodeAndDistrictName(
+                    provinceCode,
+                    getValues('customerDistrict')
+                )
+                setSelectedDistrict(districtCode)
+            }
+        }
+    }, [getValues('customerProvince')])
+
+    useEffect(() => {
+        const wardCode = addressService.getWardCodeByDistrictCodeAndWardName(
+            selectedDistrict,
+            getValues('customerWard')
+        )
+        setSelectedWard(wardCode)
+    }, [selectedDistrict])
 
     const onSubmit = async (data) => {
         const customerData = {
@@ -99,6 +149,9 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
         setSelectedDistrict('')
         setSelectedWard('')
     }
+
+    const [dob, setDob] = useState(appointmentRecord?.appointmentCustomerDob)
+    const parsedDob = dayjs(dob, 'DD-MM-YYYY')
 
     return (
         <Modal
@@ -182,13 +235,16 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                         {...register('customerDob', {
                                             valueAsDate: true,
                                         })}
-                                        format="DD-MM-YYYY"
+                                        format={'DD-MM-YYYY'}
+                                        defaultValue={parsedDob.isValid() ? parsedDob : null}
+                                        onChange={(date) => {
+                                            setDob(dayjs(date).format('DD-MM-YYYY'))
+                                            setValue(
+                                                'customerDob',
+                                                dayjs(date).format('DD-MM-YYYY')
+                                            )
+                                        }}
                                         disabledDate={disabledDoB}
-                                        onChange={(date) =>
-                                            setValue('customerDob', date?.toDate() || null, {
-                                                shouldValidate: true,
-                                            })
-                                        }
                                     />
                                 </div>
 
@@ -242,7 +298,10 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                     value={selectedProvince ? selectedProvince : 'Chọn Tỉnh/Thành'}
                                     onChange={(provinceValue) => {
                                         setSelectedProvince(provinceValue)
-                                        setValue('customerProvince', provinceValue)
+                                        setValue(
+                                            'customerProvince',
+                                            addressService.getProvincenNameByCode(provinceValue)
+                                        )
                                         if (provinceValue) clearErrors('customerProvince')
                                     }}
                                     options={provinceList.map((province) => ({
@@ -263,28 +322,25 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                     {...register('customerDistrict')}
                                     placeholder="Chọn quận/huyện"
                                     value={selectedDistrict || undefined}
-                                    onChange={(value) => {
-                                        if (value !== selectedDistrict) {
-                                            setSelectedDistrict(value)
-                                            setValue('customerDistrict', value)
-                                            if (value) clearErrors('customerDistrict')
+                                    onChange={(districtValue) => {
+                                        if (districtValue !== selectedDistrict) {
+                                            setSelectedDistrict(districtValue)
+                                            setValue(
+                                                'customerDistrict',
+                                                addressService.getDistrictNameByCode(districtValue)
+                                            )
+                                            if (districtValue) clearErrors('customerDistrict')
                                         }
                                     }}
-                                    disabled={!selectedProvince}
-                                    options={
-                                        selectedProvince
-                                            ? districtList
-                                                  .filter(
-                                                      (district) =>
-                                                          district.province_code ===
-                                                          selectedProvince
-                                                  )
-                                                  .map((district) => ({
-                                                      value: district.code,
-                                                      label: district.name,
-                                                  }))
-                                            : []
-                                    }
+                                    options={districtList
+                                        .filter(
+                                            (district) =>
+                                                district.province_code === selectedProvince
+                                        )
+                                        .map((district) => ({
+                                            value: district.code,
+                                            label: district.name,
+                                        }))}
                                     style={{ opacity: !selectedProvince ? 0.75 : 1 }}
                                 />
                                 {errors.customerDistrict && (
@@ -300,25 +356,20 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                     {...register('customerWard')}
                                     placeholder="Chọn xã/phường"
                                     value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
-                                    onChange={(value) => {
-                                        setSelectedWard(value)
-                                        setValue('customerWard', value)
-                                        if (value) clearErrors('customerWard')
+                                    onChange={(wardValue) => {
+                                        setSelectedWard(wardValue)
+                                        setValue(
+                                            'customerWard',
+                                            addressService.getWardNameByCode(wardValue)
+                                        )
+                                        if (wardValue) clearErrors('customerWard')
                                     }}
-                                    disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
-                                    options={
-                                        selectedDistrict
-                                            ? wardList
-                                                  .filter(
-                                                      (ward) =>
-                                                          ward.district_code === selectedDistrict
-                                                  ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
-                                                  .map((ward) => ({
-                                                      value: ward.code,
-                                                      label: ward.name,
-                                                  }))
-                                            : []
-                                    }
+                                    options={wardList
+                                        .filter((ward) => ward.district_code === selectedDistrict)
+                                        .map((ward) => ({
+                                            value: ward.code,
+                                            label: ward.name,
+                                        }))}
                                     style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
                                 />
 

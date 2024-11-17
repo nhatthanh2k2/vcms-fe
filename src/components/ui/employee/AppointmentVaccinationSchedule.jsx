@@ -4,7 +4,12 @@ import 'antd/dist/reset.css'
 import dayjs from 'dayjs'
 import { appointmentService } from '@/services'
 import { LoadingPage, MyToast } from '../common'
-import { AppointmentInjectionModal, PreInjectionCheckModal, sendAppointmentReminder } from '.'
+import {
+    AddCustomerApptModal,
+    AppointmentInjectionModal,
+    PreInjectionCheckModal,
+    sendAppointmentReminder,
+} from '.'
 import { getPatientInfo } from '@/utils'
 
 const statusOptions = [
@@ -33,6 +38,11 @@ export const AppointmentVaccinationSchedule = () => {
     const [status, setStatus] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
+    const [isOpenAppointmentInjectionModal, setIsOpenAppointmentInjectionModal] = useState(false)
+    const [isOpenAddCustomerModal, setIsOpenAddCustomerModal] = useState(false)
+    const [appointmentRecord, setAppointmentRecord] = useState(null)
+    const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
+    const [patientInfo, setPatientInfo] = useState(null)
 
     useEffect(() => {
         const formatDate = dayjs(selectedDate).format('YYYY-MM-DD')
@@ -45,24 +55,91 @@ export const AppointmentVaccinationSchedule = () => {
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [selectedDate])
 
+    const handleChooseStatus = (value) => {
+        setStatus(value)
+    }
+
+    const handleUpdateStatus = async (e, appointmentId) => {
+        e.preventDefault()
+        const updateStatusRequest = {
+            appointmentId: appointmentId,
+            appointmentStatus: status,
+        }
+        if (updateStatusRequest.appointmentStatus === '') {
+            MyToast('warn', 'Bạn chưa thay đổi trạng thái')
+            return
+        }
+        try {
+            const response = await appointmentService.updateAppointmentStatus(updateStatusRequest)
+            if (response.status === 200) {
+                if (response.data.code === 1000) {
+                    MyToast('success', 'Cập nhật trạng thái thành công')
+                }
+            } else MyToast('error', 'Xảy ra lỗi khi cập nhật trạng thái')
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) MyToast('error', 'Không tìm thấy cuộc hẹn')
+            }
+        }
+    }
+
+    const handleOpenPreInjectionCheckModal = async (record) => {
+        const result = getPatientInfo(record)
+        setPatientInfo(result)
+        setIsOpenPreInjectionCheckModal(true)
+    }
+
+    const handleClosePreInjectionCheckModal = () => {
+        setPatientInfo(null)
+        setIsOpenPreInjectionCheckModal(false)
+    }
+
+    const handleOpenAppointmentInjectionModal = (record) => {
+        setAppointmentRecord(record)
+        setIsOpenAppointmentInjectionModal(true)
+    }
+
+    const handleCloseAppointmentInjectionModal = () => {
+        setAppointmentRecord(null)
+        setIsOpenAppointmentInjectionModal(false)
+    }
+
+    const handleOpenAddCustomerModal = (record) => {
+        setAppointmentRecord(record)
+        setIsOpenAddCustomerModal(true)
+    }
+
+    const handleCloseAddCustomerModal = () => {
+        setAppointmentRecord(null)
+        setIsOpenAddCustomerModal(false)
+    }
+
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = appointmentList.filter((appt) =>
+                appt.appointmentCustomerFullName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            setFilterdAppointmentList(filtered)
+        } else {
+            setFilterdAppointmentList(appointmentList)
+        }
+    }, [searchQuery, appointmentList])
+
     const appointmentColumns = [
         {
             title: 'Mã khách hàng',
             dataIndex: 'customerCode',
             key: 'customerCode',
-            render: (text) => <span className="font-semibold">{text}</span>,
         },
         {
             title: 'Họ và tên',
             dataIndex: 'appointmentCustomerFullName',
             key: 'customerFullName',
-            render: (text) => <span className="font-semibold">{text}</span>,
         },
         {
             title: 'Số điện thoại',
             dataIndex: 'appointmentCustomerPhone',
             key: 'customerPhone',
-            render: (text) => <span className="font-semibold">{text}</span>,
         },
         {
             title: 'Vắc xin',
@@ -72,7 +149,7 @@ export const AppointmentVaccinationSchedule = () => {
                 const vaccineName = record.batchDetailResponse
                     ? record.batchDetailResponse.vaccineResponse.vaccineName
                     : record.vaccinePackageResponse?.vaccinePackageName || 'Chưa xác định'
-                return <span className="font-semibold">{vaccineName}</span>
+                return <span>{vaccineName}</span>
             },
         },
         {
@@ -184,73 +261,33 @@ export const AppointmentVaccinationSchedule = () => {
                             </svg>
                         </Tooltip>
                     </div>
+                    <div
+                        onClick={() => {
+                            handleOpenAddCustomerModal(record)
+                        }}
+                    >
+                        <Tooltip placement="top" title="Thêm khách hàng">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                className="w-6 h-6"
+                            >
+                                <g
+                                    stroke="#000"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2.16}
+                                >
+                                    <path d="M17 10h3m3 0h-3m0 0V7m0 3v3M1 20v-1a7 7 0 0 1 7-7v0a7 7 0 0 1 7 7v1M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+                                </g>
+                            </svg>
+                        </Tooltip>
+                    </div>
                 </div>
             ),
         },
     ]
-
-    const handleChooseStatus = (value) => {
-        setStatus(value)
-    }
-
-    const handleUpdateStatus = async (e, appointmentId) => {
-        e.preventDefault()
-        const updateStatusRequest = {
-            appointmentId: appointmentId,
-            appointmentStatus: status,
-        }
-        if (updateStatusRequest.appointmentStatus === '') {
-            MyToast('warn', 'Bạn chưa thay đổi trạng thái')
-            return
-        }
-        try {
-            const response = await appointmentService.updateAppointmentStatus(updateStatusRequest)
-            if (response.status === 200) {
-                if (response.data.code === 1000) {
-                    MyToast('success', 'Cập nhật trạng thái thành công')
-                }
-            } else MyToast('error', 'Xảy ra lỗi khi cập nhật trạng thái')
-        } catch (error) {
-            if (error.response) {
-                if (error.response.status === 404) MyToast('error', 'Không tìm thấy cuộc hẹn')
-            }
-        }
-    }
-
-    const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
-    const [patientInfo, setPatientInfo] = useState(null)
-
-    const handleOpenPreInjectionCheckModal = async (record) => {
-        const result = getPatientInfo(record)
-        setPatientInfo(result)
-        setIsOpenPreInjectionCheckModal(true)
-    }
-
-    const handleClosePreInjectionCheckModal = () => {
-        setIsOpenPreInjectionCheckModal(false)
-    }
-
-    const [isOpenAppointmentInjectionModal, setIsOpenAppointmentInjectionModal] = useState(false)
-    const [appointmentRecord, setAppointmentRecord] = useState(null)
-    const handleOpenAppointmentInjectionModal = (record) => {
-        setAppointmentRecord(record)
-        setIsOpenAppointmentInjectionModal(true)
-    }
-
-    const handleCloseAppointmentInjectionModal = () => {
-        setIsOpenAppointmentInjectionModal(false)
-    }
-
-    useEffect(() => {
-        if (searchQuery) {
-            const filtered = appointmentList.filter((appt) =>
-                appt.appointmentCustomerFullName.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-            setFilterdAppointmentList(filtered)
-        } else {
-            setFilterdAppointmentList(appointmentList)
-        }
-    }, [searchQuery, appointmentList])
 
     return (
         <section className="bg-white rounded-lg shadow p-6">
@@ -288,6 +325,22 @@ export const AppointmentVaccinationSchedule = () => {
                         />
                     </svg>
                 </label>
+                <div className="m-3">
+                    <button className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
+                        <span className="mr-2">Nhắc lịch tiêm ngày mai</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="currentcolor"
+                                d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <div className="w-full">
@@ -308,6 +361,12 @@ export const AppointmentVaccinationSchedule = () => {
             <AppointmentInjectionModal
                 visibleAppointmentInjectionModal={isOpenAppointmentInjectionModal}
                 handleCloseAppointmentInjectionModal={handleCloseAppointmentInjectionModal}
+                appointmentRecord={appointmentRecord}
+            />
+
+            <AddCustomerApptModal
+                visibleAddCustomerModal={isOpenAddCustomerModal}
+                handleCloseAddCustomerModal={handleCloseAddCustomerModal}
                 appointmentRecord={appointmentRecord}
             />
 

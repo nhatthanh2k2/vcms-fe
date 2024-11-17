@@ -1,4 +1,5 @@
 export * from './AddCustomerModal'
+export * from './AddCustomerApptModal'
 export * from './ChangePasswordModal'
 export * from './ForgotPasswordModal'
 export * from './OrderDetailModal'

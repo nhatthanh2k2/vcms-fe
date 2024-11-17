@@ -17,10 +17,10 @@ export const PrintScreeningRecordModal = ({
     return (
         <Modal
             title={
-                <div className=" flex  gap-5 items-center h-fit">
+                <div className=" flex gap-5 items-center h-fit">
                     <button
                         onClick={handlePrint}
-                        className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                        className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                     >
                         <span className="mr-2">In phiếu</span>
                         <svg
@@ -54,7 +54,10 @@ export const PrintScreeningRecordModal = ({
             }}
         >
             {screeningRecordSelected && (
-                <div ref={screeningRecordRef} className="flex flex-col space-y-4 px-10 py-5 ">
+                <div
+                    ref={screeningRecordRef}
+                    className="flex flex-col space-y-4 px-10 py-5 border-2 border-black rounded-lg"
+                >
                     <div className="flex w-full">
                         <div className="flex flex-col justify-center items-center">
                             <img src="./images/logo.png" className="h-16 object-cover" />

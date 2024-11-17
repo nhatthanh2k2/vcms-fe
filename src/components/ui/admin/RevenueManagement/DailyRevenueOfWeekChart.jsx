@@ -17,26 +17,21 @@ export const DailyRevenueOfWeekChart = () => {
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [])
 
-    // Lấy nhãn ngày và dữ liệu cho orderRevenue và recordRevenue
     const dailyLabels = dailyRevenueList.map((data) => data.period)
-    const orderRevenues = dailyRevenueList.map((data) => data.orderRevenue)
-    const recordRevenues = dailyRevenueList.map((data) => data.recordRevenue)
+    const revenues = dailyRevenueList.map((data) => data.revenue)
+    const costs = dailyRevenueList.map((data) => data.cost)
+    const profits = dailyRevenueList.map((data) => data.profit)
 
-    const totalOrderRevenue = orderRevenues.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-    )
-    const totalRecordRevenue = recordRevenues.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-    )
+    const totalRevenue = revenues.reduce((acc, curr) => acc + curr, 0)
+    const totalCost = costs.reduce((acc, curr) => acc + curr, 0)
+    const totalProfit = profits.reduce((acc, curr) => acc + curr, 0)
 
     const dailyRevenueData = {
         labels: dailyLabels,
         datasets: [
             {
-                label: 'Doanh thu từ đơn hàng',
-                data: orderRevenues,
+                label: 'Doanh thu',
+                data: revenues,
                 fill: false,
                 backgroundColor: '#007bff',
                 borderColor: '#007bff',
@@ -44,11 +39,20 @@ export const DailyRevenueOfWeekChart = () => {
                 tension: 0.1,
             },
             {
-                label: 'Doanh thu tiêm trực tiếp',
-                data: recordRevenues,
+                label: 'Chi phí',
+                data: costs,
                 fill: false,
                 backgroundColor: '#ff5733',
                 borderColor: '#ff5733',
+                borderWidth: 2,
+                tension: 0.1,
+            },
+            {
+                label: 'Lợi nhuận',
+                data: profits,
+                fill: false,
+                backgroundColor: '#28a745',
+                borderColor: '#28a745',
                 borderWidth: 2,
                 tension: 0.1,
             },
@@ -58,14 +62,14 @@ export const DailyRevenueOfWeekChart = () => {
     return (
         <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex font-bold justify-between">
-                <span>Biểu đồ Doanh thu trong tuần này</span>
+                <span>Biểu đồ Doanh thu, Chi phí và Lợi nhuận trong tuần</span>
                 <span>
-                    Tổng doanh thu từ đơn hàng:{' '}
-                    <span className="text-blue-600">{totalOrderRevenue.toLocaleString()} VNĐ</span>
-                    &nbsp;| Tổng doanh thu tiêm trực tiếp:{' '}
-                    <span className="text-orange-600">
-                        {totalRecordRevenue.toLocaleString()} VNĐ
-                    </span>
+                    Tổng doanh thu:{' '}
+                    <span className="text-blue-600">{totalRevenue.toLocaleString()} VNĐ</span>
+                    &nbsp;| Tổng chi phí:{' '}
+                    <span className="text-red-600">{totalCost.toLocaleString()} VNĐ</span>
+                    &nbsp;| Tổng lợi nhuận:{' '}
+                    <span className="text-green-600">{totalProfit.toLocaleString()} VNĐ</span>
                 </span>
             </div>
             <div className="mt-2 h-100">

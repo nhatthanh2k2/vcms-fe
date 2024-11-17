@@ -55,37 +55,31 @@ export const PrintRecord = () => {
             title: 'Mã phiếu khám',
             dataIndex: 'screeningRecordCode',
             key: 'screeningRecordCode',
-            render: (text) => <span className="font-semibold">{text}</span>,
+            render: (text) => <span>{text}</span>,
         },
         {
             title: 'Họ và tên',
             dataIndex: 'customerResponse',
             key: 'customerFullName',
-            render: (text, record) => (
-                <span className="font-semibold">{record.customerResponse.customerFullName}</span>
-            ),
+            render: (text, record) => <span>{record.customerResponse.customerFullName}</span>,
         },
         {
             title: 'Số điện thoại',
             dataIndex: 'customerResponse',
             key: 'customerPhone',
-            render: (text, record) => (
-                <span className="font-semibold">{record.customerResponse.customerPhone}</span>
-            ),
+            render: (text, record) => <span>{record.customerResponse.customerPhone}</span>,
         },
         {
             title: 'Người tạo phiếu',
             dataIndex: 'employeeResponse',
             key: 'employeeFullName',
-            render: (text, record) => (
-                <span className="font-semibold">{record.employeeResponse.employeeFullName}</span>
-            ),
+            render: (text, record) => <span>{record.employeeResponse.employeeFullName}</span>,
         },
         {
             title: 'Kết quả khám',
             dataIndex: 'screeningRecordResult',
             key: 'screeningRecordResult',
-            render: (text) => <span className="font-semibold">{convertScreeningResult(text)}</span>,
+            render: (text) => <span>{convertScreeningResult(text)}</span>,
         },
         {
             title: 'In phiếu',

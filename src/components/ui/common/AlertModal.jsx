@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export const AlertModal = ({ modalId, message }) => {
     return (
