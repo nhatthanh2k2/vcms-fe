@@ -6,7 +6,7 @@ export const VaccineDetail = () => {
     const { vaccineDetail } = location.state
 
     return (
-        <section className="relative pt-16 ">
+        <section className="relative pt-5">
             <div className="container mx-auto">
                 <div className="relative my-5">
                     <div className="uppercase text-3xl text-blue-700 font-satoshi font-bold">

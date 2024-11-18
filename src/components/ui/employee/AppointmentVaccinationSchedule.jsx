@@ -261,7 +261,7 @@ export const AppointmentVaccinationSchedule = () => {
                             </svg>
                         </Tooltip>
                     </div>
-                    <div
+                    {/* <div
                         onClick={() => {
                             handleOpenAddCustomerModal(record)
                         }}
@@ -283,7 +283,7 @@ export const AppointmentVaccinationSchedule = () => {
                                 </g>
                             </svg>
                         </Tooltip>
-                    </div>
+                    </div> */}
                 </div>
             ),
         },

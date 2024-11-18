@@ -407,7 +407,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                                 }}
                                 footer={() => (
                                     <div className="text-center text-xl font-semibold">
-                                        Tổng giá: {(packagePrice * 1.1).toLocaleString()} VND
+                                        Tổng giá: {packagePrice.toLocaleString()} VND
                                     </div>
                                 )}
                             />

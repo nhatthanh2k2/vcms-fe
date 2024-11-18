@@ -326,7 +326,7 @@ export const PreInjectionCheckModal = ({
                             type="submit"
                             className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-green-500 hover:border-green-600 hover:bg-green-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
-                            <span className="mr-2">Tạo phiếu tiêm</span>
+                            <span className="mr-2">Tạo phiếu khám</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"

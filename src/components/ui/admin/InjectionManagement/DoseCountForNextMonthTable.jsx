@@ -10,7 +10,7 @@ const columns = [
         key: 'name',
     },
     {
-        title: 'Số mũi đã đăng ký',
+        title: 'Số lượt đăng ký',
         dataIndex: 'doseCount',
         key: 'doseCount',
     },
@@ -29,7 +29,7 @@ export const DoseCountForNextMonthTable = () => {
     console.log(doseCountList)
 
     return (
-        <div>
+        <div className="bg-white border border-stroke rounded-lg shadow-default p-5">
             <div className="text-lg font-semibold mb-3">
                 Thống kê số vắc xin được đăng ký trong 1 tháng tiếp theo
             </div>

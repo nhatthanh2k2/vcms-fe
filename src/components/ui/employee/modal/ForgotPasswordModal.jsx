@@ -88,7 +88,7 @@ export const ForgotPasswordModal = ({
     return (
         <Modal
             title={
-                <div className="text-center text-2xl text-blue-500 font-bold">Quên mật khẩu?</div>
+                <div className="text-center text-2xl text-pink-500 font-bold">Quên mật khẩu?</div>
             }
             open={visibleForgotPasswordModal}
             footer={null}
@@ -280,7 +280,7 @@ export const ForgotPasswordModal = ({
                     <div className="flex justify-center">
                         <button
                             type="submit"
-                            className="bg-white text-gray-800 font-bold rounded border-b-2 border-pink-500 hover:border-pink-600 hover:bg-pink-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-pink-500 hover:border-pink-600 hover:bg-pink-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
                             <span className="mr-2">Làm mới mật khẩu</span>
                             <svg

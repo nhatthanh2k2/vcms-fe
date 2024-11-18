@@ -211,7 +211,7 @@ export const OrderForm = () => {
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="flex space-x-5 my-5 flex-wrap md:flex-nowrap">
+            <div className="flex space-x-5 my-5">
                 <div className="w-125 space-y-5">
                     {!showForm ? (
                         <div className="lg:min-w-125 md:w-fit sm:w-fit border-2 border-teal-300 p-5 rounded-lg shadow-default">
@@ -766,7 +766,7 @@ export const OrderForm = () => {
                     </div>
                 </div>
 
-                <div role="tablist" className="tabs tabs-lifted ">
+                <div role="tablist" className="tabs tabs-lifted  h-fit">
                     <input
                         type="radio"
                         name="my_tabs_2"
