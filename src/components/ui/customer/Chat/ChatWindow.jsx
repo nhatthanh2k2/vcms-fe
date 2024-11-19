@@ -237,7 +237,7 @@ export const ChatWindow = ({ toggleChat }) => {
                             </div>
                         </div>
                         <div
-                            className={`chat-bubble  ${
+                            className={`chat-bubble text-sm ${
                                 msg.sender === 'bot'
                                     ? 'chat-bubble-info '
                                     : 'chat-bubble-primary text-white'

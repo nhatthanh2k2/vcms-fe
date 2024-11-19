@@ -1,10 +1,10 @@
 import axios from "axios"
 import { apiInstance } from "@/constant";
 
-const api_url = import.meta.env.VITE_VCMS_API
+const order_url = import.meta.env.VITE_VCMS_ORDER_API
 
-const api = apiInstance({
-    baseURL: api_url,
+const order_api = apiInstance({
+    baseURL: order_url,
   });
 
 export const orderService = {
@@ -15,14 +15,23 @@ export const orderService = {
         return axios.post(api_url + "/orders/create", request)
     },
     getOrderListByInjectionDate: (selectedDate) => {
-        return api.get("/orders/list/injection-date", {
+        return order_api.get("/orders/list/injection-date", {
             params: { selectedDate }
         });
     },
     getAllOrderDetailByOrderId: (orderId) => {
-        return api.get(`/orders/detail/${orderId}`)
+        return order_api.get(`/orders/detail/${orderId}`)
     },
     getMyOrder: (orderId) =>{
         return axios.get(api_url + `/orders/detail/my-order/${orderId}`)
+    },
+    getAllOrder: (page, size) => {
+        return order_api.get(`/list/all?page=${page}&size=${size}`)
+    },
+    getAllOrderToday: (page, size) => {
+        return order_api.get(`/list/today?page=${page}&size=${size}`)
+    },
+    getAllOrderInWeek: (page, size) => {
+        return order_api.get(`/list/week?page=${page}&size=${size}`)
     }
 }

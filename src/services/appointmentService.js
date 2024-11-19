@@ -27,5 +27,11 @@ export const appointmentService = {
     },
     getAllAppointment: (page, size) => {
         return appt_api.get(`/list/all?page=${page}&size=${size}`)
-    }
+    },
+    getAppointmentListToday: (page, size) => {
+        return appt_api.get(`/list/today?page=${page}&size=${size}`)
+    },
+    getAppointmentListInWeek: (page, size) => {
+        return appt_api.get(`/list/week?page=${page}&size=${size}`)
+    },
 }

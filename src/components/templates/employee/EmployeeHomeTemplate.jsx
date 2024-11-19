@@ -11,9 +11,8 @@ import {
     UpdateEmployeeProfileModal,
     PrintRecord,
     ConfirmLogoutModal,
-    MyNewsTable,
 } from '@/components/ui'
-import { Link, Outlet } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export const EmployeeHomeTemplate = () => {
     const [activeTab, setActiveTab] = useState('customerLookup')
@@ -63,8 +62,7 @@ export const EmployeeHomeTemplate = () => {
                         batchDetailList={batchDetailList}
                     />
                 )
-            case 'myNews':
-                return <MyNewsTable employee={employee} />
+
             default:
                 return null
         }

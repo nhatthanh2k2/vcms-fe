@@ -1,7 +1,7 @@
 import { appointmentService } from '@/services'
 import React, { useEffect, useState } from 'react'
 import { MyToast } from '../../common'
-import { Table } from 'antd'
+import { Select, Table } from 'antd'
 
 const appointmentColumns = [
     {
@@ -45,11 +45,21 @@ export const AppointmentTable = () => {
     const [page, setPage] = useState(0)
     const [size] = useState(50)
     const [totalRecords, setTotalRecords] = useState(0)
+    const [filter, setFilter] = useState('today')
 
-    const getAllAppointment = (page, size) => {
+    const getAppointmentList = (page, size, filter) => {
         setLoading(true)
-        appointmentService
-            .getAllAppointment(page, size)
+        let fetchAppointments
+
+        if (filter === 'today') {
+            fetchAppointments = appointmentService.getAppointmentListToday(page, size)
+        } else if (filter === 'week') {
+            fetchAppointments = appointmentService.getAppointmentListInWeek(page, size)
+        } else {
+            fetchAppointments = appointmentService.getAllAppointment(page, size)
+        }
+
+        fetchAppointments
             .then((response) => {
                 setAppointmentList(response.data.result.content)
                 setTotalRecords(response.data.result.totalElements)
@@ -62,8 +72,8 @@ export const AppointmentTable = () => {
     }
 
     useEffect(() => {
-        getAllAppointment(page, size)
-    }, [page, size])
+        getAppointmentList(page, size, filter)
+    }, [page, size, filter])
 
     const paginationConfig = {
         current: page + 1,
@@ -74,12 +84,39 @@ export const AppointmentTable = () => {
     }
 
     return (
-        <Table
-            columns={appointmentColumns}
-            dataSource={appointmentList}
-            pagination={paginationConfig}
-            loading={loading}
-            rowKey="appointmentId"
-        />
+        <>
+            <Select
+                placeholder="Chọn thời gian xem lịch hẹn"
+                value={filter}
+                options={[
+                    {
+                        value: 'today',
+                        label: 'Cuộc hẹn hôm nay',
+                    },
+                    {
+                        value: 'week',
+                        label: 'Cuộc hẹn trong tuần kế tiếp',
+                    },
+                    {
+                        value: 'all',
+                        label: 'Tất cả cuộc hẹn',
+                    },
+                ]}
+                onChange={(value) => setFilter(value)}
+                style={{
+                    width: '250px',
+                    marginBottom: '10px',
+                    border: '2px',
+                    borderColor: '#000',
+                }}
+            />
+            <Table
+                columns={appointmentColumns}
+                dataSource={appointmentList}
+                pagination={paginationConfig}
+                loading={loading}
+                rowKey="appointmentId"
+            />
+        </>
     )
 }
