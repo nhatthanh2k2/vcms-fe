@@ -97,7 +97,7 @@ export const VaccineList = () => {
 
     return (
         <div className="flex flex-col space-y-5">
-            <div className="flex flex-col items-center bg-bg-vaccination p-10">
+            <div className="flex flex-col items-center bg-bg-vaccination shadow-default p-10">
                 <div className="text-2xl text-blue-700 font-bold mb-4">
                     Thông tin sản phẩm vắc xin
                 </div>

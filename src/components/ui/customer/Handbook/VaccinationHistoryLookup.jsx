@@ -118,12 +118,6 @@ export const VaccinationHistoryLookup = () => {
             if (response.data.code === 1000) {
                 const recordList = response.data.result
                 setVaccinationRecordList(recordList)
-
-                if (recordList.length === 0) {
-                    MyToast('info', 'Bạn chưa có dữ liệu tiêm chủng tại trung tâm')
-                } else {
-                    MyToast('success', 'Lấy lịch sử tiêm thành công')
-                }
             }
         } catch (error) {
             MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
@@ -170,24 +164,24 @@ export const VaccinationHistoryLookup = () => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="flex flex-col">
-                        <label className="block mb-1 font-medium">Nhập Mã KH / SĐT:</label>
+                        <label className=" mb-1 font-medium">Nhập Mã KH / SĐT:</label>
                         <div className=" relative">
                             <input
                                 {...register('customerIdentifier')}
                                 type="text"
                                 placeholder="Số điện thoại / Mã KH"
-                                className="input input-bordered input-info w-full  h-12"
+                                className="input input-bordered input-info w-full h-12"
                             />
                             {errors.customerIdentifier && (
-                                <span className="w-fit text-red-500 text-sm">
+                                <p className=" text-red-500 text-sm">
                                     {errors.customerIdentifier.message}
-                                </span>
+                                </p>
                             )}
                         </div>
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="block mb-1 font-medium">Ngày/tháng/năm sinh:</label>
+                        <label className=" mb-1 font-medium">Ngày/tháng/năm sinh:</label>
                         <div className="relative flex flex-col">
                             <DatePicker
                                 {...register('customerDob', {
@@ -203,14 +197,14 @@ export const VaccinationHistoryLookup = () => {
                                 style={{ height: '48px' }}
                             />
                             {errors.customerDob && (
-                                <span className="absolute left-0 top-full mt-1 w-fit text-red-500 text-sm">
+                                <p className=" text-red-500 text-sm">
                                     {errors.customerDob.message}
-                                </span>
+                                </p>
                             )}
                         </div>
                     </div>
 
-                    <div>
+                    <div className="pt-1">
                         <button
                             type="submit"
                             className="text-base rounded-full border-l-0 border-r-0 hover:scale-110 focus:outline-none flex justify-center px-4 py-2  font-bold cursor-pointer 
@@ -219,7 +213,21 @@ export const VaccinationHistoryLookup = () => {
                             Tra cứu thông tin
                         </button>
                     </div>
+                    <fieldset
+                        style={{
+                            border: '2px solid #0f766e',
+                            borderRadius: '6px',
+                            padding: '16px',
+                        }}
+                        className=" rounded-md p-6"
+                    >
+                        <legend className="text-lg font-medium text-gray-900">
+                            Thông tin cá nhân
+                        </legend>
+                        {/* Các input và label ở đây */}
+                    </fieldset>
                 </form>
+
                 {customer ? (
                     <div className="w-full">
                         <div>

@@ -31,8 +31,8 @@ export const ChildPackageList = () => {
 
             <div className="mt-5">
                 {childPackageList.map((pack, index) => (
-                    <div className="my-5">
-                        <ChildPackageTable pack={pack} key={index} />
+                    <div className="my-5" key={pack.vaccinePackageId || index}>
+                        <ChildPackageTable pack={pack} />
                         <div>
                             <img
                                 className="mx-auto mt-5"

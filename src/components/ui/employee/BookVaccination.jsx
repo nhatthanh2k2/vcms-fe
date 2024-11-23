@@ -45,8 +45,8 @@ const columns = [
     },
     {
         title: 'Số mũi tiêm',
-        dataIndex: 'doseCount',
-        key: 'doseCount',
+        dataIndex: 'packageDetailDoseCount',
+        key: 'packageDetailDoseCount',
         render: (text) => <span className="font-semibold">{text}</span>,
     },
 ]

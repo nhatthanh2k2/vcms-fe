@@ -153,21 +153,6 @@ export const EditVaccinePackageForm = () => {
             dataIndex: ['vaccineResponse', 'vaccineName'],
             key: 'vaccineName',
             width: 150,
-            onFilter: (value, record) => {
-                if (value === 'CHILD') {
-                    return record.vaccineResponse.vaccineAdultDoseCount === 0
-                }
-
-                if (value === 'ADULT') {
-                    return record.vaccineResponse.vaccineAdultDoseCount > 0
-                }
-                return false
-            },
-            filters: [
-                { text: 'Trẻ Em', value: 'CHILD' },
-                { text: 'Người Lớn', value: 'ADULT' },
-            ],
-            filterMultiple: false,
             render: (text, record) => text,
         },
         {

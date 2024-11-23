@@ -55,10 +55,7 @@ export const PrintVaccinationRecordModal = ({
             }}
         >
             {vaccinationRecordSelected && (
-                <div
-                    ref={vaccinationRecordRef}
-                    className="flex flex-col space-y-2 px-10 py-5 border-2 border-black rounded-lg"
-                >
+                <div ref={vaccinationRecordRef} className="flex flex-col space-y-2 p-5  rounded-lg">
                     <div className="flex w-full">
                         <div className="flex flex-col justify-center items-center">
                             <img src="./images/logo.png" className="h-16 object-cover" />
@@ -154,12 +151,12 @@ export const PrintVaccinationRecordModal = ({
                                 {vaccinationRecordSelected?.vaccinationRecordDate}
                             </span>
                             <span>
-                                <span className="font-bold">Tổng tiền thanh toán: </span>
+                                <span className="font-bold">Tổng tiền: </span>
                                 {vaccinationRecordSelected?.vaccinationRecordTotal.toLocaleString() +
                                     ' VNĐ'}
                             </span>
                             <span>
-                                <span className="font-bold">Phương thức thanh toán: </span>
+                                <span className="font-bold">Thanh toán: </span>
                                 {convertPaymentType(
                                     vaccinationRecordSelected?.vaccinationRecordPayment
                                 )}

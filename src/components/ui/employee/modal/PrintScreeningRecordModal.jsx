@@ -56,7 +56,7 @@ export const PrintScreeningRecordModal = ({
             {screeningRecordSelected && (
                 <div
                     ref={screeningRecordRef}
-                    className="flex flex-col space-y-4 px-10 py-5 border-2 border-black rounded-lg"
+                    className="flex flex-col space-y-4 px-10 py-5 rounded-lg"
                 >
                     <div className="flex w-full">
                         <div className="flex flex-col justify-center items-center">

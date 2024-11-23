@@ -16,13 +16,13 @@ const batchDetailColumns = [
     },
     {
         title: 'Tổng Số lượng',
-        dataIndex: 'batchDetailTotalVaccineQuantity',
-        key: 'quantity',
+        dataIndex: 'batchDetailInitialQuantity',
+        key: 'batchDetailInitialQuantity',
     },
     {
         title: 'Số lượng còn lại',
-        dataIndex: 'batchDetailVaccineQuantity',
-        key: 'quantity',
+        dataIndex: 'batchDetailRemainingQuantity',
+        key: 'batchDetailRemainingQuantity',
     },
     {
         title: 'Ngày sản xuất',

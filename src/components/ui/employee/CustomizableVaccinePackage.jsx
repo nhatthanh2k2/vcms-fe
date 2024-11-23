@@ -91,8 +91,11 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
             vaccineIdList: packageDetailList.map(
                 (packageDetail) => packageDetail.vaccineResponse.vaccineId
             ),
-            doseCountList: packageDetailList.map((packageDetail) => packageDetail.doseCount),
+            doseCountList: packageDetailList.map(
+                (packageDetail) => packageDetail.packageDetailDoseCount
+            ),
         }
+        console.log(request)
 
         try {
             const response = await employeeService.bookCustomPackage(request)
@@ -136,7 +139,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                 ...prev,
                 {
                     vaccineResponse: batchDetailToAdd.vaccineResponse,
-                    doseCount: doseCount,
+                    packageDetailDoseCount: doseCount,
                     diseaseResponse: batchDetailToAdd.diseaseResponse,
                 },
             ])
@@ -160,7 +163,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
         )
 
         if (vaccineToRemove) {
-            const { doseCount } = vaccineToRemove
+            const { packageDetailDoseCount } = vaccineToRemove
 
             const batchDetail = batchDetailList.find(
                 (detail) => detail.vaccineResponse.vaccineId === vaccineId
@@ -168,7 +171,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
 
             if (batchDetail) {
                 const vaccinePrice = batchDetail.batchDetailVaccinePrice
-                setPackagePrice((prevPrice) => prevPrice - doseCount * vaccinePrice)
+                setPackagePrice((prevPrice) => prevPrice - packageDetailDoseCount * vaccinePrice)
             }
 
             setFilteredVaccineList((prev) => [
@@ -240,34 +243,30 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
             title: 'Tên Vắc Xin',
             dataIndex: ['vaccineResponse', 'vaccineName'],
             key: 'vaccineName',
-            width: 150,
-            onFilter: (value, record) => {
-                if (value === 'CHILD') {
-                    return record.vaccineResponse.vaccineAdultDoseCount === 0
-                }
-
-                if (value === 'ADULT') {
-                    return record.vaccineResponse.vaccineAdultDoseCount > 0
-                }
-                return false
-            },
-            filters: [
-                { text: 'Trẻ Em', value: 'CHILD' },
-                { text: 'Người Lớn', value: 'ADULT' },
-            ],
-            filterMultiple: false,
+            width: 200,
         },
         {
             title: 'Nguồn gốc',
             dataIndex: ['vaccineResponse', 'vaccineOrigin'],
             key: 'vaccineOrigin',
-            width: 150,
+            width: 200,
         },
         {
             title: 'Phòng bệnh',
             dataIndex: ['diseaseResponse', 'diseaseName'],
             key: 'diseaseName',
+            width: 200,
+        },
+        {
+            title: 'Giá vắc xin',
+            dataIndex: 'batchDetailVaccinePrice',
+            key: 'batchDetailVaccinePrice',
             width: 150,
+            render: (text) => (
+                <span>
+                    {text.toLocaleString()} {' VNĐ'}
+                </span>
+            ),
         },
         {
             key: 'action',
@@ -399,7 +398,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
                             <Table
                                 columns={packageDetailColumns}
                                 dataSource={packageDetailList}
-                                rowKey={'vaccinePkgDetailId'}
+                                rowKey={'packageDetailId'}
                                 pagination={false}
                                 bordered
                                 scroll={{

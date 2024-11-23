@@ -31,8 +31,8 @@ export const AdolescentPackageList = () => {
 
             <div className="mt-5">
                 {adolescentPackageList.map((pack, index) => (
-                    <div className="my-5">
-                        <AdolescentPackageTable pack={pack} key={index} />
+                    <div className="my-5" key={pack.vaccinePackageId || index}>
+                        <AdolescentPackageTable pack={pack} />
                         <div>
                             <img
                                 className="mx-auto mt-5"

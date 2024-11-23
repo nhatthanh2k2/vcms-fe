@@ -20,8 +20,8 @@ const childPackageColumns = [
     },
     {
         title: 'Số mũi tiêm',
-        dataIndex: 'doseCount',
-        key: 'doseCount',
+        dataIndex: 'packageDetailDoseCount',
+        key: 'packageDetailDoseCount',
     },
 ]
 
@@ -35,7 +35,10 @@ export const ChildPackageTable = ({ pack }) => {
             .catch((error) => console.error('Get package detail failed.'))
     }, [])
 
-    const totalDoseCount = vaccinePackageDetail.reduce((total, item) => total + item.doseCount, 0)
+    const totalDoseCount = vaccinePackageDetail.reduce(
+        (total, item) => total + item.packageDetailDoseCount,
+        0
+    )
 
     return (
         <Table
@@ -62,6 +65,7 @@ export const ChildPackageTable = ({ pack }) => {
             dataSource={vaccinePackageDetail}
             columns={childPackageColumns}
             pagination={false}
+            rowKey={'packageDetailId'}
         />
     )
 }

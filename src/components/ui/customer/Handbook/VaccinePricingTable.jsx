@@ -12,13 +12,13 @@ const priceColumns = [
         title: 'Phòng bệnh',
         dataIndex: ['diseaseResponse', 'diseaseName'],
         key: 'diseaseName',
-        width: 300,
+        width: 400,
     },
     {
         title: 'Tên vắc xin',
         dataIndex: ['vaccineResponse', 'vaccineName'],
         key: 'vaccineName',
-        width: 300,
+        width: 400,
     },
     {
         title: 'Nguồn gốc vắc xin',
@@ -31,6 +31,8 @@ const priceColumns = [
         dataIndex: 'batchDetailVaccinePrice',
         key: 'vaccinePrice',
         render: (price) => `${price.toLocaleString()} VNĐ`,
+        sorter: (a, b) => a.batchDetailVaccinePrice - b.batchDetailVaccinePrice,
+        width: 200,
     },
 ]
 

@@ -31,8 +31,8 @@ export const AdultPackageList = () => {
 
             <div className="mt-5">
                 {adultPackageList.map((pack, index) => (
-                    <div className="my-5">
-                        <AdultPackageTable pack={pack} key={index} />
+                    <div className="my-5" key={pack.vaccinePackageId || index}>
+                        <AdultPackageTable pack={pack} />
                         <div>
                             <img
                                 className="mx-auto mt-5"

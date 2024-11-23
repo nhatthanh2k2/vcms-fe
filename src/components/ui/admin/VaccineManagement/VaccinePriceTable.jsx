@@ -33,8 +33,6 @@ export const VaccinePriceTable = () => {
         }
     }, [searchQuery, batchDetailList])
 
-    console.log(batchDetailList)
-
     const vaccinePriceColumns = [
         {
             title: 'Tên vắc xin',
