@@ -13,9 +13,9 @@ const columns = [
         key: 'vaccinePackageName',
     },
     {
-        title: 'Ngày tiêm',
-        dataIndex: 'vaccinationRecordDate',
-        key: 'vaccinationRecordDate',
+        title: 'Liều lượng',
+        dataIndex: 'vaccinationRecordDosage',
+        key: 'vaccinationRecordDosage',
     },
     {
         title: 'Mũi tiêm',
@@ -23,9 +23,9 @@ const columns = [
         key: 'vaccinationRecordDose',
     },
     {
-        title: 'Liều lượng',
-        dataIndex: 'vaccinationRecordDosage',
-        key: 'vaccinationRecordDosage',
+        title: 'Ngày tiêm',
+        dataIndex: 'vaccinationRecordDate',
+        key: 'vaccinationRecordDate',
     },
 ]
 export const VaccinationHistoryTable = ({ vaccinationRecordList }) => {

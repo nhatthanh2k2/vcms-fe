@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Select, DatePicker, Pagination } from 'antd'
+import { Select, DatePicker, Pagination, Tooltip } from 'antd'
 import { batchDetailService, vaccinePackageService } from '@/services'
 import { disabledDoB, formatCurrency, disabledPastDate, phoneNumberPattern } from '@/utils'
 
@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { customerService } from '@/services/customerService'
 import { AlertModal, ModalTransfer, MyToast } from '../common'
-import { PayPalCheckOut } from '.'
+import { PayPalCheckOut, PolicyModal } from '.'
 
 const orderSchema = z.object({
     orderCustomerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
@@ -201,6 +201,16 @@ export const OrderForm = () => {
     }
 
     const orderData = watch()
+
+    const [isOpenPolicyModal, setIsOpenPolicyModal] = useState(false)
+
+    const handleOpenPolicyModal = () => {
+        setIsOpenPolicyModal(true)
+    }
+
+    const handleClosePolicyModal = () => {
+        setIsOpenPolicyModal(false)
+    }
 
     return (
         <div>
@@ -691,9 +701,33 @@ export const OrderForm = () => {
                             </div>
 
                             <div className="flex flex-col space-y-4 mt-8">
-                                <span className="text-lg font-semibold">
-                                    Chọn phương thức thanh toán:
-                                </span>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-lg font-semibold">
+                                        Chọn phương thức thanh toán:
+                                    </span>
+                                    <Tooltip placement="top" title="Chính sách mua vắc xin">
+                                        <svg
+                                            onClick={handleOpenPolicyModal}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlSpace="preserve"
+                                            className="w-8 h-8 cursor-pointer"
+                                            viewBox="0 0 496.158 496.158"
+                                        >
+                                            <path
+                                                d="M496.158 248.085C496.158 111.063 385.089.003 248.083.003 111.07.003 0 111.063 0 248.085c0 137.001 111.07 248.07 248.083 248.07 137.006 0 248.075-111.069 248.075-248.07z"
+                                                style={{
+                                                    fill: '#25b7d3',
+                                                }}
+                                            />
+                                            <path
+                                                d="M138.216 173.592c0-13.915 4.467-28.015 13.403-42.297 8.933-14.282 21.973-26.11 39.111-35.486 17.139-9.373 37.134-14.062 59.985-14.062 21.238 0 39.99 3.921 56.25 11.755 16.26 7.838 28.818 18.495 37.683 31.97 8.861 13.479 13.293 28.125 13.293 43.945 0 12.452-2.527 23.367-7.581 32.739-5.054 9.376-11.062 17.469-18.018 24.279-6.959 6.812-19.446 18.275-37.463 34.388-4.981 4.542-8.975 8.535-11.975 11.976-3.004 3.443-5.239 6.592-6.702 9.447-1.466 2.857-2.603 5.713-3.406 8.57-.807 2.855-2.015 7.875-3.625 15.051-2.784 15.236-11.501 22.852-26.147 22.852-7.618 0-14.028-2.489-19.226-7.471-5.201-4.979-7.8-12.377-7.8-22.192 0-12.305 1.902-22.962 5.713-31.97 3.808-9.01 8.861-16.92 15.161-23.73 6.296-6.812 14.794-14.904 25.488-24.28 9.373-8.202 16.15-14.392 20.325-18.567a62.97 62.97 0 0 0 10.547-13.953c2.856-5.126 4.285-10.691 4.285-16.699 0-11.718-4.36-21.605-13.074-29.663-8.717-8.054-19.961-12.085-33.728-12.085-16.116 0-27.981 4.065-35.596 12.195-7.618 8.13-14.062 20.105-19.336 35.925-4.981 16.555-14.43 24.829-28.345 24.829-8.206 0-15.127-2.891-20.764-8.679-5.639-5.786-8.458-12.048-8.458-18.787zm107.226 240.82c-8.937 0-16.737-2.895-23.401-8.68-6.667-5.784-9.998-13.877-9.998-24.279 0-9.229 3.22-16.991 9.668-23.291 6.444-6.297 14.354-9.448 23.73-9.448 9.229 0 16.991 3.151 23.291 9.448 6.296 6.3 9.448 14.062 9.448 23.291 0 10.255-3.296 18.312-9.888 24.17-6.592 5.858-14.208 8.789-22.85 8.789z"
+                                                style={{
+                                                    fill: '#fff',
+                                                }}
+                                            />
+                                        </svg>
+                                    </Tooltip>
+                                </div>
 
                                 <div className="flex gap-4">
                                     <input
@@ -771,13 +805,13 @@ export const OrderForm = () => {
                         type="radio"
                         name="my_tabs_2"
                         role="tab"
-                        className="tab font-bold text-base text-nowrap  [--tab-bg:DeepSkyBlue] [--tab-border-color:blue]"
+                        className="tab font-bold text-base text-nowrap  [--tab-bg:MediumSpringGreen] [--tab-border-color:MediumSpringGreen]"
                         aria-label="Vắc xin lẻ"
                         defaultChecked
                     />
                     <div
                         role="tabpanel"
-                        className="tab-content bg-base-100  border-blue-700 rounded-box p-6 "
+                        className="tab-content bg-base-100 border-2  border-teal-300 rounded-box p-6 "
                     >
                         <div className="flex flex-wrap gap-2 flex-grow">
                             {currentBatchDetails.map((batchDetail, index) => {
@@ -795,7 +829,7 @@ export const OrderForm = () => {
                                                 {batchDetail.vaccineResponse.vaccineName}{' '}
                                             </h2>
                                             <p>Phòng: {batchDetail.diseaseResponse.diseaseName}</p>
-                                            <p className="text-lg font-semibold text-blue-700">
+                                            <p className="text-lg font-semibold text-MediumSpringGreen-700">
                                                 Giá chỉ:{' '}
                                                 {formatCurrency(
                                                     batchDetail.batchDetailVaccinePrice
@@ -846,12 +880,12 @@ export const OrderForm = () => {
                         type="radio"
                         name="my_tabs_2"
                         role="tab"
-                        className="tab font-bold text-base text-nowrap [--tab-bg:DeepSkyBlue] [--tab-border-color:blue] "
+                        className="tab font-bold text-base text-nowrap [--tab-bg:MediumSpringGreen] [--tab-border-color:MediumSpringGreen] "
                         aria-label="Gói vắc xin"
                     />
                     <div
                         role="tabpanel"
-                        className="tab-content bg-base-100  border-blue-700 rounded-box p-6"
+                        className="tab-content bg-base-100   border-2  border-teal-300 rounded-box p-6"
                     >
                         <div className="flex flex-col ">
                             <div className="flex flex-wrap gap-2 flex-grow">
@@ -919,6 +953,11 @@ export const OrderForm = () => {
             <AlertModal
                 modalId={'modal_info'}
                 message={'Bạn là khách hàng của trung tâm. Mời bạn chọn vắc xin muốn mua!'}
+            />
+
+            <PolicyModal
+                visiblePolicyModal={isOpenPolicyModal}
+                handleClosePolicyModal={handleClosePolicyModal}
             />
         </div>
     )

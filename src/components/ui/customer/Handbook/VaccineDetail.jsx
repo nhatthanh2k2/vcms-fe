@@ -9,7 +9,7 @@ export const VaccineDetail = () => {
         <section className="relative pt-5">
             <div className="container mx-auto">
                 <div className="relative my-5">
-                    <div className="uppercase text-3xl text-blue-700 font-satoshi font-bold">
+                    <div className="uppercase text-3xl text-blue-700 font-bold">
                         {vaccineDetail.vaccineName}
                     </div>
                     <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>

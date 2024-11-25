@@ -213,19 +213,6 @@ export const VaccinationHistoryLookup = () => {
                             Tra cứu thông tin
                         </button>
                     </div>
-                    <fieldset
-                        style={{
-                            border: '2px solid #0f766e',
-                            borderRadius: '6px',
-                            padding: '16px',
-                        }}
-                        className=" rounded-md p-6"
-                    >
-                        <legend className="text-lg font-medium text-gray-900">
-                            Thông tin cá nhân
-                        </legend>
-                        {/* Các input và label ở đây */}
-                    </fieldset>
                 </form>
 
                 {customer ? (
@@ -240,7 +227,7 @@ export const VaccinationHistoryLookup = () => {
                                     readOnly
                                     type="text"
                                     placeholder="Họ và tên"
-                                    className="input input-bordered input-success input-sm w-full max-w-xs"
+                                    className="input input-bordered input-success input-sm w-full max-w-fit flex-1"
                                 />
 
                                 <input
@@ -248,7 +235,7 @@ export const VaccinationHistoryLookup = () => {
                                     readOnly
                                     type="text"
                                     placeholder="Số điện thoại:"
-                                    className="input input-bordered input-success input-sm w-full max-w-xs"
+                                    className="input input-bordered input-success input-sm w-full max-w-fit flex-1"
                                 />
 
                                 <input
@@ -266,7 +253,7 @@ export const VaccinationHistoryLookup = () => {
                                     readOnly
                                     type="text"
                                     placeholder="Địa chỉ:"
-                                    className="input input-bordered input-success input-sm w-full max-w-lg"
+                                    className="input input-bordered input-success input-sm w-full max-w-sm flex-2"
                                 />
                             </div>
                         </div>

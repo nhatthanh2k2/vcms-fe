@@ -8,4 +8,5 @@ export * from './Chat'
 export * from './AppointmentForm'
 export * from './OrderForm'
 export * from './PayPalCheckOut'
+export * from './PolicyModal'
 

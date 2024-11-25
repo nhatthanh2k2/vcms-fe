@@ -658,13 +658,13 @@ export const AppointmentForm = () => {
                             type="radio"
                             name="vaccine_tabs"
                             role="tab"
-                            className="tab font-bold text-base text-nowrap [--tab-bg:DeepSkyBlue] [--tab-border-color:blue]"
+                            className="tab font-bold text-base text-nowrap [--tab-bg:MediumSpringGreen] [--tab-border-color:MediumSpringGreen]"
                             aria-label="Vắc xin lẻ"
                             defaultChecked
                         />
                         <div
                             role="tabpanel"
-                            className="tab-content bg-base-100 border-blue-700 rounded-box p-6 "
+                            className="tab-content bg-base-100  border-2  border-teal-300 rounded-box p-6 "
                         >
                             <div className="flex flex-col ">
                                 <div className="flex flex-wrap gap-2 flex-grow">
@@ -733,12 +733,12 @@ export const AppointmentForm = () => {
                             type="radio"
                             name="vaccine_tabs"
                             role="tab"
-                            className="tab font-bold text-base text-nowrap [--tab-bg:DeepSkyBlue] [--tab-border-color:blue]"
+                            className="tab font-bold text-base text-nowrap [--tab-bg:MediumSpringGreen] [--tab-border-color:MediumSpringGreen]"
                             aria-label="Gói vắc xin"
                         />
                         <div
                             role="tabpanel"
-                            className="tab-content bg-base-100 border-blue-700 rounded-box p-6"
+                            className="tab-content bg-base-100  border-2  border-teal-300 rounded-box p-6"
                         >
                             <div className="flex flex-col ">
                                 <div className="flex flex-wrap gap-2 flex-grow">

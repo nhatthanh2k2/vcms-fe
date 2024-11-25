@@ -10,12 +10,17 @@ const batchDetailColumns = [
         key: 'vaccineName',
     },
     {
-        title: 'Phòng bệnh',
-        dataIndex: ['diseaseResponse', 'diseaseName'],
-        key: 'diseaseName',
+        title: 'Giá nhập',
+        dataIndex: 'batchDetailVaccinePrice',
+        key: 'batchDetailVaccinePrice',
+        render: (text) => (
+            <span>
+                {text.toLocaleString()} {' VNĐ'}
+            </span>
+        ),
     },
     {
-        title: 'Tổng Số lượng',
+        title: 'Số lượng lúc nhập',
         dataIndex: 'batchDetailInitialQuantity',
         key: 'batchDetailInitialQuantity',
     },
