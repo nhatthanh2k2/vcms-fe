@@ -15,6 +15,8 @@ export const convertAppointmentStatus = (status) => {
 
 export const convertQualification = (qual) => {
     switch (qual) {
+        case 'ĐH':
+            return 'Đại học'
         case 'ĐD':
             return 'Điều dưỡng'
         case 'BS':

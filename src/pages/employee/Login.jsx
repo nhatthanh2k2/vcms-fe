@@ -19,7 +19,7 @@ export const Login = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
-        setIsLoading(true)
+        //setIsLoading(true)
 
         const authEmployeeDTO = {
             username: account.username,
@@ -37,17 +37,24 @@ export const Login = () => {
             const decodedToken = jwtDecode(token)
             const role = decodedToken.scope
 
-            setTimeout(() => {
-                setIsLoading(false)
-                MyToast('success', 'Đăng Nhập Thành Công')
-                if (role === 'ADMIN') navigate('/admin/trang-chu')
-                else navigate('/nhan-vien')
-            }, 2000)
+            MyToast('success', 'Đăng Nhập Thành Công')
+            if (role === 'ADMIN') navigate('/admin/trang-chu')
+            else navigate('/nhan-vien')
+
+            // setTimeout(() => {
+            //     setIsLoading(false)
+            //     MyToast('success', 'Đăng Nhập Thành Công')
+            //     if (role === 'ADMIN') navigate('/admin/trang-chu')
+            //     else navigate('/nhan-vien')
+            // }, 2000)
         } catch (error) {
-            setTimeout(() => {
-                setIsLoading(false)
-                MyToast('error', 'Đăng Nhập Không Thành Công')
-            }, 2000)
+            if (error.response.status === 403) {
+                //setIsLoading(false)
+                MyToast('error', 'Tài khoản của bạn đã bị khóa.')
+            } else {
+                //setIsLoading(false)
+                MyToast('error', 'Sai tên tài khoản hoặc mật khẩu.')
+            }
         }
     }
 

@@ -74,12 +74,47 @@ export const EmployeeTable = () => {
         setEmployeeInfo(null)
     }
 
+    const handleDeactivateEmployee = async (employeeId) => {
+        try {
+            const response = await employeeService.deactivateEmployee(employeeId)
+            if (response.data.code === 1000) {
+                MyToast('success', 'Khóa tài khoản thành công.')
+                getEmployeeList()
+            } else {
+                MyToast('error', 'Không thể khóa tài khoản.')
+            }
+        } catch (error) {
+            MyToast('error', 'Xảy ra lỗi khi khóa tài khoản.')
+        }
+    }
+
+    const handleActiveEmployee = async (employeeId) => {
+        try {
+            const response = await employeeService.activeEmployee(employeeId)
+            if (response.data.code === 1000) {
+                MyToast('success', 'Kích hoạt tài khoản thành công.')
+                getEmployeeList()
+            } else {
+                MyToast('error', 'Không thể kích hoạt tài khoản.')
+            }
+        } catch (error) {
+            MyToast('error', 'Xảy ra lỗi khi kích hoạt tài khoản.')
+        }
+    }
+
     const employeeColumns = [
         {
-            title: 'STT',
-            key: 'index',
-            render: (text, record, index) =>
-                (pagination.current - 1) * pagination.pageSize + index + 1,
+            title: '',
+            key: 'status',
+            render: (text, record) => (
+                <div>
+                    {record.employeeActive ? (
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    ) : (
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    )}
+                </div>
+            ),
             width: 50,
         },
         {
@@ -125,7 +160,7 @@ export const EmployeeTable = () => {
             title: '',
             key: 'actions',
             render: (text, record) => (
-                <div className="flex space-x-2 justify-center">
+                <div className="flex space-x-2 justify-center items-center">
                     <div onClick={() => handleOpenEditEmployeeModal(record)}>
                         <Tooltip placement="top" title="Chỉnh sửa thông tin">
                             <svg
@@ -223,6 +258,47 @@ export const EmployeeTable = () => {
                                 />
                             </svg>
                         </Tooltip>
+                    </div>
+                    <div>
+                        {record.employeeActive ? (
+                            <div onClick={() => handleDeactivateEmployee(record.employeeId)}>
+                                <Tooltip placement="top" title="Khóa tài khoản">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 48 48"
+                                        className="w-6 h-6"
+                                    >
+                                        <g data-name="Layer 2">
+                                            <path
+                                                fill="none"
+                                                d="M0 0h48v48H0z"
+                                                data-name="invisible box"
+                                            />
+                                            <path d="m3 30.5-1 .6V39a2 2 0 0 0 2 2h20v-4H6v-3.6A21.7 21.7 0 0 1 16 31a21.5 21.5 0 0 1 8 1.5v-4.2a24.4 24.4 0 0 0-8-1.3 25.6 25.6 0 0 0-13 3.5ZM16 5a9 9 0 1 0 9 9 9 9 0 0 0-9-9Zm0 14a5 5 0 1 1 5-5 5 5 0 0 1-5 5ZM44 28h-1v-3a6 6 0 0 0-12 0v3h-1a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V30a2 2 0 0 0-2-2Zm-9-3a2 2 0 0 1 4 0v3h-4Zm7 14H32v-7h10Z" />
+                                        </g>
+                                    </svg>
+                                </Tooltip>
+                            </div>
+                        ) : (
+                            <div onClick={() => handleActiveEmployee(record.employeeId)}>
+                                <Tooltip placement="top" title="Kích hoạt tài khoản">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="w-6 h-6"
+                                        viewBox="0 0 48 48"
+                                    >
+                                        <g data-name="Layer 2">
+                                            <path
+                                                fill="none"
+                                                d="M0 0h48v48H0z"
+                                                data-name="invisible box"
+                                            />
+                                            <path d="m3 30.5-1 .6V39a2 2 0 0 0 2 2h20v-4H6v-3.6A21.7 21.7 0 0 1 16 31a21.5 21.5 0 0 1 8 1.5v-4.2a24.4 24.4 0 0 0-8-1.3 25.6 25.6 0 0 0-13 3.5ZM16 23a9 9 0 1 0-9-9 9 9 0 0 0 9 9Zm0-14a5 5 0 1 1-5 5 5 5 0 0 1 5-5ZM44 28h-8v-3a6 6 0 0 0-12 0h4a2 2 0 0 1 4 0v3h-2a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V30a2 2 0 0 0-2-2Zm-2 11H32v-7h10Z" />
+                                        </g>
+                                    </svg>
+                                </Tooltip>
+                            </div>
+                        )}
                     </div>
                 </div>
             ),

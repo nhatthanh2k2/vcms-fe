@@ -29,6 +29,12 @@ export const employeeService =  {
     createEmployee: (request) => {
         return api.post("/employees/create", request)
     },
+    deactivateEmployee: (employeeId) => {
+        return api.put(`/employees/deactivate/${employeeId}`)
+    },
+    activeEmployee: (employeeId) => {
+        return api.put(`/employees/active/${employeeId}`)
+    },
     deleteEmployee: (employeeId) => {
         return api.delete("/employees/delete/" + employeeId)
     },

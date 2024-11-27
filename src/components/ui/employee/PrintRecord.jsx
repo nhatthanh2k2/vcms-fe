@@ -63,6 +63,10 @@ export const PrintRecord = () => {
         setVaccinationRecordSelected(null)
     }
 
+    // const handleCanceledScreeningRecord = (srId){
+
+    // }
+
     const screeningColumns = [
         {
             title: 'Mã phiếu khám',
