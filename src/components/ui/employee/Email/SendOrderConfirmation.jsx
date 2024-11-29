@@ -77,6 +77,8 @@ export const sendOrderConfirmation = async (record) => {
                 )
             )
     } catch (error) {
+        console.log(error)
+
         MyToast('error', 'Không gửi được email xác nhận đơn hàng')
     }
 }

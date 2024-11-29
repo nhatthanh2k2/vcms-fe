@@ -18,8 +18,8 @@ export const CustomerLayout = () => {
             <CustomerFooter />
 
             <BackToTopButton />
-            <ChatBotButton toggleChat={toggleChat} />
-            {isChatOpen && <ChatWindow toggleChat={toggleChat} />}
+            {/* <ChatBotButton toggleChat={toggleChat} />
+            {isChatOpen && <ChatWindow toggleChat={toggleChat} />} */}
         </div>
     )
 }

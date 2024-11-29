@@ -193,7 +193,7 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
                                 valueAsDate: true,
                             })}
                             format="DD-MM-YYYY"
-                            disabledDate={disabledPastDateForEmployee}
+                            //disabledDate={disabledPastDateForEmployee}
                             onChange={(date) => {
                                 setValue('injectionDate', date?.toDate() || null, {
                                     shouldValidate: true,

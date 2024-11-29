@@ -37,10 +37,10 @@ export const VaccineDetail = () => {
                             </div>
 
                             <div>
-                                <label className="block">
-                                    <strong>Nguồn gốc:</strong>
-                                </label>
-                                <span>{vaccineDetail.vaccineOrigin}</span>
+                                <span>
+                                    <strong>Nguồn gốc: </strong>
+                                    {vaccineDetail.vaccineOrigin}
+                                </span>
                             </div>
 
                             <div>

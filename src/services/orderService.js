@@ -9,10 +9,10 @@ const order_api = apiInstance({
 
 export const orderService = {
     createOrderWithCustomerCode: (requset) => {
-        return axios.post(api_url + "/create-code", requset)
+        return axios.post(order_url + "/create-code", requset)
     },
     createOrder: (request) => {
-        return axios.post(api_url + "/create", request)
+        return axios.post(order_url + "/create", request)
     },
     getOrderListByInjectionDate: (selectedDate) => {
         return order_api.get("/list/injection-date", {
@@ -23,7 +23,7 @@ export const orderService = {
         return order_api.get(`/detail/${orderId}`)
     },
     getMyOrder: (orderId) =>{
-        return axios.get(api_url + `/detail/my-order/${orderId}`)
+        return axios.get(order_url + `/detail/my-order/${orderId}`)
     },
     getAllOrder: (page, size) => {
         return order_api.get(`/list/all?page=${page}&size=${size}`)

@@ -90,7 +90,7 @@ export const CustomerLookup = () => {
 
     return (
         <section className="flex-col">
-            <div className=" bg-base-100 shadow-md flex flex-col p-4 space-y-2 rounded-lg">
+            <div className=" bg-base-100 shadow-default flex flex-col p-4 space-y-2 rounded-lg">
                 <h1 className="text-2xl md:text-2xl pl-2 my-2 border-l-4 text-orange-600  font-sans font-bold border-teal-400  dark:text-gray-200">
                     Tra cứu thông tin khách hàng
                 </h1>
@@ -158,7 +158,7 @@ export const CustomerLookup = () => {
                 </form>
             </div>
 
-            <div role="tablist" className="tabs tabs-lifted mt-5 shadow-lg">
+            <div role="tablist" className="tabs tabs-lifted mt-5 shadow-default border-base-200">
                 <input
                     type="radio"
                     name="customer_tabs"

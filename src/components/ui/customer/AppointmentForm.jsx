@@ -539,7 +539,7 @@ export const AppointmentForm = () => {
                                         valueAsDate: true,
                                     })}
                                     format="DD-MM-YYYY"
-                                    disabledDate={disabledPastDate}
+                                    //disabledDate={disabledPastDate}
                                     onChange={(date) =>
                                         setValue(
                                             'appointmentInjectionDate',
@@ -667,7 +667,7 @@ export const AppointmentForm = () => {
                             className="tab-content bg-base-100  border-2  border-teal-300 rounded-box p-6 "
                         >
                             <div className="flex flex-col ">
-                                <div className="flex flex-wrap gap-2 flex-grow">
+                                <div className="flex flex-wrap gap-2 space-y-2 flex-grow">
                                     {currentBatchDetails.map((batchDetail, index) => {
                                         return (
                                             <div
@@ -741,7 +741,7 @@ export const AppointmentForm = () => {
                             className="tab-content bg-base-100  border-2  border-teal-300 rounded-box p-6"
                         >
                             <div className="flex flex-col ">
-                                <div className="flex flex-wrap gap-2 flex-grow">
+                                <div className="flex flex-wrap gap-2 space-y-2 flex-grow">
                                     {packageList.map((pack, index) => {
                                         return (
                                             <div

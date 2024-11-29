@@ -25,6 +25,10 @@ export const DailyDoseCountOfWeekChart = () => {
                 backgroundColor: 'rgba(75,192,192,0.2)',
                 fill: true,
                 tension: 0.4,
+                pointBackgroundColor: 'rgba(75,192,192,1)',
+                pointBorderColor: 'rgba(75,192,192,1)',
+                pointRadius: 5,
+                pointHoverRadius: 7,
             },
         ],
     }

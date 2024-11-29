@@ -4,6 +4,7 @@ import { MyToast } from '../../common'
 import dayjs from 'dayjs'
 import { Table, Tooltip } from 'antd'
 import { AddVaccineBatchModal, VaccineBatchDetailModal } from '.'
+import { BatchExcelModal } from './BatchExcelModal'
 
 export const VaccineBatchTable = () => {
     const [vaccineBatchList, setVaccineBatchList] = useState([])
@@ -63,13 +64,14 @@ export const VaccineBatchTable = () => {
         setBatchSelected(null)
     }
 
-    const handleDownloadFile = () => {
-        const link = document.createElement('a')
-        link.href = '/files/Mau-lo-vac-xin.xlsx' // Đường dẫn file trong thư mục public
-        link.download = 'Mau-lo-vac-xin.xlsx' // Tên file khi tải về
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+    const [isOpenBatchExcelModal, setIsOpenBatchExcelModal] = useState(false)
+
+    const handleOpenBatchExcelModal = () => {
+        setIsOpenBatchExcelModal(true)
+    }
+
+    const handleCloseBatchExcelModal = () => {
+        setIsOpenBatchExcelModal(false)
     }
 
     const vaccineBatchColumns = [
@@ -167,7 +169,7 @@ export const VaccineBatchTable = () => {
                         </div>
                         <div>
                             <button
-                                onClick={handleDownloadFile}
+                                onClick={handleOpenBatchExcelModal}
                                 className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                             >
                                 <span className="mr-2">Tải file Excel mẫu</span>
@@ -228,6 +230,11 @@ export const VaccineBatchTable = () => {
                 visibleVaccineBatchDetailModal={isOpenVaccineBatchDetailModal}
                 handleCloseVaccineBatchDetailModal={handleCloseVaccineBatchDetailModal}
                 batchSelected={batchSelected}
+            />
+
+            <BatchExcelModal
+                visibleBatchExcelModal={isOpenBatchExcelModal}
+                handleCloseBatchExcelModal={handleCloseBatchExcelModal}
             />
         </div>
     )

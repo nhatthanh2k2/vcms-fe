@@ -36,13 +36,7 @@ export const QuarterlyRevenueOfYearChart = () => {
                 borderColor: '#007bff',
                 borderWidth: 1,
             },
-            {
-                label: 'Chi phí',
-                data: costs,
-                backgroundColor: '#ff5733',
-                borderColor: '#ff5733',
-                borderWidth: 1,
-            },
+
             {
                 label: 'Lợi nhuận',
                 data: profits,
@@ -56,12 +50,10 @@ export const QuarterlyRevenueOfYearChart = () => {
     return (
         <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex justify-between font-bold">
-                <span>Doanh thu, chi phí và lợi nhuận theo quý năm {yearSelected}</span>
+                <span>Doanh thu theo quý năm {yearSelected}</span>
                 <span>
                     Tổng doanh thu:{' '}
                     <span className="text-blue-600">{totalRevenue.toLocaleString()} VNĐ</span>
-                    &nbsp;| Tổng chi phí:{' '}
-                    <span className="text-orange-600">{totalCost.toLocaleString()} VNĐ</span>
                     &nbsp;| Tổng lợi nhuận:{' '}
                     <span className="text-green-600">{totalProfit.toLocaleString()} VNĐ</span>
                 </span>

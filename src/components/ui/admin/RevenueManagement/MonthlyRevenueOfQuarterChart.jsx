@@ -38,13 +38,7 @@ export const MonthlyRevenueOfQuarterChart = () => {
                 borderColor: '#007bff',
                 borderWidth: 1,
             },
-            {
-                label: 'Chi phí',
-                data: costs,
-                backgroundColor: '#ff5733',
-                borderColor: '#ff5733',
-                borderWidth: 1,
-            },
+
             {
                 label: 'Lợi nhuận',
                 data: profits,
@@ -59,8 +53,7 @@ export const MonthlyRevenueOfQuarterChart = () => {
         <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5 space-y-5">
             <div className="flex justify-between items-center font-bold">
                 <span>
-                    Doanh thu, chi phí và lợi nhuận theo tháng trong quý {quarterSelected} năm{' '}
-                    {yearSelected}
+                    Doanh thu theo tháng trong quý {quarterSelected} năm {yearSelected}
                 </span>
                 <Select
                     options={[
@@ -78,8 +71,6 @@ export const MonthlyRevenueOfQuarterChart = () => {
             <span className="font-semibold">
                 Tổng doanh thu:{' '}
                 <span className="text-blue-600">{totalRevenue.toLocaleString()} VNĐ</span>
-                &nbsp;| Tổng chi phí:{' '}
-                <span className="text-orange-600">{totalCost.toLocaleString()} VNĐ</span>
                 &nbsp;| Tổng lợi nhuận:{' '}
                 <span className="text-green-600">{totalProfit.toLocaleString()} VNĐ</span>
             </span>

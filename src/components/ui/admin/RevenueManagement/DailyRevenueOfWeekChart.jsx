@@ -38,15 +38,7 @@ export const DailyRevenueOfWeekChart = () => {
                 borderWidth: 2,
                 tension: 0.1,
             },
-            {
-                label: 'Chi phí',
-                data: costs,
-                fill: false,
-                backgroundColor: '#ff5733',
-                borderColor: '#ff5733',
-                borderWidth: 2,
-                tension: 0.1,
-            },
+
             {
                 label: 'Lợi nhuận',
                 data: profits,
@@ -62,12 +54,10 @@ export const DailyRevenueOfWeekChart = () => {
     return (
         <div className="bg-white rounded-lg shadow-default border border-stroke px-5 pb-5 pt-7.5">
             <div className="flex font-bold justify-between">
-                <span>Biểu đồ Doanh thu, Chi phí và Lợi nhuận trong tuần</span>
+                <span>Doanh thu trong tuần này</span>
                 <span>
                     Tổng doanh thu:{' '}
                     <span className="text-blue-600">{totalRevenue.toLocaleString()} VNĐ</span>
-                    &nbsp;| Tổng chi phí:{' '}
-                    <span className="text-red-600">{totalCost.toLocaleString()} VNĐ</span>
                     &nbsp;| Tổng lợi nhuận:{' '}
                     <span className="text-green-600">{totalProfit.toLocaleString()} VNĐ</span>
                 </span>

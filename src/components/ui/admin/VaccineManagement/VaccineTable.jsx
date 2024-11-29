@@ -73,13 +73,13 @@ export const VaccineTable = () => {
             width: 50,
         },
         {
-            title: 'Mã Vaccine',
+            title: 'Mã vắc xin',
             dataIndex: 'vaccineCode',
             key: 'vaccineCode',
             width: 100,
         },
         {
-            title: 'Tên Vaccine',
+            title: 'Tên vắc xin',
             dataIndex: 'vaccineName',
             key: 'vaccineName',
             width: 200,
