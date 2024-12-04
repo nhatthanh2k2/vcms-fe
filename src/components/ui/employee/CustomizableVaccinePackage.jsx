@@ -111,11 +111,7 @@ export const CustomizableVaccinePackage = ({ vaccinePackageList, batchDetailList
             if (error.response) {
                 if (error.response.status === 404) {
                     MyToast('error', 'Không Tìm Thấy Khách Hàng')
-                } else {
-                    MyToast('error', 'Xảy ra lỗi')
                 }
-            } else {
-                MyToast('error', 'Xảy ra lỗi')
             }
         }
     }

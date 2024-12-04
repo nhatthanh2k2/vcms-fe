@@ -62,28 +62,28 @@ export const OrderVaccinationSchedule = () => {
             title: 'Số điện thoại',
             dataIndex: 'orderCustomerPhone',
             key: 'orderCustomerPhone',
-            width: 150,
+
             render: (text) => <span>{text}</span>,
         },
         {
             title: 'Tổng tiền',
             dataIndex: 'orderTotal',
             key: 'orderTotal',
-            width: 150,
+
             render: (text) => <span>{text.toLocaleString()} VND</span>,
         },
         {
             title: 'Thanh toán',
             dataIndex: 'orderPayment',
             key: 'orderPayment',
-            width: 150,
+
             render: (text) => <span>{convertPaymentType(text)}</span>,
         },
         {
             title: 'Ngày đặt hàng',
             dataIndex: 'orderDate',
             key: 'orderDate',
-            width: 150,
+
             render: (text) => <span>{text}</span>,
         },
         {
@@ -321,6 +321,21 @@ export const OrderVaccinationSchedule = () => {
         }
     }
 
+    const handleSendVaccinationReminderEmailForNextDay = async () => {
+        try {
+            const tomorrow = new Date()
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            const formatDate = dayjs(tomorrow).format('YYYY-MM-DD')
+            const response = await orderService.getOrderListByInjectionDate(formatDate)
+            // console.log(response.data.result)
+            response.data.result.map((record) => {
+                handleSendVaccinationReminderEmail(record)
+            })
+        } catch (error) {
+            MyToast('error', 'Xảy ra lỗi khi nhắc lịch.')
+        }
+    }
+
     useEffect(() => {
         if (searchQuery) {
             const filtered = orderList.filter((order) =>
@@ -369,6 +384,25 @@ export const OrderVaccinationSchedule = () => {
                         />
                     </svg>
                 </label>
+                <div className="m-3">
+                    <button
+                        onClick={handleSendVaccinationReminderEmailForNextDay}
+                        className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                    >
+                        <span className="mr-2">Nhắc lịch tiêm ngày mai</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="currentcolor"
+                                d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div className="w-full">
                 <Table

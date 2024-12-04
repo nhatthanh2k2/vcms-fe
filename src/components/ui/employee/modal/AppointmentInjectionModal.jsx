@@ -124,6 +124,7 @@ export const AppointmentInjectionModal = ({
                 vaccinationRecordReceiptSource: 'APPOINTMENT',
             }
         }
+        console.log(response)
 
         try {
             const response = await vaccinationRecordService.createVaccinationRecord(request)
@@ -131,7 +132,7 @@ export const AppointmentInjectionModal = ({
             else MyToast('error', 'Xảy ra lỗi khi tạo phiếu tiêm.')
         } catch (error) {
             if (error.response) {
-                MyToast('error', 'Có lỗi không tìm thấy hoặc số lượng vắc xin không đủ')
+                MyToast('error', 'Số lượng vắc xin trong lô không đủ hãy chọn lô khác.')
             }
         }
     }

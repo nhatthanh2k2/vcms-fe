@@ -39,7 +39,6 @@ export const sendAppointmentReminder = (appointmentRecord, setIsLoading) => {
         content: emailContent,
         injectionDate: appointmentRecord.appointmentInjectionDate,
     }
-    console.log(templateParams)
 
     emailjs
         .send('service_wwqml4v', 'template_uk1un67', templateParams, {

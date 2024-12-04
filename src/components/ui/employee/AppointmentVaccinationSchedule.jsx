@@ -114,6 +114,22 @@ export const AppointmentVaccinationSchedule = () => {
         setIsOpenAddCustomerModal(false)
     }
 
+    const handleSendEmailRemiderForNextDay = async () => {
+        try {
+            const tomorrow = new Date()
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            const formatDate = dayjs(tomorrow).format('YYYY-MM-DD')
+            //console.log(formatDate)
+            const response = await appointmentService.getAppointmentListByInjectionDate(formatDate)
+            //console.log(response.data.result)
+            response.data.result.map((record) => {
+                sendAppointmentReminder(record, setIsLoading)
+            })
+        } catch (error) {
+            MyToast('error', 'Đã xảy ra lỗi khi nhắc lịch.')
+        }
+    }
+
     useEffect(() => {
         if (searchQuery) {
             const filtered = appointmentList.filter((appt) =>
@@ -261,29 +277,31 @@ export const AppointmentVaccinationSchedule = () => {
                             </svg>
                         </Tooltip>
                     </div>
-                    {/* <div
-                        onClick={() => {
-                            handleOpenAddCustomerModal(record)
-                        }}
-                    >
-                        <Tooltip placement="top" title="Thêm khách hàng">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                className="w-6 h-6"
-                            >
-                                <g
-                                    stroke="#000"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2.16}
+                    {record.customerCode === 'Chưa có thông tin' && (
+                        <div
+                            onClick={() => {
+                                handleOpenAddCustomerModal(record)
+                            }}
+                        >
+                            <Tooltip placement="top" title="Thêm khách hàng">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    className="w-6 h-6"
                                 >
-                                    <path d="M17 10h3m3 0h-3m0 0V7m0 3v3M1 20v-1a7 7 0 0 1 7-7v0a7 7 0 0 1 7 7v1M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
-                                </g>
-                            </svg>
-                        </Tooltip>
-                    </div> */}
+                                    <g
+                                        stroke="#000"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2.16}
+                                    >
+                                        <path d="M17 10h3m3 0h-3m0 0V7m0 3v3M1 20v-1a7 7 0 0 1 7-7v0a7 7 0 0 1 7 7v1M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+                                    </g>
+                                </svg>
+                            </Tooltip>
+                        </div>
+                    )}
                 </div>
             ),
         },
@@ -296,7 +314,7 @@ export const AppointmentVaccinationSchedule = () => {
             </h1>
             <div className="flex space-x-10 items-center">
                 <div className="flex items-center my-5">
-                    <span className="font-semibold">Chọn ngày muốn xem lịch hẹn:</span>
+                    <span className="font-semibold">Chọn ngày muốn xem:</span>
                     <DatePicker
                         defaultValue={dayjs(selectedDate)}
                         isClearable
@@ -326,7 +344,10 @@ export const AppointmentVaccinationSchedule = () => {
                     </svg>
                 </label>
                 <div className="m-3">
-                    <button className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
+                    <button
+                        onClick={handleSendEmailRemiderForNextDay}
+                        className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                    >
                         <span className="mr-2">Nhắc lịch tiêm ngày mai</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

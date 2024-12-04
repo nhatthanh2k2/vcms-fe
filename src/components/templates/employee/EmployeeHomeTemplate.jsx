@@ -389,6 +389,7 @@ export const EmployeeHomeTemplate = () => {
             />
 
             <ChangePasswordModal
+                employee={employee}
                 visibleChangePasswordModal={isOpenChangePasswordModal}
                 handleCloseChangePasswordModal={handleCloseChangePasswordModal}
             />

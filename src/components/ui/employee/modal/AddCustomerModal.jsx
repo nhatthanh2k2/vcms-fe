@@ -78,6 +78,8 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
             customerWard: addressService.getWardNameByCode(selectedWard),
             customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
+        // console.log(customerData)
+
         try {
             const response = await customerService.createCustomer(customerData)
             if (response.status === 200) {
@@ -95,6 +97,7 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
     const handleCancel = () => {
         handleCloseAddCustomerModal()
         reset()
+        setValue('customerDob', null)
         setSelectedProvince('')
         setSelectedDistrict('')
         setSelectedWard('')

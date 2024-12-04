@@ -1,6 +1,8 @@
+import { fetchDetailOfSampleBatch } from '@/redux'
 import { batchDetailService } from '@/services'
 import { Table } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const priceColumns = [
     {
@@ -37,20 +39,16 @@ const priceColumns = [
 ]
 
 export const VaccinePricingTable = () => {
-    const [batchDetailList, setBatchDetailList] = useState([])
     const [loading, setLoading] = useState(true)
+    const { batchDetailList } = useSelector((state) => state.batchDetail)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        batchDetailService
-            .getDetailOfSampleBatch()
-            .then((response) => {
-                setLoading(false)
-                setBatchDetailList(response.data.result)
-            })
-            .catch((err) => console.log('Get Batch Detail Failed!'))
-    }, [])
+        dispatch(fetchDetailOfSampleBatch())
+        setLoading(false)
+    }, [dispatch])
 
-    const sortedBatchDetail = batchDetailList.sort((a, b) => {
+    const sortedBatchDetail = [...batchDetailList].sort((a, b) => {
         return a.diseaseResponse.diseaseId - b.diseaseResponse.diseaseId
     })
 
@@ -62,6 +60,7 @@ export const VaccinePricingTable = () => {
                 columns={priceColumns}
                 dataSource={sortedBatchDetail}
                 bordered
+                rowKey={'batchDetailId'}
             />
         </div>
     )

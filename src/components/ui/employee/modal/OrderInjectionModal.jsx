@@ -132,7 +132,7 @@ export const OrderInjectionModal = ({
             if (response.data.code === 1000) MyToast('success', 'Tạo phiếu tiêm thành công.')
             else MyToast('error', 'Xảy ra lỗi khi tạo phiếu tiêm.')
         } catch (error) {
-            MyToast('error', 'Có lỗi không tìm thấy hoặc số lượng vắc xin không đủ')
+            MyToast('error', 'Số lượng vắc xin trong lô không đủ hãy chọn lô khác.')
         }
     }
 

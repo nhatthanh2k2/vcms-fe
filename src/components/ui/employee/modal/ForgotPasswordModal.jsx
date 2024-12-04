@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyToast } from '../../common'
 import { employeeService } from '@/services'
+import { generateOTP } from '@/utils'
+import emailjs from '@emailjs/browser'
 
 dayjs.extend(localeData)
 dayjs.extend(weekday)
@@ -16,6 +18,7 @@ const forgotPasswordSchema = z
     .object({
         employeeUsername: z.string().min(1, { message: 'Tên đăng nhập không được trống.' }),
         employeeEmail: z.string().email({ message: 'Địa chỉ email không hợp lệ' }),
+        employeeOTP: z.string().min(1, { message: 'OTP không được trống.' }),
         newPassword: z
             .string()
             .min(8, { message: 'Mật khẩu mới phải có ít nhất 8 ký tự.' })
@@ -34,33 +37,31 @@ export const ForgotPasswordModal = ({
     visibleForgotPasswordModal,
     handleCloseForgotPasswordModal,
 }) => {
-    const [selectedDate, setSelectedDate] = useState(dayjs('2023-10-08'))
-
-    const handleDateChange = (date) => {
-        if (date && dayjs(date).isValid()) {
-            setSelectedDate(date)
-        } else {
-            console.log('Ngày không hợp lệ')
-        }
-    }
+    const [otp, setOtp] = useState(null)
 
     const {
         register,
         handleSubmit,
         formState: { errors },
         clearErrors,
+        getValues,
         reset,
     } = useForm({
         resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
             employeeUsername: '',
             employeeEmail: '',
+            employeeOTP: '',
             newPassword: '',
             confirmPassword: '',
         },
     })
 
     const onSubmit = async (data) => {
+        if (otp !== data.employeeOTP) {
+            MyToast('error', 'Mã OTP không đúng.')
+            return
+        }
         const resetData = {
             employeeUsername: data.employeeUsername,
             employeeEmail: data.employeeEmail,
@@ -71,6 +72,7 @@ export const ForgotPasswordModal = ({
             if (response.status === 200) {
                 if (response.data.code === 1000) {
                     MyToast('success', 'Làm mới mật khẩu thành công')
+                    setOtp(null)
                     reset()
                 } else {
                     MyToast('error', 'Xảy ra lỗi trong quá trình làm mới mật khẩu')
@@ -85,6 +87,43 @@ export const ForgotPasswordModal = ({
         }
     }
 
+    const handleSendOTP = (e) => {
+        e.preventDefault()
+        try {
+            const email = getValues('employeeEmail')
+            if (!email) {
+                MyToast('error', 'Vui lòng nhập email để gửi OTP.')
+            } else {
+                const otp = generateOTP()
+                setOtp(otp)
+                const templateParams = {
+                    otp: otp,
+                    employeeEmail: email,
+                }
+                //console.log(templateParams)
+                emailjs
+                    .send('service_e54eizs', 'template_omyd5ht', templateParams, {
+                        publicKey: 'KUsvkeW08x-_y8Ns2',
+                    })
+                    .then(
+                        (response) => {
+                            MyToast('success', 'OTP đã được gửi qua email.')
+                        },
+                        (error) => {
+                            MyToast('error', 'Xảy ra lỗi khi gửi OTP.')
+                        }
+                    )
+            }
+        } catch (error) {
+            MyToast('error', 'Không thể gửi mã OTP.')
+        }
+    }
+
+    const handleCloseModal = () => {
+        reset()
+        handleCloseForgotPasswordModal()
+    }
+
     return (
         <Modal
             title={
@@ -92,8 +131,8 @@ export const ForgotPasswordModal = ({
             }
             open={visibleForgotPasswordModal}
             footer={null}
-            width={700}
-            onCancel={handleCloseForgotPasswordModal}
+            width={800}
+            onCancel={handleCloseModal}
         >
             <div className=" flex flex-row justify-center space-x-5 m-5">
                 <div className="flex items-center bg-yellow-50 rounded-xl">
@@ -103,7 +142,7 @@ export const ForgotPasswordModal = ({
                     <div className="flex flex-col">
                         <div
                             className="flex items-center border-2 h-12 p-4 rounded-2xl  transition duration-300
-                                     hover:border-blue-500 focus:bg-blue-50"
+                                     hover:border-pink-500 focus:bg-pink-50"
                         >
                             <svg
                                 className="w-6 h-6"
@@ -156,7 +195,7 @@ export const ForgotPasswordModal = ({
                     <div className="flex flex-col">
                         <div
                             className="flex items-center border-2 h-12 p-4 rounded-2xl  transition duration-300
-                                     hover:border-blue-500 focus:bg-blue-50"
+                                     hover:border-pink-500 focus:bg-pink-50"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -188,7 +227,7 @@ export const ForgotPasswordModal = ({
                     <div className="flex flex-col">
                         <div
                             className="flex items-center border-2  h-12 p-4 rounded-2xl transition duration-300
-                                     hover:border-blue-500 focus:bg-blue-50"
+                                     hover:border-pink-500 focus:bg-pink-50"
                         >
                             <svg
                                 className="w-6 h-6"
@@ -235,7 +274,7 @@ export const ForgotPasswordModal = ({
                     <div className="flex flex-col">
                         <div
                             className="flex items-center border-2  h-12 p-4 rounded-2xl transition duration-300
-                                     hover:border-blue-500 focus:bg-blue-50"
+                                     hover:border-pink-500 focus:bg-pink-50"
                         >
                             <svg
                                 className="w-6 h-6"
@@ -277,10 +316,38 @@ export const ForgotPasswordModal = ({
                         )}
                     </div>
 
-                    <div className="flex justify-center">
+                    <div className="flex flex-col">
+                        <div
+                            className="flex items-center border-2  h-12 p-4 rounded-2xl transition duration-300
+                                     hover:border-pink-500 focus:bg-pink-50"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 15 15"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    stroke="#000"
+                                    d="M6 5.5h3m-1.5 0V10m3 0V7.5m0 0v-2h1a1 1 0 1 1 0 2h-1Zm-6-1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 2 0Zm-3-6h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-12a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1Z"
+                                />
+                            </svg>
+                            <input
+                                className="pl-4 outline-none border-none flex-grow"
+                                type="text"
+                                placeholder="Mã OTP"
+                                {...register('employeeOTP')}
+                            />
+                        </div>
+                        {errors.employeeOTP && (
+                            <span className="text-red-500">{errors.employeeOTP.message}</span>
+                        )}
+                    </div>
+
+                    <div className="flex space-x-2 justify-center">
                         <button
                             type="submit"
-                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-pink-500 hover:border-pink-600 hover:bg-pink-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
                         >
                             <span className="mr-2">Làm mới mật khẩu</span>
                             <svg
@@ -305,6 +372,27 @@ export const ForgotPasswordModal = ({
                                         <path d="M11,19h4c0.6,0,1-0.3,1-0.9V18c0-5.7,4.9-10.4,10.7-10C32,8.4,36,13,36,18.4v-0.3c0,0.6,0.4,0.9,1,0.9h4 c0.6,0,1-0.3,1-0.9V18c0-9.1-7.6-16.4-16.8-16c-8.5,0.4-15,7.6-15.2,16.1C10.1,18.6,10.5,19,11,19z" />
                                     </g>
                                 </g>
+                            </svg>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={(e) => handleSendOTP(e)}
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                        >
+                            <span className="mr-2">Nhận OTP</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    stroke="CurrentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11.5 12H5.42m-.173.797L4.242 15.8c-.55 1.643-.826 2.465-.628 2.971.171.44.54.773.994.9.523.146 1.314-.21 2.894-.92l10.135-4.561c1.543-.695 2.314-1.042 2.553-1.524a1.5 1.5 0 0 0 0-1.33c-.239-.482-1.01-.83-2.553-1.524L7.485 5.243c-1.576-.71-2.364-1.064-2.887-.918a1.5 1.5 0 0 0-.994.897c-.198.505.074 1.325.618 2.966l1.026 3.091c.094.282.14.423.159.567a1.5 1.5 0 0 1 0 .385c-.02.144-.066.285-.16.566Z"
+                                />
                             </svg>
                         </button>
                     </div>

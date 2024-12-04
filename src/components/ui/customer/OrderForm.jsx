@@ -425,7 +425,7 @@ export const OrderForm = () => {
                             </div>
 
                             <div className="flex flex-col mb-5 md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-                                <div className="relative z-0 w-full space-y-1 group flex flex-col flex-1">
+                                <div className="relative z-0 w-40 space-y-1 group flex flex-col flex-1">
                                     <label>Tỉnh/Thành:</label>
                                     <Select
                                         placeholder="Chọn Tỉnh/Thành"
@@ -445,7 +445,7 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-                                <div className="relative z-0 w-full group flex flex-col flex-1 space-y-1">
+                                <div className="relative z-0 w-40 group flex flex-col flex-1 space-y-1">
                                     <label>Quận/Huyện:</label>
                                     <Select
                                         placeholder="Chọn quận/huyện"
@@ -480,7 +480,7 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-                                <div className="relative z-0 w-full space-y-1  group flex flex-col flex-1">
+                                <div className="relative z-0 w-40 space-y-1  group flex flex-col flex-1">
                                     <label>Xã/Phường:</label>
                                     <Select
                                         placeholder="Chọn xã/phường"
@@ -771,7 +771,7 @@ export const OrderForm = () => {
                                         />
                                     </div>
                                 ) : (
-                                    <div className="flex justify-center">
+                                    <div className="flex justify-center mt-3">
                                         <button
                                             type="button"
                                             className="btn btn-info"

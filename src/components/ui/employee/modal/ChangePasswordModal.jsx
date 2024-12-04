@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { employeeService } from '@/services'
 import { MyToast } from '../../common'
 import { Modal } from 'antd'
+import emailjs from '@emailjs/browser'
+import { generateOTP } from '@/utils'
 
 const changePasswordSchema = z
     .object({
         currentPassword: z.string().min(1, { message: 'Mật khẩu hiện tại không được trống' }),
+        employeeOTP: z.string().min(1, { message: 'OTP không được trống.' }),
         newPassword: z
             .string()
             .min(8, { message: 'Mật khẩu mới phải có ít nhất 8 ký tự.' })
@@ -26,21 +29,64 @@ const changePasswordSchema = z
 export const ChangePasswordModal = ({
     visibleChangePasswordModal,
     handleCloseChangePasswordModal,
+    employee,
 }) => {
+    const [otp, setOtp] = useState(null)
+
     const {
         register: registerChange,
         handleSubmit: handleSubmitChange,
+        reset: resetChange,
         formState: { errors: errorsChange },
     } = useForm({
         resolver: zodResolver(changePasswordSchema),
         defaultValues: {
             currentPassword: '',
+            employeeOTP: '',
             newPassword: '',
             confirmPassword: '',
         },
     })
 
+    const handleSendOTP = (e) => {
+        e.preventDefault()
+        const email = employee?.employeeProfile.employeeEmail
+        console.log(email)
+
+        try {
+            if (!email) {
+                MyToast('error', 'Vui lòng nhập email để gửi OTP.')
+            } else {
+                const otp = generateOTP()
+                setOtp(otp)
+                const templateParams = {
+                    otp: otp,
+                    employeeEmail: email,
+                }
+                console.log(templateParams)
+                emailjs
+                    .send('service_e54eizs', 'template_omyd5ht', templateParams, {
+                        publicKey: 'KUsvkeW08x-_y8Ns2',
+                    })
+                    .then(
+                        (response) => {
+                            MyToast('success', 'OTP đã được gửi qua email.')
+                        },
+                        (error) => {
+                            MyToast('error', 'Xảy ra lỗi khi gửi OTP.')
+                        }
+                    )
+            }
+        } catch (error) {
+            MyToast('error', 'Không thể gửi mã OTP.')
+        }
+    }
+
     const onSubmitChange = async (data) => {
+        if (otp !== data.employeeOTP) {
+            MyToast('error', 'Mã OTP không đúng.')
+            return
+        }
         const changeData = {
             employeeUsername: employee.employeeProfile.employeeUsername,
             employeePassword: data.currentPassword,
@@ -51,6 +97,8 @@ export const ChangePasswordModal = ({
             if (response.status === 200) {
                 if (response.data.code == 1000) {
                     MyToast('success', 'Đổi mật khẩu thành công')
+                    setOtp(null)
+                    resetChange()
                 } else {
                     MyToast('success', 'Có lỗi xảy ra khi đổi mật khẩu')
                 }
@@ -68,29 +116,34 @@ export const ChangePasswordModal = ({
         }
     }
 
+    const handleCloseModal = () => {
+        handleCloseChangePasswordModal()
+        resetChange()
+    }
+
     return (
         <Modal
             title={
                 <div className="text-center font-bold text-xl text-orange-500">Đổi Mật Khẩu</div>
             }
             open={visibleChangePasswordModal}
-            onCancel={handleCloseChangePasswordModal}
+            onCancel={handleCloseModal}
             //onOk={handleCloseModal}
             footer={null}
             width={800}
-            style={{
-                top: 40,
-            }}
         >
-            <div className="flex flex-row justify-center gap-5 items-center ">
+            <div className="flex flex-row justify-center  items-center ">
                 <div>
-                    <img src="/images/change-password.jpg" />
+                    <img className="w-100 h-100" src="/images/change-password.jpg" />
                 </div>
-                <form className="flex flex-col gap-5" onSubmit={handleSubmitChange(onSubmitChange)}>
+                <form
+                    className="flex flex-col space-y-1"
+                    onSubmit={handleSubmitChange(onSubmitChange)}
+                >
                     <label className="input input-bordered  flex items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-8 w-8 opacity-70"
+                            className="w-7 h-7 opacity-70"
                             fill="none"
                             viewBox="0 0 24 24"
                         >
@@ -119,7 +172,7 @@ export const ChangePasswordModal = ({
                     <label className="input input-bordered  flex items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-8 w-8 opacity-70"
+                            className="w-7 h-7 opacity-70"
                             viewBox="0 -1 16 16"
                         >
                             <path
@@ -143,7 +196,7 @@ export const ChangePasswordModal = ({
                     <label className="input input-bordered  flex items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-8 w-8 opacity-70"
+                            className="w-7 h-7 opacity-70"
                             viewBox="0 -1 16 16"
                         >
                             <path
@@ -162,9 +215,53 @@ export const ChangePasswordModal = ({
                         <span className="text-red-500">{errorsChange.confirmPassword.message}</span>
                     )}
 
-                    <div className="flex justify-center">
+                    <label className="input input-bordered  flex items-center gap-2">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 15 15"
+                            className="w-6 h-6"
+                        >
+                            <path
+                                stroke="#000"
+                                d="M6 5.5h3m-1.5 0V10m3 0V7.5m0 0v-2h1a1 1 0 1 1 0 2h-1Zm-6-1v2a1 1 0 0 1-2 0v-2a1 1 0 0 1 2 0Zm-3-6h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-12a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1Z"
+                            />
+                        </svg>
+                        <input
+                            className="pl-4 outline-none border-none flex-grow"
+                            type="text"
+                            placeholder="Mã OTP"
+                            {...registerChange('employeeOTP')}
+                        />
+                    </label>
+                    {errorsChange.employeeOTP && (
+                        <span className="text-red-500">{errorsChange.employeeOTP.message}</span>
+                    )}
+
+                    <div className="flex space-x-2 justify-center pt-5">
                         <button className=" bg-white tracking-wide  text-gray-800 font-bold rounded-full border-b-2 border-yellow-500 hover:border-yellow-600 hover:bg-yellow-500 hover:text-white shadow-md  h-12">
                             Đổi mật khẩu
+                        </button>
+                        <button
+                            type="button"
+                            onClick={(e) => handleSendOTP(e)}
+                            className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-teal-500 hover:border-teal-600 hover:bg-teal-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center"
+                        >
+                            <span className="mr-2">Nhận OTP</span>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    stroke="CurrentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11.5 12H5.42m-.173.797L4.242 15.8c-.55 1.643-.826 2.465-.628 2.971.171.44.54.773.994.9.523.146 1.314-.21 2.894-.92l10.135-4.561c1.543-.695 2.314-1.042 2.553-1.524a1.5 1.5 0 0 0 0-1.33c-.239-.482-1.01-.83-2.553-1.524L7.485 5.243c-1.576-.71-2.364-1.064-2.887-.918a1.5 1.5 0 0 0-.994.897c-.198.505.074 1.325.618 2.966l1.026 3.091c.094.282.14.423.159.567a1.5 1.5 0 0 1 0 .385c-.02.144-.066.285-.16.566Z"
+                                />
+                            </svg>
                         </button>
                     </div>
                 </form>

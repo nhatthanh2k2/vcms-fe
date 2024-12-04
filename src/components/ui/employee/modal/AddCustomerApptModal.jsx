@@ -7,6 +7,9 @@ import { useForm } from 'react-hook-form'
 import { DatePicker, Modal, Select } from 'antd'
 import { disabledDoB } from '@/utils'
 import { MyToast } from '../../common'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
+dayjs.extend(customParseFormat)
 
 const addCustomerApptSchema = z.object({
     customerFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
@@ -14,7 +17,7 @@ const addCustomerApptSchema = z.object({
     customerPhone: z.string().regex(/^0[3-9]\d{8}$/, {
         message: 'SĐT không hợp lệ',
     }),
-    customerDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
+    customerDob: z.string().nonempty('Ngày sinh là bắt buộc'),
     customerGender: z.enum(['MALE', 'FEMALE'], { message: 'Giới tính là bắt buộc' }),
     customerProvince: z.string().min(1, { message: 'Tỉnh/Thành là bắt buộc' }),
     customerDistrict: z.string().min(1, { message: 'Quận/Huyện là bắt buộc' }),
@@ -37,6 +40,8 @@ export const AddCustomerApptModal = ({
         formAddCustomer.current.requestSubmit()
     }
 
+    //console.log(appointmentRecord)
+
     const {
         register,
         handleSubmit,
@@ -51,7 +56,7 @@ export const AddCustomerApptModal = ({
             customerFullName: '',
             customerEmail: '',
             customerPhone: '',
-            customerDob: null,
+            customerDob: '',
             customerGender: '',
             customerProvince: '',
             customerDistrict: '',
@@ -73,10 +78,12 @@ export const AddCustomerApptModal = ({
         setProvinceList(addressService.getProvinceList())
         setDistrictList(addressService.getDistrictList())
         setWardList(addressService.getWardList())
-    }, [])
+    }, [appointmentRecord])
 
+    const [dob, setDob] = useState()
     useEffect(() => {
         if (appointmentRecord) {
+            setDob(appointmentRecord?.appointmentCustomerDob)
             reset({
                 customerFullName: appointmentRecord?.appointmentCustomerFullName,
                 customerEmail: appointmentRecord?.appointmentCustomerEmail,
@@ -110,7 +117,7 @@ export const AddCustomerApptModal = ({
                 setSelectedDistrict(districtCode)
             }
         }
-    }, [getValues('customerProvince')])
+    }, [appointmentRecord, getValues('customerProvince')])
 
     useEffect(() => {
         const wardCode = addressService.getWardCodeByDistrictCodeAndWardName(
@@ -126,8 +133,9 @@ export const AddCustomerApptModal = ({
             customerProvince: addressService.getProvincenNameByCode(selectedProvince),
             customerDistrict: addressService.getDistrictNameByCode(selectedDistrict),
             customerWard: addressService.getWardNameByCode(selectedWard),
-            customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
+            customerDob: data.customerDob,
         }
+
         try {
             const response = await customerService.createCustomer(customerData)
             if (response.status === 200) {
@@ -150,13 +158,14 @@ export const AddCustomerApptModal = ({
         setSelectedWard('')
     }
 
-    const [dob, setDob] = useState(appointmentRecord?.appointmentCustomerDob)
-    const parsedDob = dayjs(dob, 'DD-MM-YYYY')
+    const parsedDob = dob ? dayjs(dob, 'DD-MM-YYYY') : null
 
     return (
         <Modal
             key={'add_customer_modal'}
-            title={<div className="text-center font-bold text-xl">Thêm khách hàng mới</div>}
+            title={
+                <div className="text-center font-bold text-xl">Thêm khách hàng mới từ lịch hẹn</div>
+            }
             open={visibleAddCustomerModal}
             onCancel={handleCancel}
             footer={false}
@@ -231,12 +240,24 @@ export const AddCustomerApptModal = ({
                             <div className="relative z-0 w-full mb-5 group flex flex-col">
                                 <div className="flex space-x-5">
                                     <label>Ngày sinh: </label>
-                                    <DatePicker
-                                        {...register('customerDob', {
-                                            valueAsDate: true,
-                                        })}
+                                    {parsedDob && (
+                                        <DatePicker
+                                            {...register('customerDob')}
+                                            format="DD-MM-YYYY"
+                                            defaultValue={parsedDob}
+                                            onChange={(date) => {
+                                                const formattedDate =
+                                                    dayjs(date).format('DD-MM-YYYY')
+                                                setDob(formattedDate)
+                                                setValue('customerDob', formattedDate)
+                                            }}
+                                            disabledDate={disabledDoB}
+                                        />
+                                    )}
+                                    {/* <DatePicker
+                                        {...register('customerDob')}
                                         format={'DD-MM-YYYY'}
-                                        defaultValue={parsedDob.isValid() ? parsedDob : null}
+                                        defaultValue={parsedDob}
                                         onChange={(date) => {
                                             setDob(dayjs(date).format('DD-MM-YYYY'))
                                             setValue(
@@ -245,7 +266,7 @@ export const AddCustomerApptModal = ({
                                             )
                                         }}
                                         disabledDate={disabledDoB}
-                                    />
+                                    /> */}
                                 </div>
 
                                 {errors.customerDob && (
