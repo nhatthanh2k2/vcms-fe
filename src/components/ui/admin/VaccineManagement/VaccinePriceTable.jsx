@@ -159,7 +159,7 @@ export const VaccinePriceTable = () => {
                             Search
                         </button>
                     </div>
-                    <div>
+                    {/* <div>
                         <button className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
                             <span className="mr-2">Cập nhật giá bằng file excel</span>
                             <svg
@@ -177,7 +177,7 @@ export const VaccinePriceTable = () => {
                                 />
                             </svg>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             )}
             loading={loading}

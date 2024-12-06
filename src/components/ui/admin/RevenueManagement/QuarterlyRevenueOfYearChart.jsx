@@ -15,7 +15,7 @@ export const QuarterlyRevenueOfYearChart = () => {
             .catch((error) => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [yearSelected])
 
-    const quarterOfYearLabels = quarterlyRevenueOfYearList.map((data) => `Quý ${data.period}`)
+    const quarterOfYearLabels = quarterlyRevenueOfYearList.map((data) => data.period)
     const revenues = quarterlyRevenueOfYearList.map((data) => data.revenue)
     const costs = quarterlyRevenueOfYearList.map((data) => data.cost)
     const profits = quarterlyRevenueOfYearList.map((data) => data.profit)

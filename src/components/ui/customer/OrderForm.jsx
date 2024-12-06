@@ -952,7 +952,9 @@ export const OrderForm = () => {
 
             <AlertModal
                 modalId={'modal_info'}
-                message={'Bạn là khách hàng của trung tâm. Mời bạn chọn vắc xin muốn mua!'}
+                message={
+                    'Bạn đã có thông tin khách hàng tại trung tâm. Mời bạn chọn vắc xin muốn mua!'
+                }
             />
 
             <PolicyModal

@@ -82,7 +82,7 @@ const onApprove = async (
             const response = await orderService.createOrderWithCustomerCode(orderWithCodeData)
             if (response.data.code === 1000) {
                 MyToast('success', 'Đặt hàng thành công')
-                sendOrderConfirmation(response.data.result)
+                //sendOrderConfirmation(response.data.result)
             } else {
                 MyToast('error', 'Đặt hàng không thành công')
             }

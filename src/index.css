@@ -120,3 +120,11 @@ body {
     line-height: 1.5;
     max-height: 4.5em;
 }
+
+.svg-icon {
+    transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+.svg-icon:hover {
+    transform: scale(1.1);
+}
