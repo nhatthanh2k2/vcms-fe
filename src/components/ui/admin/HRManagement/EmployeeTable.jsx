@@ -1,17 +1,17 @@
 import { employeeService } from '@/services'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { MyToast } from '../../common'
 import { Table, Tooltip } from 'antd'
 import { convertQualification } from '@/utils'
 import { AddEmployeeModal, DeleteEmployeeModal, EditEmployeeModal } from '.'
+import { MyToast } from '../../common'
 
 export const EmployeeTable = () => {
     const [employeeList, setEmployeeList] = useState([])
     const [isOpenAddEmployeeModal, SetIsOpenAddEmployeeModal] = useState(false)
     const [filteredEmployeeList, setFilteredEmployeeList] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
@@ -21,7 +21,6 @@ export const EmployeeTable = () => {
             .then((response) => {
                 setEmployeeList(response.data.result)
                 setFilteredEmployeeList(response.data.result)
-                setLoading(false)
             })
             .catch((error) => MyToast('error', 'Xảy ra lỗi lấy danh sách nhân viên.'))
     }
@@ -75,11 +74,13 @@ export const EmployeeTable = () => {
     }
 
     const handleDeactivateEmployee = async (employeeId) => {
+        setLoading(true)
         try {
             const response = await employeeService.deactivateEmployee(employeeId)
             if (response.data.code === 1000) {
                 MyToast('success', 'Khóa tài khoản thành công.')
                 getEmployeeList()
+                setLoading(false)
             } else {
                 MyToast('error', 'Không thể khóa tài khoản.')
             }
@@ -89,11 +90,13 @@ export const EmployeeTable = () => {
     }
 
     const handleActiveEmployee = async (employeeId) => {
+        setLoading(true)
         try {
             const response = await employeeService.activeEmployee(employeeId)
             if (response.data.code === 1000) {
                 MyToast('success', 'Kích hoạt tài khoản thành công.')
                 getEmployeeList()
+                setLoading(false)
             } else {
                 MyToast('error', 'Không thể kích hoạt tài khoản.')
             }
@@ -259,6 +262,7 @@ export const EmployeeTable = () => {
                             </svg>
                         </Tooltip>
                     </div>
+
                     <div>
                         {record.employeeActive ? (
                             <div onClick={() => handleDeactivateEmployee(record.employeeId)}>
@@ -308,6 +312,7 @@ export const EmployeeTable = () => {
     const pagination = {
         current: currentPage,
         pageSize: pageSize,
+        showSizeChanger: true,
         total: employeeList.length,
         onChange: (page, pageSize) => {
             setCurrentPage(page)

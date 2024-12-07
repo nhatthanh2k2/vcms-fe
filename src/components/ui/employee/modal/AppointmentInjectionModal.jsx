@@ -124,7 +124,6 @@ export const AppointmentInjectionModal = ({
                 vaccinationRecordReceiptSource: 'APPOINTMENT',
             }
         }
-        console.log(response)
 
         try {
             const response = await vaccinationRecordService.createVaccinationRecord(request)

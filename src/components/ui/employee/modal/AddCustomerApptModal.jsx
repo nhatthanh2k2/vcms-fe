@@ -144,9 +144,7 @@ export const AddCustomerApptModal = ({
                 }
             } else MyToast('error', 'Xảy ra lỗi khi thêm khách hàng.')
         } catch (error) {
-            if (error.response)
-                if (error.response.status === 409)
-                    MyToast('warn', 'Khách hàng đã có thông tin tại trung tâm.')
+            MyToast('warn', 'Khách hàng đã có thông tin tại trung tâm.')
         }
     }
 

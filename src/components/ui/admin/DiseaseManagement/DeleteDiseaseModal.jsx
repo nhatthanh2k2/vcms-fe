@@ -27,7 +27,6 @@ export const DeleteDiseaseModal = ({
         <Modal
             open={visibleOpenDeleteDiseaseModal}
             onCancel={handleCloseDeleteDiseaseModal}
-            centered
             title={<div className="text-center font-bold text-2xl">Xác nhận xóa bệnh?</div>}
             footer={[
                 <div key="footer-buttons" className="flex justify-center space-x-2">

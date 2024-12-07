@@ -10,7 +10,15 @@ import { MyToast } from '../../common'
 
 const employeeSchema = z.object({
     employeeFullName: z.string().min(1, { message: 'Họ và tên là bắt buộc' }),
-    employeeDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
+    // employeeDob: z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' }),
+    employeeDob: z
+        .preprocess(
+            (value) =>
+                value === '' || value === null || value === undefined ? null : new Date(value),
+            z.date({ invalid_type_error: 'Ngày sinh không hợp lệ' })
+        )
+        .nullable()
+        .refine((val) => val !== null, { message: 'Ngày sinh là bắt buộc' }),
     employeeEmail: z.string().email({ message: 'Địa chỉ email không hợp lệ' }),
     employeePhone: z.string().regex(/^0[3-9]\d{8}$/, {
         message: 'SĐT không hợp lệ',
@@ -56,6 +64,7 @@ export const AddEmployeeModal = ({
         formState: { errors },
         setValue,
         watch,
+        clearErrors,
         reset,
     } = useForm({
         resolver: zodResolver(employeeSchema),
@@ -64,7 +73,7 @@ export const AddEmployeeModal = ({
             employeeEmail: '',
             employeePhone: '',
             employeeGender: '',
-            employeeDob: '',
+            employeeDob: null,
             employeeQualification: '',
             employeePosition: '',
             employeeProvince: '',
@@ -81,10 +90,11 @@ export const AddEmployeeModal = ({
         if (currentRoles.includes(mappedRole)) {
             setValue(
                 'roles',
-                currentRoles.filter((r) => r !== mappedRole)
+                currentRoles.filter((r) => r !== mappedRole),
+                { shouldValidate: true }
             )
         } else {
-            setValue('roles', [...currentRoles, mappedRole])
+            setValue('roles', [...currentRoles, mappedRole], { shouldValidate: true })
         }
     }
 
@@ -98,6 +108,10 @@ export const AddEmployeeModal = ({
             if (response.data.code === 1000) {
                 MyToast('success', 'Thêm nhân viên thành công.')
                 getEmployeeList()
+                reset()
+                setSelectedProvince('')
+                setSelectedDistrict('')
+                setSelectedWard('')
             }
         } catch {
             MyToast('error', 'Xảy ra lỗi khi thêm nhân viên thành công.')
@@ -107,7 +121,16 @@ export const AddEmployeeModal = ({
     const handleCloseModal = () => {
         handleCloseAddEmployeeModal()
         reset()
+        setSelectedProvince('')
+        setSelectedDistrict('')
+        setSelectedWard('')
+        setValue('employeePosition', '')
+        setValue('employeeQualification', '')
     }
+
+    const qualificationValue = watch('employeeQualification')
+    const position = watch('employeePosition')
+    const employeeDob = watch('employeeDob')
 
     return (
         <Modal
@@ -147,6 +170,7 @@ export const AddEmployeeModal = ({
                             {...register('employeeDob', {
                                 valueAsDate: true,
                             })}
+                            value={employeeDob ? dayjs(employeeDob) : null}
                             format={'DD-MM-YYYY'}
                             disabledDate={disabledDoB}
                             onChange={(date) =>
@@ -162,8 +186,8 @@ export const AddEmployeeModal = ({
                         )}
                     </div>
 
-                    <div className="flex-1 flex flex-col space-y-2 font-semibold">
-                        <label>Giới tính:</label>
+                    <div className="flex-1 flex flex-col space-y-2 ">
+                        <label className="font-semibold">Giới tính:</label>
                         <div className="flex space-x-5">
                             <div className="flex space-x-2">
                                 <label htmlFor="">Nam</label>
@@ -222,6 +246,7 @@ export const AddEmployeeModal = ({
                     <div className="flex flex-col flex-1 space-y-2">
                         <label className="font-semibold">Trình độ chuyên môn:</label>
                         <Select
+                            value={qualificationValue || null}
                             {...register('employeeQualification')}
                             placeholder="Chọn trình độ chuyên môn"
                             options={[
@@ -232,7 +257,10 @@ export const AddEmployeeModal = ({
                                 { value: 'Ths.Bs', label: <span>Thạc sĩ, Bác sĩ</span> },
                                 { value: 'Ts.Bs', label: <span>Tiến sĩ, Bác sĩ</span> },
                             ]}
-                            onChange={(value) => setValue('employeeQualification', value)}
+                            //onChange={(value) => setValue('employeeQualification', value)}
+                            onChange={(value) =>
+                                setValue('employeeQualification', value, { shouldValidate: true })
+                            }
                         />
                         {errors.employeeQualification && (
                             <span className=" text-red-500 text-sm">
@@ -273,7 +301,10 @@ export const AddEmployeeModal = ({
                                 { value: 'Giám đốc Y khoa', label: <span>Giám đốc Y khoa</span> },
                             ]}
                             {...register('employeePosition')}
-                            onChange={(value) => setValue('employeePosition', value)}
+                            value={position || null}
+                            onChange={(value) =>
+                                setValue('employeePosition', value, { shouldValidate: true })
+                            }
                         />
                         {errors.employeePosition && (
                             <span className=" text-red-500 text-sm">
@@ -310,13 +341,15 @@ export const AddEmployeeModal = ({
                     <div className="relative z-0 w-full mb-5 group flex flex-col flex-1 space-y-1">
                         <label>Tỉnh/Thành:</label>
                         <Select
+                            value={selectedProvince || null}
                             {...register('employeeProvince')}
                             placeholder="Chọn Tỉnh/Thành"
                             onChange={(provinceValue) => {
                                 setSelectedProvince(provinceValue)
                                 setValue(
                                     'employeeProvince',
-                                    addressService.getProvincenNameByCode(provinceValue)
+                                    addressService.getProvincenNameByCode(provinceValue),
+                                    { shouldValidate: true }
                                 )
                             }}
                             options={provinceList.map((province) => ({
@@ -336,14 +369,15 @@ export const AddEmployeeModal = ({
                         <Select
                             {...register('employeeDistrict')}
                             placeholder="Chọn quận/huyện"
-                            value={selectedDistrict || undefined}
+                            value={selectedDistrict || null}
                             disabled={!selectedProvince}
                             onChange={(value) => {
                                 if (value !== selectedDistrict) {
                                     setSelectedDistrict(value)
                                     setValue(
                                         'employeeDistrict',
-                                        addressService.getDistrictNameByCode(value)
+                                        addressService.getDistrictNameByCode(value),
+                                        { shouldValidate: true }
                                     )
                                 }
                             }}
@@ -374,11 +408,13 @@ export const AddEmployeeModal = ({
                         <Select
                             {...register('employeeWard')}
                             placeholder="Chọn xã/phường"
-                            value={selectedWard || undefined}
+                            value={selectedWard || null}
                             disabled={!selectedDistrict}
                             onChange={(value) => {
                                 setSelectedWard(value)
-                                setValue('employeeWard', addressService.getWardNameByCode(value))
+                                setValue('employeeWard', addressService.getWardNameByCode(value), {
+                                    shouldValidate: true,
+                                })
                             }}
                             options={
                                 selectedDistrict

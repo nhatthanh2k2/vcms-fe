@@ -41,8 +41,6 @@ export const CustomerTable = () => {
             .catch((error) => MyToast('error', 'Xảy ra lỗi khi lấy danh sách khách hàng.'))
     }, [])
 
-    console.log(customerList)
-
     return (
         <div className="bg-white shadow-default">
             <Table

@@ -163,6 +163,9 @@ export const AppointmentForm = () => {
 
             if (response.data.code === 1000) {
                 MyToast('success', 'Đăng Ký Thành Công')
+
+                setBatchDetailSelected(0)
+                setVaccinePackageSelected(0)
             } else {
                 MyToast('error', 'Đăng Ký Không Thành Công')
             }
@@ -196,6 +199,9 @@ export const AppointmentForm = () => {
 
             if (response.data.code === 1000) {
                 MyToast('success', 'Đăng Ký Thành Công')
+
+                setBatchDetailSelected(0)
+                setVaccinePackageSelected(0)
             } else {
                 MyToast('error', 'Xảy ra lỗi trong quá trình đăng ký')
             }

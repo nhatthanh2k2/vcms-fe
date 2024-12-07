@@ -150,6 +150,10 @@ export const AddVaccineForm = () => {
     }, [])
 
     const onSubmit = async (data) => {
+        // if (data.vaccineAdultDoseCount === '0' || data.vaccineChildDoseCount === '0') {
+        //     MyToast('warn', 'Số mũi tiêm không thể bằng 0.')
+        //     return
+        // }
         const request = new FormData()
         request.append('vaccineName', data.vaccineName)
         request.append('vaccineOrigin', data.vaccineOrigin)
@@ -173,6 +177,7 @@ export const AddVaccineForm = () => {
             if (response.data.code === 1000) {
                 MyToast('success', 'Thêm vắc xin thành công.')
                 reset()
+                setSelectedAges([])
             } else MyToast('error', 'Xảy ra lỗi khi thêm vắc xin.')
         } catch (error) {
             if (error.response)
