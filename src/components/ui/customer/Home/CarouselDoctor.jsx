@@ -56,16 +56,18 @@ export const CarouselDoctor = () => {
                         key={index}
                         className="mx-4 flex flex-col items-center justify-center pointer-events-none"
                     >
-                        <img
-                            className="h-96 w-80 object-cover"
-                            src={
-                                import.meta.env.VITE_VCMS_IMAGE +
-                                '/avatars/' +
-                                employee.employeeAvatar
-                            }
-                        />
-                        <div className="text-center mt-2 font-bold">
-                            {employee.employeeQualification} {employee.employeeFullName}
+                        <div className="w-fit">
+                            <img
+                                className="h-96 w-80 object-cover"
+                                src={
+                                    import.meta.env.VITE_VCMS_IMAGE +
+                                    '/avatars/' +
+                                    employee.employeeAvatar
+                                }
+                            />
+                            <div className="text-center mt-2 font-bold">
+                                {employee.employeeQualification} {employee.employeeFullName}
+                            </div>
                         </div>
                     </div>
                 ))}

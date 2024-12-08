@@ -252,10 +252,10 @@ export const AppointmentForm = () => {
             </div>
 
             <div className="flex space-x-5 flex-wrap md:flex-nowrap">
-                <div>
+                <div className="lg:max-w-125 md:w-fit sm:w-fit">
                     {isCustomer == 0 ? (
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className=" text-blue-500 size-5 w-full font-bold text-2xl text-center">
+                            <div className=" text-blue-500 size-5 w-full font-bold text-2xl text-center ">
                                 Thông tin người tiêm
                             </div>
 
@@ -310,7 +310,7 @@ export const AppointmentForm = () => {
                                 )}
                             </div>
 
-                            <div className="flex flex-row gap-10">
+                            <div className="flex flex-row flex-wrap sm:flex-nowrap">
                                 <div className="relative z-0 w-full mb-5 group flex flex-col">
                                     <div>
                                         <label>Ngày sinh: </label>
@@ -373,7 +373,7 @@ export const AppointmentForm = () => {
                                 <label>Địa chỉ thường trú:</label>
                             </div>
 
-                            <div className="flex flex-row space-x-2 w-125">
+                            <div className="flex flex-row space-x-2 w-full flex-wrap sm:flex-nowrap">
                                 <div className="relative z-0 w-full mb-5 group flex flex-col flex-1">
                                     <label>Tỉnh/Thành:</label>
                                     <Select
@@ -574,7 +574,7 @@ export const AppointmentForm = () => {
                         </form>
                     ) : (
                         <form
-                            className="max-w-full"
+                            className="lg:min-w-125 md:w-full sm:w-full"
                             onSubmit={handleSubmitWithCode(onSubmitWithCode)}
                         >
                             <div className="text-blue-500 size-5 w-full font-bold text-2xl text-center">
@@ -598,7 +598,7 @@ export const AppointmentForm = () => {
                                 )}
                             </div>
 
-                            <div className="relative z-0 w-125 mb-5 group space-x-2">
+                            <div className="relative z-0 w-full mb-5 group space-x-2">
                                 <label>Ngày sinh: </label>
                                 <DatePicker
                                     {...registerWithCode('customerDob', {
@@ -619,7 +619,7 @@ export const AppointmentForm = () => {
                                 )}
                             </div>
 
-                            <div className="relative z-0 w-125 mb-5 group space-x-2">
+                            <div className="relative z-0 w-full mb-5 group space-x-2">
                                 <label>Chọn ngày tiêm: </label>
                                 <DatePicker
                                     {...registerWithCode('injectionDate', {
@@ -652,11 +652,11 @@ export const AppointmentForm = () => {
                     )}
                 </div>
 
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                     <span className="text-blue-500 size-5 w-full font-bold text-2xl text-center">
                         Chọn vắc xin muốn tiêm
                     </span>
-                    <div role="tablist" className="tabs tabs-lifted mt-10">
+                    <div role="tablist" className="tabs tabs-lifted mt-5">
                         <input
                             onChange={() => {
                                 setInjectionType('SINGLE')

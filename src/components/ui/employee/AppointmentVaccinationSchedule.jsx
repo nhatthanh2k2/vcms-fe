@@ -122,9 +122,15 @@ export const AppointmentVaccinationSchedule = () => {
             //console.log(formatDate)
             const response = await appointmentService.getAppointmentListByInjectionDate(formatDate)
             //console.log(response.data.result)
-            response.data.result.map((record) => {
-                sendAppointmentReminder(record, setIsLoading)
-            })
+            const apptList = response.data.result
+            if (apptList.length === 0) {
+                MyToast('warn', 'Ngày mai không có cuộc hẹn.')
+                return
+            } else {
+                apptList.forEach((record) => {
+                    sendAppointmentReminder(record, setIsLoading)
+                })
+            }
         } catch (error) {
             MyToast('error', 'Đã xảy ra lỗi khi nhắc lịch.')
         }

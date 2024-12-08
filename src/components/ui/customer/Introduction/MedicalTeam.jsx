@@ -36,13 +36,13 @@ export const MedicalTeam = () => {
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="mt-10 ">
+            <div className="mt-10">
                 <Row gutter={[16, 16]}>
                     {currentEmployees.map((employee) => (
                         <Col key={employee.employeeId} xs={24} sm={12} lg={8}>
                             <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden m-5">
                                 <img
-                                    className="w-full h-96 object-cover object-center"
+                                    className="w-fit h-96 object-cover object-center"
                                     src={
                                         import.meta.env.VITE_VCMS_IMAGE +
                                         '/avatars/' +

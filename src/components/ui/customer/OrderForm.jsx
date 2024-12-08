@@ -221,7 +221,7 @@ export const OrderForm = () => {
                 <div className="absolute left-0 right-0 bottom-[-5px] h-[3px] bg-yellow-600"></div>
             </div>
 
-            <div className="flex space-x-5 my-5">
+            <div className="flex flex-wrap sm:flex-nowrap space-x-5 space-y-5  my-5">
                 <div className="w-125 space-y-5">
                     {!showForm ? (
                         <div className="lg:min-w-125 md:w-fit sm:w-fit border-2 border-teal-300 p-5 rounded-lg shadow-default">
@@ -425,7 +425,7 @@ export const OrderForm = () => {
                             </div>
 
                             <div className="flex flex-col mb-5 md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-                                <div className="relative z-0 w-40 space-y-1 group flex flex-col flex-1">
+                                <div className="relative z-0 w-full space-y-1 group flex flex-col flex-1">
                                     <label>Tỉnh/Thành:</label>
                                     <Select
                                         placeholder="Chọn Tỉnh/Thành"
@@ -440,12 +440,12 @@ export const OrderForm = () => {
                                         }))}
                                     />
                                     {errors.orderCustomerProvince && (
-                                        <span className="w-40 text-red-500 text-sm">
+                                        <span className="w-full text-red-500 text-sm">
                                             {errors.orderCustomerProvince.message}
                                         </span>
                                     )}
                                 </div>
-                                <div className="relative z-0 w-40 group flex flex-col flex-1 space-y-1">
+                                <div className="relative z-0 w-full group flex flex-col flex-1 space-y-1">
                                     <label>Quận/Huyện:</label>
                                     <Select
                                         placeholder="Chọn quận/huyện"
@@ -480,7 +480,7 @@ export const OrderForm = () => {
                                         </span>
                                     )}
                                 </div>
-                                <div className="relative z-0 w-40 space-y-1  group flex flex-col flex-1">
+                                <div className="relative z-0 w-full space-y-1  group flex flex-col flex-1">
                                     <label>Xã/Phường:</label>
                                     <Select
                                         placeholder="Chọn xã/phường"
@@ -800,7 +800,7 @@ export const OrderForm = () => {
                     </div>
                 </div>
 
-                <div role="tablist" className="tabs tabs-lifted  h-fit">
+                <div role="tablist" className="tabs tabs-lifted h-fit">
                     <input
                         type="radio"
                         name="my_tabs_2"

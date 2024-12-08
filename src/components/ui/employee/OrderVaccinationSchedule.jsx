@@ -328,9 +328,15 @@ export const OrderVaccinationSchedule = () => {
             const formatDate = dayjs(tomorrow).format('YYYY-MM-DD')
             const response = await orderService.getOrderListByInjectionDate(formatDate)
             // console.log(response.data.result)
-            response.data.result.map((record) => {
-                handleSendVaccinationReminderEmail(record)
-            })
+            const orderList = response.data.result
+            if (orderList.length === 0) {
+                MyToast('warn', 'Ngày mai không có cuộc hẹn từ đơn hàng.')
+                return
+            } else {
+                orderList.forEach((record) => {
+                    handleSendVaccinationReminderEmail(record)
+                })
+            }
         } catch (error) {
             MyToast('error', 'Xảy ra lỗi khi nhắc lịch.')
         }
