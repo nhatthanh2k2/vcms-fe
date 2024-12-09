@@ -5,9 +5,15 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyToast } from '../../common'
-import { customerService, vaccinePackageService, vaccineService } from '@/services'
+import {
+    appointmentService,
+    customerService,
+    orderService,
+    vaccinePackageService,
+    vaccineService,
+} from '@/services'
 import dayjs from 'dayjs'
-import { VaccinationHistoryTable } from '.'
+import { MyAppointmentTable, MyOrderTable, VaccinationHistoryTable } from '.'
 
 const lookupSchema = z.object({
     customerIdentifier: z
@@ -26,6 +32,8 @@ export const VaccinationHistoryLookup = () => {
     const [vaccineList, setVaccineList] = useState([])
     const [packageDetailList, setPackageDetailList] = useState([])
     const [recommendedPackageList, setRecommendedPackageList] = useState([])
+    const [myAppointmentList, setMyAppointmentList] = useState([])
+    const [myOrderList, setMyOrderList] = useState([])
 
     useEffect(() => {
         vaccinePackageService
@@ -124,9 +132,46 @@ export const VaccinationHistoryLookup = () => {
         }
     }
 
+    const getMyAppointmentList = async (request) => {
+        try {
+            const response = await appointmentService.getMyAppontmentList(request)
+
+            if (response.data.code === 1000) {
+                const appointmentList = response.data.result
+                setMyAppointmentList(appointmentList)
+            } else {
+                console.log('Không có dữ liệu')
+            }
+        } catch (error) {
+            //MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+            console.log('Không có dữ liệu')
+        }
+    }
+
+    const getMyOrderList = async (request) => {
+        try {
+            const response = await orderService.getMyOrderList(request)
+
+            if (response.data.code === 1000) {
+                const orderList = response.data.result
+                setMyOrderList(orderList)
+            } else {
+                console.log('Không có dữ liệu')
+            }
+        } catch (error) {
+            //MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+            console.log('Không có dữ liệu')
+        }
+    }
+
     const onSubmit = async (data) => {
         const lookupdata = {
             ...data,
+            customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
+        }
+
+        const myData = {
+            customerIdentifier: data.customerIdentifier,
             customerDob: data.customerDob ? dayjs(data.customerDob).format('DD-MM-YYYY') : null,
         }
 
@@ -137,6 +182,8 @@ export const VaccinationHistoryLookup = () => {
                 MyToast('success', 'Tra cứu thông tin khách hàng thành công')
                 setCustomer(response.data.result)
                 getMyVaccinationReordHistory(lookupdata)
+                getMyAppointmentList(myData)
+                getMyOrderList(myData)
             } else {
                 MyToast('error', 'Tra cứu thông tin khách hàng không thành công')
             }
@@ -277,10 +324,52 @@ export const VaccinationHistoryLookup = () => {
                         </div>
 
                         <div className="mt-5">
-                            <span className="text-xl font-bold text-teal-700">Lịch sử tiêm</span>
-                            <VaccinationHistoryTable
-                                vaccinationRecordList={vaccinationRecordList}
-                            />
+                            <div role="tablist" className="tabs tabs-lifted">
+                                <input
+                                    type="radio"
+                                    name="my_info"
+                                    role="tab"
+                                    className="tab text-nowrap font-bold text-teal-700"
+                                    aria-label="Lịch sử tiêm chủng"
+                                    defaultChecked
+                                />
+                                <div
+                                    role="tabpanel"
+                                    className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                                >
+                                    <VaccinationHistoryTable
+                                        vaccinationRecordList={vaccinationRecordList}
+                                    />
+                                </div>
+
+                                <input
+                                    type="radio"
+                                    name="my_info"
+                                    role="tab"
+                                    className="tab text-nowrap font-bold text-teal-700"
+                                    aria-label="Lịch hẹn của tôi"
+                                />
+                                <div
+                                    role="tabpanel"
+                                    className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                                >
+                                    <MyAppointmentTable myAppointmentList={myAppointmentList} />
+                                </div>
+
+                                <input
+                                    type="radio"
+                                    name="my_info"
+                                    role="tab"
+                                    className="tab text-nowrap font-bold text-teal-700"
+                                    aria-label="Đơn hàng của tôi"
+                                />
+                                <div
+                                    role="tabpanel"
+                                    className="tab-content bg-base-100 border-base-300 rounded-box p-6"
+                                >
+                                    <MyOrderTable myOrderList={myOrderList} />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 ) : (

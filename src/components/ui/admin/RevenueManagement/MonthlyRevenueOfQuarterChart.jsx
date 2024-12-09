@@ -18,7 +18,6 @@ export const MonthlyRevenueOfQuarterChart = () => {
             .catch(() => MyToast('error', 'Lỗi lấy dữ liệu'))
     }, [quarterSelected, yearSelected])
 
-    // Tạo nhãn và các mảng doanh thu, chi phí, lợi nhuận từ API
     const monthlyOfQuarterLabels = monthlyRevenueOfQuarterList.map((data) => data.period)
     const revenues = monthlyRevenueOfQuarterList.map((data) => data.revenue)
     const costs = monthlyRevenueOfQuarterList.map((data) => data.cost)

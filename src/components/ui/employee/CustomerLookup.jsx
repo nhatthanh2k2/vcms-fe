@@ -2,12 +2,13 @@ import React, { useState, useRef } from 'react'
 import dayjs from 'dayjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { customerService } from '@/services'
+import { appointmentService, customerService, orderService } from '@/services'
 import { useForm } from 'react-hook-form'
 import { DatePicker, Table } from 'antd'
 import { disabledDoB, phoneNumberPattern } from '@/utils'
 import { AlertModal, MyToast } from '../common'
-import { VaccinationHistoryTable } from '../customer'
+import { MyAppointmentTable, MyOrderTable, VaccinationHistoryTable } from '../customer'
+import { CustomerAppointmentTable, CustomerOrderTable } from '.'
 
 const lookupSchema = z.object({
     customerIdentifier: z
@@ -23,6 +24,8 @@ export const CustomerLookup = () => {
     const [customer, setCustomer] = useState(null)
     const formLookupCustomer = useRef(null)
     const [vaccinationRecordList, setVaccinationRecordList] = useState([])
+    const [myAppointmentList, setMyAppointmentList] = useState([])
+    const [myOrderList, setMyOrderList] = useState([])
 
     const {
         register: registerLookup,
@@ -63,6 +66,38 @@ export const CustomerLookup = () => {
         formLookupCustomer.current.requestSubmit()
     }
 
+    const getMyAppointmentList = async (request) => {
+        try {
+            const response = await appointmentService.getMyAppontmentList(request)
+
+            if (response.data.code === 1000) {
+                const appointmentList = response.data.result
+                setMyAppointmentList(appointmentList)
+            } else {
+                console.log('Không có dữ liệu')
+            }
+        } catch (error) {
+            //MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+            console.log('Không có dữ liệu')
+        }
+    }
+
+    const getMyOrderList = async (request) => {
+        try {
+            const response = await orderService.getMyOrderList(request)
+
+            if (response.data.code === 1000) {
+                const orderList = response.data.result
+                setMyOrderList(orderList)
+            } else {
+                console.log('Không có dữ liệu')
+            }
+        } catch (error) {
+            //MyToast('error', 'Xảy ra lỗi khi lấy lịch sử tiêm chủng')
+            console.log('Không có dữ liệu')
+        }
+    }
+
     const onSubmitLookup = async (data) => {
         const lookupdata = {
             ...data,
@@ -77,6 +112,8 @@ export const CustomerLookup = () => {
                 //document.getElementById('modal_info').showModal()
                 MyToast('success', 'Tra cứu khách hàng thành công.')
                 getMyVaccinationReordHistory(lookupdata)
+                getMyAppointmentList(lookupdata)
+                getMyOrderList(lookupdata)
             } else {
                 // document.getElementById('modal_no_info').showModal()
                 MyToast('error', 'Xảy ra lỗi khi tìm kiếm.')
@@ -124,7 +161,7 @@ export const CustomerLookup = () => {
                                         shouldValidate: true,
                                     })
                                 }
-                                style={{ height: '48px' }} // Căn chỉnh chiều cao của DatePicker
+                                style={{ height: '48px' }}
                             />
                             {errorsLookup.customerDob && (
                                 <span className="w-fit text-red-500 text-sm">
@@ -304,17 +341,37 @@ export const CustomerLookup = () => {
                 >
                     <VaccinationHistoryTable vaccinationRecordList={vaccinationRecordList} />
                 </div>
+
+                <input
+                    type="radio"
+                    name="customer_tabs"
+                    role="tab"
+                    className="tab font-bold text-base text-orange-600 text-nowrap"
+                    aria-label="Lịch hẹn"
+                />
+                <div
+                    role="tabpanel"
+                    className="tab-content bg-base-100 border-base-300 rounded-box p-3"
+                >
+                    {/* <MyAppointmentTable myAppointmentList={myAppointmentList} /> */}
+                    <CustomerAppointmentTable appointmentList={myAppointmentList} />
+                </div>
+
+                <input
+                    type="radio"
+                    name="customer_tabs"
+                    role="tab"
+                    className="tab font-bold text-base text-orange-600 text-nowrap"
+                    aria-label="Đơn hàng"
+                />
+                <div
+                    role="tabpanel"
+                    className="tab-content bg-base-100 border-base-300 rounded-box p-3"
+                >
+                    {/* <MyOrderTable myOrderList={myOrderList} /> */}
+                    <CustomerOrderTable orderList={myOrderList} />
+                </div>
             </div>
-
-            <AlertModal
-                modalId={'modal_info'}
-                message={'Khách hàng đã có thông tin tại trung tâm.'}
-            />
-
-            <AlertModal
-                modalId={'modal_no_info'}
-                message={'Khách hàng chưa có thông tin tại trung tâm.'}
-            />
         </section>
     )
 }

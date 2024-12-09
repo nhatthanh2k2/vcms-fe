@@ -20,12 +20,10 @@ export const QuarterlyRevenueOfYearChart = () => {
     const costs = quarterlyRevenueOfYearList.map((data) => data.cost)
     const profits = quarterlyRevenueOfYearList.map((data) => data.profit)
 
-    // Tính tổng
     const totalRevenue = revenues.reduce((acc, curr) => acc + curr, 0)
     const totalCost = costs.reduce((acc, curr) => acc + curr, 0)
     const totalProfit = profits.reduce((acc, curr) => acc + curr, 0)
 
-    // Dữ liệu biểu đồ
     const quarterlyOfYearData = {
         labels: quarterOfYearLabels,
         datasets: [

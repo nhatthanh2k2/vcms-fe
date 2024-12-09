@@ -302,27 +302,27 @@ export const AddCustomerModal = ({ visibleAddCustomerModal, handleCloseAddCustom
                                 <Select
                                     {...register('customerWard')}
                                     placeholder="Chọn xã/phường"
-                                    value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                    value={selectedWard || undefined}
                                     onChange={(value) => {
                                         setSelectedWard(value)
                                         setValue('customerWard', value)
                                         if (value) clearErrors('customerWard')
                                     }}
-                                    disabled={!selectedDistrict} // Vô hiệu hóa nếu chưa chọn quận/huyện
+                                    disabled={!selectedDistrict}
                                     options={
                                         selectedDistrict
                                             ? wardList
                                                   .filter(
                                                       (ward) =>
                                                           ward.district_code === selectedDistrict
-                                                  ) // Lọc danh sách xã/phường theo quận/huyện đã chọn
+                                                  )
                                                   .map((ward) => ({
                                                       value: ward.code,
                                                       label: ward.name,
                                                   }))
                                             : []
                                     }
-                                    style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                    style={{ opacity: !selectedDistrict ? 0.75 : 1 }}
                                 />
 
                                 {errors.customerWard && (

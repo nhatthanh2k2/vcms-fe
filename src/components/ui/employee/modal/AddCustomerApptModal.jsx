@@ -374,7 +374,7 @@ export const AddCustomerApptModal = ({
                                 <Select
                                     {...register('customerWard')}
                                     placeholder="Chọn xã/phường"
-                                    value={selectedWard || undefined} // Hiển thị placeholder khi chưa chọn phường/xã
+                                    value={selectedWard || undefined}
                                     onChange={(wardValue) => {
                                         setSelectedWard(wardValue)
                                         setValue(
@@ -389,7 +389,7 @@ export const AddCustomerApptModal = ({
                                             value: ward.code,
                                             label: ward.name,
                                         }))}
-                                    style={{ opacity: !selectedDistrict ? 0.75 : 1 }} // Giảm độ mờ khi bị disabled để dễ nhìn placeholder
+                                    style={{ opacity: !selectedDistrict ? 0.75 : 1 }}
                                 />
 
                                 {errors.customerWard && (

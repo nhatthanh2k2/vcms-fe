@@ -68,7 +68,6 @@ export const AppointmentForm = () => {
     const [batchDetailSelected, setBatchDetailSelected] = useState(0)
     const [vaccinePackageSelected, setVaccinePackageSelected] = useState(0)
 
-    // Lay danh sach vaccine va goi vaccine
     useEffect(() => {
         batchDetailService
             .getDetailOfSampleBatch()
@@ -81,7 +80,6 @@ export const AppointmentForm = () => {
             .catch((err) => console.log('Get Vaccine Package Failed!'))
     }, [])
 
-    // Lay tinh-thanh, quan-huyen, xa-phuong
     useEffect(() => {
         setProvinceList(addressService.getProvinceList())
         setDistrictList(addressService.getDistrictList())

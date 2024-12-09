@@ -33,5 +33,8 @@ export const orderService = {
     },
     getAllOrderInWeek: (page, size) => {
         return order_api.get(`/list/week?page=${page}&size=${size}`)
+    },
+    getMyOrderList: (request) => {
+        return axios.post(order_url + "/my-list", request)
     }
 }

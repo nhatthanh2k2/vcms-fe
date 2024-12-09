@@ -13,9 +13,9 @@ export const DarkModeSwitcher = () => {
                     value="synthwave"
                     className="toggle theme-controller bg-base-content col-span-2 col-start-1 row-start-1"
                 />
-                {/* Sun Icon for Light Mode */}
+            
                 <svg
-                    className="stroke-yellow-500 fill-yellow-500 col-start-1 row-start-1" // Color for light mode
+                    className="stroke-yellow-500 fill-yellow-500 col-start-1 row-start-1" 
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
                     height="14"
@@ -29,9 +29,9 @@ export const DarkModeSwitcher = () => {
                     <circle cx="12" cy="12" r="5" />
                     <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
                 </svg>
-                {/* Moon Icon for Dark Mode */}
+                
                 <svg
-                    className="stroke-blue-500 fill-blue-500 col-start-2 row-start-1" // Color for dark mode
+                    className="stroke-blue-500 fill-blue-500 col-start-2 row-start-1" 
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
                     height="14"

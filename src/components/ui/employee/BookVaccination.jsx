@@ -115,7 +115,6 @@ export const BookVaccination = ({ batchDetailList, vaccinePackageList, vaccineLi
         }
     }
 
-    // xem goi
     const [open, setOpen] = useState(false)
 
     const showModal = () => {

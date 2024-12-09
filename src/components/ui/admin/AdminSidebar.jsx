@@ -15,7 +15,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
         storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
     )
 
-    // close on click outside
     useEffect(() => {
         const clickHandler = ({ target }) => {
             if (!sidebar.current || !trigger.current) return
@@ -31,7 +30,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
         return () => document.removeEventListener('click', clickHandler)
     })
 
-    // close if the esc key is pressed
     useEffect(() => {
         const keyHandler = ({ keyCode }) => {
             if (!sidebarOpen || keyCode !== 27) return
@@ -78,7 +76,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
         >
-            {/* <!-- SIDEBAR HEADER --> */}
             <div className="flex items-center justify-between gap-2 px-6 py-4">
                 <img className="w-50" src="/images/logo2.png"></img>
 
@@ -102,17 +99,13 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </svg>
                 </button>
             </div>
-            {/* <!-- SIDEBAR HEADER --> */}
 
             <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-                {/* <!-- Sidebar Menu --> */}
                 <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
-                    {/* <!-- Menu Group --> */}
                     <div>
                         <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">MENU</h3>
 
                         <ul className="mb-6 flex flex-col gap-1.5">
-                            {/* Trang chu */}
                             <li>
                                 <NavLink
                                     to="/admin/trang-chu"
@@ -149,7 +142,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
-                            {/* NHAN SU */}
                             <li>
                                 <NavLink
                                     to="/admin/quan-ly/nhan-su"
@@ -174,7 +166,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
-                            {/* VAC XIN */}
                             <SidebarLinkGroup
                                 activeCondition={
                                     pathname.includes('vac-xin-le') ||
@@ -232,7 +223,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     />
                                                 </svg>
                                             </NavLink>
-                                            {/* <!-- Dropdown Menu Start --> */}
+
                                             <div
                                                 className={`translate transform overflow-hidden ${
                                                     !open && 'hidden'
@@ -277,13 +268,11 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/* <!-- Dropdown Menu End --> */}
                                         </React.Fragment>
                                     )
                                 }}
                             </SidebarLinkGroup>
 
-                            {/* LO VAC XIN*/}
                             <li>
                                 <NavLink
                                     to="/admin/quan-ly/lo-vac-xin/danh-muc"
@@ -357,7 +346,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
-                            {/* CAI DAT */}
                             <SidebarLinkGroup
                                 activeCondition={
                                     pathname === '/forms' || pathname.includes('forms')
@@ -424,7 +412,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     />
                                                 </svg>
                                             </NavLink>
-                                            {/* <!-- Dropdown Menu Start --> */}
+
                                             <div
                                                 className={`translate transform overflow-hidden ${
                                                     !open && 'hidden'
@@ -451,7 +439,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/* <!-- Dropdown Menu End --> */}
                                         </React.Fragment>
                                     )
                                 }}
@@ -459,7 +446,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         </ul>
                     </div>
 
-                    {/* <!-- Others Group --> */}
                     <div>
                         <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">OTHERS</h3>
 
@@ -538,7 +524,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     />
                                                 </svg>
                                             </NavLink>
-                                            {/* <!-- Dropdown Menu Start --> */}
+
                                             <div
                                                 className={`translate transform overflow-hidden ${
                                                     !open && 'hidden'
@@ -570,7 +556,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/* <!-- Dropdown Menu End --> */}
                                         </React.Fragment>
                                     )
                                 }}
@@ -597,7 +582,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </NavLink>
                             </li>
 
-                            {/* <!-- Menu Item Chart --> */}
                             <SidebarLinkGroup
                                 activeCondition={
                                     pathname === '/forms' || pathname.includes('forms')
@@ -664,7 +648,7 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     />
                                                 </svg>
                                             </NavLink>
-                                            {/* <!-- Dropdown Menu Start --> */}
+
                                             <div
                                                 className={`translate transform overflow-hidden ${
                                                     !open && 'hidden'
@@ -695,7 +679,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/* <!-- Dropdown Menu End --> */}
                                         </React.Fragment>
                                     )
                                 }}
@@ -728,7 +711,6 @@ export const AdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         </ul>
                     </div>
                 </nav>
-                {/* <!-- Sidebar Menu --> */}
             </div>
 
             <UpdateEmployeeProfileModal

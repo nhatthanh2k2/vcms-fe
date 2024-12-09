@@ -292,7 +292,6 @@ export const CustomerHeader = () => {
                     </div>
                 </div>
 
-                {/* Hamburger Menu for mobile */}
                 <div className="md:hidden flex items-center">
                     <button className="text-gray-700 focus:outline-none" onClick={toggleMenu}>
                         <svg
@@ -312,7 +311,6 @@ export const CustomerHeader = () => {
                     </button>
                 </div>
 
-                {/* Menu responsive khi nhấn nút hamburger */}
                 <div
                     className={`absolute top-16 left-0 w-full bg-white p-5 z-40 md:hidden ${
                         isOpen ? 'block' : 'hidden'

@@ -195,7 +195,6 @@ export const OrderVaccinationSchedule = () => {
         },
     ]
 
-    // mo modal chi tiet don hang
     const [isOpenOrderDetailModal, setIsOpenOrderDetailModal] = useState(false)
     const [orderRecord, setOrderRecord] = useState(null)
 
@@ -209,7 +208,6 @@ export const OrderVaccinationSchedule = () => {
         setOrderRecord(null)
     }
 
-    // mo modal tao phieu kham
     const [isOpenPreInjectionCheckModal, setIsOpenPreInjectionCheckModal] = useState(false)
     const [patientInfo, setPatientInfo] = useState(null)
 
@@ -224,7 +222,6 @@ export const OrderVaccinationSchedule = () => {
         setPatientInfo(null)
     }
 
-    // mo modal tao phieu tiem
     const [isOpenOrderinjectionModal, setIsOpenOrderInjectionModal] = useState(false)
 
     const handleOpenOrderInjectionModal = (record) => {
@@ -237,7 +234,6 @@ export const OrderVaccinationSchedule = () => {
         setOrderRecord(null)
     }
 
-    // gui email
     const handleSendVaccinationReminderEmail = async (record) => {
         try {
             setIsLoading(true)

@@ -6,7 +6,6 @@ export const ModalTransfer = () => {
         <dialog id="modal_transfer" className="modal w-full h-full">
             <div className="modal-box max-w-xl mx-auto">
                 <form method="dialog">
-                    {/* Close button */}
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                         ✕
                     </button>
@@ -16,7 +15,7 @@ export const ModalTransfer = () => {
                         errorLevel="H"
                         value="https://ant.design/"
                         icon="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
-                        size={400} // Adjust size if needed
+                        size={400}
                     />
                     <p className="text-center mt-4 text-black">Quét mã chuyển khoản đơn hàng</p>
                 </div>

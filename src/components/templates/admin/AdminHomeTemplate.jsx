@@ -1,40 +1,85 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
-    Breadcrumb,
     CardDataStats,
     DailyRevenueOfWeekChart,
     EmployeeGenderChart,
     EmployeeQualificationChart,
 } from '@/components/ui'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { appointmentService, customerService, orderService } from '@/services'
+import { fetchAllDefaultPackages, fetchAllVaccines } from '@/redux'
 
 export const AdminHomeTemplate = () => {
+    const [appointmentTotal, setAppointmentTotal] = useState(0)
+    const [orderTotal, setOrderTotal] = useState(0)
+    const [productTotal, setProductTotal] = useState(0)
+    const [customerTotal, setCustomerTotal] = useState(0)
+    const { vaccineList } = useSelector((state) => state.vaccine)
+    const { vaccinePackageList } = useSelector((state) => state.vaccinePackage)
+    const [page, setPage] = useState(0)
+    const [size] = useState(50)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        appointmentService
+            .getAllAppointment(page, size)
+            .then((response) => {
+                setAppointmentTotal(response.data.result.totalElements)
+            })
+            .catch((error) => console.log('Lỗi lấy appt.'))
+
+        orderService
+            .getAllOrder(page, size)
+            .then((response) => {
+                setOrderTotal(response.data.result.totalElements)
+            })
+            .catch((error) => console.log('Lỗi lấy order.'))
+        customerService
+            .getAllCustomers()
+            .then((response) => {
+                const custList = response.data.result
+                setCustomerTotal(custList.length)
+            })
+            .catch((error) => console.log('Lỗi lấy cust.'))
+        dispatch(fetchAllVaccines())
+        dispatch(fetchAllDefaultPackages())
+    }, [dispatch])
+
+    useEffect(() => {
+        setProductTotal(vaccineList.length + vaccinePackageList.length)
+    }, [vaccineList, vaccinePackageList])
+
+    // console.log('a', appointmentTotal)
+    // console.log('o', orderTotal)
+    // console.log('p', productTotal)
+    // console.log('c', customerTotal)
+
     return (
         <>
             <div className="flex flex-wrap gap-4 md:gap-6 2xl:gap-7.5">
                 <div className="flex-1">
-                    <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp>
+                    {/* <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp> */}
+                    <CardDataStats title="Tổng cuộc hẹn" total={appointmentTotal} levelUp>
                         <svg
-                            className="fill-primary dark:fill-white"
-                            width="22"
-                            height="16"
-                            viewBox="0 0 22 16"
-                            fill="none"
                             xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            fill="none"
+                            viewBox="0 0 24 24"
                         >
-                            <path
-                                d="M11 15.1156C4.19376 15.1156 0.825012 8.61876 0.687512 8.34376C0.584387 8.13751 0.584387 7.86251 0.687512 7.65626C0.825012 7.38126 4.19376 0.918762 11 0.918762C17.8063 0.918762 21.175 7.38126 21.3125 7.65626C21.4156 7.86251 21.4156 8.13751 21.3125 8.34376C21.175 8.61876 17.8063 15.1156 11 15.1156ZM2.26876 8.00001C3.02501 9.27189 5.98126 13.5688 11 13.5688C16.0188 13.5688 18.975 9.27189 19.7313 8.00001C18.975 6.72814 16.0188 2.43126 11 2.43126C5.98126 2.43126 3.02501 6.72814 2.26876 8.00001Z"
-                                fill=""
-                            />
-                            <path
-                                d="M11 10.9219C9.38438 10.9219 8.07812 9.61562 8.07812 8C8.07812 6.38438 9.38438 5.07812 11 5.07812C12.6156 5.07812 13.9219 6.38438 13.9219 8C13.9219 9.61562 12.6156 10.9219 11 10.9219ZM11 6.625C10.2437 6.625 9.625 7.24375 9.625 8C9.625 8.75625 10.2437 9.375 11 9.375C11.7563 9.375 12.375 8.75625 12.375 8C12.375 7.24375 11.7563 6.625 11 6.625Z"
-                                fill=""
-                            />
+                            <g fill="#3C50E0">
+                                <path d="M17 4.75h-1.25V3.5a.75.75 0 1 0-1.5 0v1.25h-4.5V3.5a.75.75 0 0 0-1.5 0v1.25H7A2.75 2.75 0 0 0 4.25 7.5v11A2.75 2.75 0 0 0 7 21.25h10a2.75 2.75 0 0 0 2.75-2.75v-11A2.75 2.75 0 0 0 17 4.75ZM7 6.25h1.25V7.5a.75.75 0 0 0 1.5 0V6.25h4.5V7.5a.75.75 0 1 0 1.5 0V6.25H17a1.25 1.25 0 0 1 1.25 1.25v2.75H5.75V7.5A1.25 1.25 0 0 1 7 6.25Zm10 13.5H7a1.25 1.25 0 0 1-1.25-1.25v-6.75h12.5v6.75A1.25 1.25 0 0 1 17 19.75Z" />
+                                <path d="M14 15.25h-1.25V14a.75.75 0 1 0-1.5 0v1.25H10a.75.75 0 1 0 0 1.5h1.25V18a.75.75 0 1 0 1.5 0v-1.25H14a.75.75 0 1 0 0-1.5Z" />
+                            </g>
                         </svg>
                     </CardDataStats>
                 </div>
 
                 <div className="flex-1">
-                    <CardDataStats title="Total Profit" total="$45,2K" rate="4.35%" levelUp>
+                    {/* <CardDataStats title="Total Profit" total="$45,2K" rate="4.35%" levelUp> */}
+                    <CardDataStats title="Tổng đơn hàng" total={orderTotal} levelUp>
                         <svg
                             className="fill-primary dark:fill-white"
                             width="20"
@@ -60,7 +105,8 @@ export const AdminHomeTemplate = () => {
                 </div>
 
                 <div className="flex-1">
-                    <CardDataStats title="Total Product" total="2.450" rate="2.59%" levelUp>
+                    {/* <CardDataStats title="Total Product" total="2.450" rate="2.59%" levelUp> */}
+                    <CardDataStats title="Tổng sản phẩm" total={productTotal} levelUp>
                         <svg
                             className="fill-primary dark:fill-white"
                             width="22"
@@ -82,7 +128,8 @@ export const AdminHomeTemplate = () => {
                 </div>
 
                 <div className="flex-1">
-                    <CardDataStats title="Total Users" total="3.456" rate="0.95%" levelDown>
+                    {/* <CardDataStats title="Total Users" total="3.456" rate="0.95%" levelDown> */}
+                    <CardDataStats title="Tổng khách hàng" total={customerTotal} levelUp>
                         <svg
                             className="fill-primary dark:fill-white"
                             width="22"

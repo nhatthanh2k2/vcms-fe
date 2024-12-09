@@ -66,7 +66,6 @@ export const CustomerFooter = () => {
                                 Theo dõi chúng tôi
                             </h3>
                             <div className="flex justify-center md:justify-start gap-4">
-                                {/* Các icon mạng xã hội */}
                                 <a href="/">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

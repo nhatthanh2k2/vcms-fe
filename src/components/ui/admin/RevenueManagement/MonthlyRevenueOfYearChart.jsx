@@ -22,12 +22,10 @@ export const MonthlyRevenueOfYearChart = () => {
     const costs = monthlyRevenueOfYearList.map((data) => data.cost)
     const profits = monthlyRevenueOfYearList.map((data) => data.profit)
 
-    // Tính tổng
     const totalRevenue = revenues.reduce((acc, curr) => acc + curr, 0)
     const totalCost = costs.reduce((acc, curr) => acc + curr, 0)
     const totalProfit = profits.reduce((acc, curr) => acc + curr, 0)
 
-    // Dữ liệu cho biểu đồ
     const monthlyRevenueOfYearData = {
         labels: monthlyRevenueOfYearLabels,
         datasets: [

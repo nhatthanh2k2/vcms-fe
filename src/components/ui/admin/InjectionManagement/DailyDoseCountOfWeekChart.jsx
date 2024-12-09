@@ -47,13 +47,13 @@ export const DailyDoseCountOfWeekChart = () => {
         scales: {
             x: {
                 ticks: {
-                    color: '#000', // Màu chữ của trục X
+                    color: '#000',
                 },
             },
             y: {
                 beginAtZero: true,
                 ticks: {
-                    color: '#000', // Màu chữ của trục X
+                    color: '#000',
                 },
             },
         },

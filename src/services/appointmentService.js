@@ -34,4 +34,7 @@ export const appointmentService = {
     getAppointmentListInWeek: (page, size) => {
         return appt_api.get(`/list/week?page=${page}&size=${size}`)
     },
+    getMyAppontmentList: (request) =>{
+        return axios.post(appt_url + "/my-list", request)
+    }
 }

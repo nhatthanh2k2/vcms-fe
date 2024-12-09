@@ -372,6 +372,7 @@ export const AppointmentVaccinationSchedule = () => {
 
             <div className="w-full">
                 <Table
+                    bordered
                     columns={appointmentColumns}
                     dataSource={filterdAppointmentList}
                     scroll={{ y: 400 }}

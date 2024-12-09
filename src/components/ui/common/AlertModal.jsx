@@ -5,7 +5,6 @@ export const AlertModal = ({ modalId, message }) => {
         <dialog id={modalId} className="modal">
             <div className="modal-box">
                 <form method="dialog">
-                    {/* Close button */}
                     <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                         ✕
                     </button>

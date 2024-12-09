@@ -35,6 +35,7 @@ export const VaccinationHistoryTable = ({ vaccinationRecordList }) => {
                 columns={columns}
                 dataSource={vaccinationRecordList}
                 bordered
+                rowKey={'vaccinationRecordId'}
                 locale={{
                     emptyText: (
                         <div className="flex flex-col items-center justify-center">
