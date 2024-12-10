@@ -71,6 +71,7 @@ export const AddVaccineForm = () => {
         setValue,
         clearErrors,
         reset,
+        watch,
     } = useForm({
         resolver: zodResolver(addVaccineSchema),
         defaultValues: {
@@ -149,6 +150,16 @@ export const AddVaccineForm = () => {
         }
     }, [])
 
+    const resetQuillEditors = () => {
+        Object.keys(quillRefs.current).forEach((fieldId) => {
+            const quillInstance = quillRefs.current[fieldId]
+            if (quillInstance) {
+                quillInstance.setContents([])
+                setValue(fieldId, '')
+            }
+        })
+    }
+
     const onSubmit = async (data) => {
         // if (data.vaccineAdultDoseCount === '0' || data.vaccineChildDoseCount === '0') {
         //     MyToast('warn', 'Số mũi tiêm không thể bằng 0.')
@@ -177,13 +188,17 @@ export const AddVaccineForm = () => {
             if (response.data.code === 1000) {
                 MyToast('success', 'Thêm vắc xin thành công.')
                 reset()
+                reset('')
                 setSelectedAges([])
+                resetQuillEditors()
             } else MyToast('error', 'Xảy ra lỗi khi thêm vắc xin.')
         } catch (error) {
             if (error.response)
                 if (error.response.status === 400) MyToast('error', 'Hình ảnh không hợp lệ.')
         }
     }
+
+    console.log(watch())
 
     return (
         <div className="flex flex-col bg-white border border-stroke rounded-lg shadow-default px-10 py-5">

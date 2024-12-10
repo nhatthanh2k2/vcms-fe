@@ -329,7 +329,7 @@ export const VaccinationHistoryLookup = () => {
                                     type="radio"
                                     name="my_info"
                                     role="tab"
-                                    className="tab text-nowrap font-bold text-teal-700"
+                                    className="tab text-nowrap font-bold text-teal-700 text-base"
                                     aria-label="Lịch sử tiêm chủng"
                                     defaultChecked
                                 />
@@ -346,7 +346,7 @@ export const VaccinationHistoryLookup = () => {
                                     type="radio"
                                     name="my_info"
                                     role="tab"
-                                    className="tab text-nowrap font-bold text-teal-700"
+                                    className="tab text-nowrap font-bold text-teal-700 text-base"
                                     aria-label="Lịch hẹn của tôi"
                                 />
                                 <div
@@ -360,7 +360,7 @@ export const VaccinationHistoryLookup = () => {
                                     type="radio"
                                     name="my_info"
                                     role="tab"
-                                    className="tab text-nowrap font-bold text-teal-700"
+                                    className="tab text-nowrap font-bold text-teal-700 text-base"
                                     aria-label="Đơn hàng của tôi"
                                 />
                                 <div

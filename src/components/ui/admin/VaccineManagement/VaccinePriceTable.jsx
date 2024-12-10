@@ -4,8 +4,9 @@ import { fetchDetailOfSampleBatch } from '@/redux'
 import { Input, Table, Tooltip } from 'antd'
 
 import dayjs from 'dayjs'
-import { batchDetailService } from '@/services'
+import { batchDetailService, priceHistoryService } from '@/services'
 import { MyToast } from '../../common'
+import { PriceHistoryModal } from '.'
 
 export const VaccinePriceTable = () => {
     const dispatch = useDispatch()
@@ -13,6 +14,7 @@ export const VaccinePriceTable = () => {
     const [filteredDetailList, setFilteredDetailList] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [vaccinePrice, setVaccinePrice] = useState()
+    const [oldPrice, setOldPrice] = useState(null)
 
     useEffect(() => {
         dispatch(fetchDetailOfSampleBatch())
@@ -33,6 +35,74 @@ export const VaccinePriceTable = () => {
         }
     }, [searchQuery, batchDetailList])
 
+    const handleEditStart = (record) => {
+        setOldPrice(record.batchDetailVaccinePrice)
+    }
+
+    const handlePriceChange = (e, record) => {
+        const newPrice = e.target.value
+        setVaccinePrice(newPrice)
+        setFilteredDetailList((prevList) =>
+            prevList.map((item) =>
+                item.batchDetailId === record.batchDetailId
+                    ? { ...item, batchDetailVaccinePrice: newPrice }
+                    : item
+            )
+        )
+    }
+
+    const handleAddPriceHistory = async (request) => {
+        try {
+            const response = await priceHistoryService.addPriceHistory(request)
+            if (response.data.code === 1000) {
+                console.log('OKE')
+            } else {
+                console.log('ERROR')
+            }
+        } catch (error) {
+            console.log('ERROR')
+        }
+    }
+
+    const handleUpdateVaccinePrice = async (record) => {
+        const request = {
+            batchDetailId: record.batchDetailId,
+            newPrice: vaccinePrice,
+        }
+        const priceHistoryRequest = {
+            vaccineId: record.vaccineResponse.vaccineId,
+            oldPrice: oldPrice,
+            newPrice: vaccinePrice,
+        }
+
+        console.log(priceHistoryRequest)
+
+        try {
+            const response = await batchDetailService.updateVaccinePrice(request)
+            if (response.data.code === 1000) {
+                MyToast('success', 'Cập nhật giá vắc xin thành công.')
+
+                handleAddPriceHistory(priceHistoryRequest)
+                dispatch(fetchDetailOfSampleBatch())
+            } else MyToast('error', 'Xảy ra lỗi khi cập nhật. Hãy thử lại sau.')
+        } catch (error) {
+            if (error.response) MyToast('error', 'Không tìm thấy vắc xin để cập nhật.')
+        }
+    }
+
+    const [isOpenPriceHistoryModal, setIsOpenPriceHistoryModal] = useState(false)
+    const [recordSelected, setRecordSelected] = useState(null)
+
+    const handleOpenPriceHistoryModal = (record) => {
+        setRecordSelected(record)
+        setIsOpenPriceHistoryModal(true)
+    }
+
+    const handleClosePriceHistoryModal = () => {
+        setRecordSelected(null)
+        setIsOpenPriceHistoryModal(false)
+    }
+
     const vaccinePriceColumns = [
         {
             title: 'Tên vắc xin',
@@ -45,20 +115,25 @@ export const VaccinePriceTable = () => {
             dataIndex: 'batchDetailVaccinePrice',
             key: 'price',
             render: (price, record) => (
-                <Input value={price} onChange={(e) => handlePriceChange(e, record)} suffix="VNĐ" />
+                <Input
+                    value={price}
+                    onFocus={() => handleEditStart(record)}
+                    onChange={(e) => handlePriceChange(e, record)}
+                    suffix="VNĐ"
+                />
             ),
         },
         {
             title: 'Ngày tạo',
             dataIndex: ['vaccineResponse', 'vaccineCreateAt'],
             key: 'vaccineCreateAt',
-            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('HH:mm:ss DD-MM-YYYY'),
         },
         {
             title: 'Ngày cập nhật',
             dataIndex: ['vaccineResponse', 'vaccineUpdateAt'],
             key: 'vaccineUpdateAt',
-            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('HH:mm:ss DD-MM-YYYY'),
         },
         {
             title: '',
@@ -66,13 +141,14 @@ export const VaccinePriceTable = () => {
             key: 'actions',
 
             render: (_, record) => (
-                <div onClick={() => handleUpdateVaccinePrice(record)}>
+                <div className="flex justify-center items-center">
                     <Tooltip
                         placement="top"
                         title="Cập nhật giá vắc xin"
                         key={`update-price-${record.vaccineId}`}
                     >
                         <svg
+                            onClick={() => handleUpdateVaccinePrice(record)}
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-8 h-8"
                             fill="none"
@@ -92,99 +168,93 @@ export const VaccinePriceTable = () => {
                             />
                         </svg>
                     </Tooltip>
+
+                    <Tooltip placement="top" title="Lịch sử thay đổi giá">
+                        <svg
+                            onClick={() => handleOpenPriceHistoryModal(record)}
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6"
+                            fill="none"
+                            viewBox="0 0 48 48"
+                        >
+                            <path fill="#fff" fillOpacity={0.01} d="M0 0h48v48H0z" />
+                            <path
+                                fill="#2F88FF"
+                                stroke="#000"
+                                strokeLinejoin="round"
+                                strokeWidth={4}
+                                d="M13 10h28v34H13z"
+                            />
+                            <path
+                                stroke="#000"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={4}
+                                d="M35 10V4H8a1 1 0 0 0-1 1v33h6"
+                            />
+                            <path
+                                stroke="#fff"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={4}
+                                d="M21 22h12M21 30h12"
+                            />
+                        </svg>
+                    </Tooltip>
                 </div>
             ),
         },
     ]
 
-    const handlePriceChange = (e, record) => {
-        const newPrice = e.target.value
-        setVaccinePrice(newPrice)
-        setFilteredDetailList((prevList) =>
-            prevList.map((item) =>
-                item.batchDetailId === record.batchDetailId
-                    ? { ...item, batchDetailVaccinePrice: newPrice }
-                    : item
-            )
-        )
-    }
-
-    const handleUpdateVaccinePrice = async (record) => {
-        const request = {
-            batchDetailId: record.batchDetailId,
-            newPrice: vaccinePrice,
-        }
-        try {
-            const response = await batchDetailService.updateVaccinePrice(request)
-            if (response.data.code === 1000) {
-                MyToast('success', 'Cập nhật giá vắc xin thành công.')
-                dispatch(fetchDetailOfSampleBatch())
-            } else MyToast('error', 'Xảy ra lỗi khi cập nhật. Hãy thử lại sau.')
-        } catch (error) {
-            if (error.response) MyToast('error', 'Không tìm thấy vắc xin để cập nhật.')
-        }
-    }
-
     return (
-        <Table
-            title={() => (
-                <div className="flex justify-between items-center">
-                    <div className="relative w-full max-w-xl">
-                        <input
-                            placeholder="Tìm kiếm..."
-                            className="rounded-full w-full bg-white py-2 px-8 pr-32 outline-none border-2 border-gray-100 shadow-md hover:outline-none focus:ring-teal-200 focus:border-teal-200 h-12"
-                            type="text"
-                            name="query"
-                            id="query"
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <button
-                            type="submit"
-                            className="absolute inline-flex items-center px-4 py-2 text-sm text-white transition duration-150 ease-in-out rounded-full right-3 top-2 h-8 bg-teal-600 sm:px-6 sm:text-base sm:font-medium hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-                        >
-                            <svg
-                                className="-ml-0.5 sm:-ml-1 mr-2 w-4 h-4 sm:h-5 sm:w-5"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+        <>
+            {' '}
+            <Table
+                title={() => (
+                    <div className="flex justify-between items-center">
+                        <div className="relative w-full max-w-xl">
+                            <input
+                                placeholder="Tìm kiếm..."
+                                className="rounded-full w-full bg-white py-2 px-8 pr-32 outline-none border-2 border-gray-100 shadow-md hover:outline-none focus:ring-teal-200 focus:border-teal-200 h-12"
+                                type="text"
+                                name="query"
+                                id="query"
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            <button
+                                type="submit"
+                                className="absolute inline-flex items-center px-4 py-2 text-sm text-white transition duration-150 ease-in-out rounded-full right-3 top-2 h-8 bg-teal-600 sm:px-6 sm:text-base sm:font-medium hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                ></path>
-                            </svg>
-                            Search
-                        </button>
-                    </div>
-                    {/* <div>
-                        <button className="bg-white text-gray-800 font-bold rounded-full border-b-2 border-blue-500 hover:border-blue-600 hover:bg-blue-500 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
-                            <span className="mr-2">Cập nhật giá bằng file excel</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                className="w-6 h-6"
-                            >
-                                <path
+                                <svg
+                                    className="-ml-0.5 sm:-ml-1 mr-2 w-4 h-4 sm:h-5 sm:w-5"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
                                     stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M13 3H7a2 2 0 0 0-2 2v5m8-7 6 6m-6-6v5a1 1 0 0 0 1 1h5m0 0v10a2 2 0 0 1-2 2h-7a4 4 0 0 1-4-4v0a4 4 0 0 1 4-4h3m0 0-3-3m3 3-3 3"
-                                />
-                            </svg>
-                        </button>
-                    </div> */}
-                </div>
-            )}
-            loading={loading}
-            bordered
-            columns={vaccinePriceColumns}
-            dataSource={filteredDetailList}
-            rowKey={'batchDetailId'}
-        />
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                    ></path>
+                                </svg>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                )}
+                loading={loading}
+                bordered
+                columns={vaccinePriceColumns}
+                dataSource={filteredDetailList}
+                rowKey={'batchDetailId'}
+            />
+            <PriceHistoryModal
+                visiblePriceHistoryModal={isOpenPriceHistoryModal}
+                handleClosePriceHistoryModal={handleClosePriceHistoryModal}
+                record={recordSelected}
+            />
+        </>
     )
 }

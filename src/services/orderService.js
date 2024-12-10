@@ -36,5 +36,8 @@ export const orderService = {
     },
     getMyOrderList: (request) => {
         return axios.post(order_url + "/my-list", request)
+    },
+    getOrderDetail: (orderId) => {
+        return axios.get(order_url + `/detail/my-order/${orderId}`)
     }
 }

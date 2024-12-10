@@ -85,10 +85,8 @@ export const EditEmployeeModal = ({
             const response = await employeeService.updateQualificationAndPosition(request)
 
             if (response.data.code === 1000) {
-                MyToast(
-                    'success',
-                    'Cập nhật trình độ chuyên môn và chức vụ của nhân viên thành công.'
-                )
+                MyToast('success', 'Cập nhật trình độ chuyên môn và chức vụ  thành công.')
+                handleCloseEditEmployeeModal()
                 getEmployeeList()
             } else MyToast('error', 'Xảy ra lỗi khi cập nhật.')
         } catch (error) {

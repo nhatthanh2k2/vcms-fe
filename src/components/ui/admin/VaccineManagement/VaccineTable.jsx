@@ -94,13 +94,13 @@ export const VaccineTable = () => {
             title: 'Ngày thêm',
             dataIndex: 'vaccineCreateAt',
             key: 'vaccineCreateAt',
-            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('HH:mm:ss DD-MM-YYYY'),
         },
         {
             title: 'Ngày cập nhật',
             dataIndex: 'vaccineUpdateAt',
             key: 'vaccineUpdateAt',
-            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('HH:mm:ss DD-MM-YYYY'),
         },
         {
             title: '',

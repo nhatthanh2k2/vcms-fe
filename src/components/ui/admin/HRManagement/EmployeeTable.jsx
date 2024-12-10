@@ -209,7 +209,7 @@ export const EmployeeTable = () => {
                         </Tooltip>
                     </div>
 
-                    <div onClick={() => handleOpenDeleteEmployeeModal(record)}>
+                    {/* <div onClick={() => handleOpenDeleteEmployeeModal(record)}>
                         <Tooltip placement="top" title="Xóa nhân viên">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -261,7 +261,7 @@ export const EmployeeTable = () => {
                                 />
                             </svg>
                         </Tooltip>
-                    </div>
+                    </div> */}
 
                     <div>
                         {record.employeeActive ? (

@@ -88,13 +88,13 @@ export const VaccinePackageTable = () => {
             title: 'Ngày tạo gói',
             dataIndex: 'vaccinePackageCreateAt',
             key: 'vaccinePackageCreateAt',
-            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('HH:mm:ss DD-MM-YYYY '),
         },
         {
             title: 'Ngày tạo gói',
             dataIndex: 'vaccinePackageUpdateAt',
             key: 'vaccinePackageUpdateAt',
-            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('DD-MM-YYYY HH:mm:ss'),
+            render: (text) => dayjs(text, 'DD-MM-YYYY HH-mm-ss').format('HH:mm:ss DD-MM-YYYY '),
         },
         {
             title: '',

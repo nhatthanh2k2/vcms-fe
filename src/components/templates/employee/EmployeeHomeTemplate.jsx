@@ -11,6 +11,7 @@ import {
     UpdateEmployeeProfileModal,
     PrintRecord,
     ConfirmLogoutModal,
+    AddVaccinationHistoryModal,
 } from '@/components/ui'
 import { Link } from 'react-router-dom'
 
@@ -108,6 +109,16 @@ export const EmployeeHomeTemplate = () => {
         setIsOpenUpdateEmployeeProfileModal(false)
     }
 
+    const [isOpenAddVaccinationHistoryModal, setIsOpenAddVaccinationHistoryModal] = useState(false)
+
+    const handleOpenAddVaccinationHistoryModal = () => {
+        setIsOpenAddVaccinationHistoryModal(true)
+    }
+
+    const handleCloseAddVaccinationHistoryModal = () => {
+        setIsOpenAddVaccinationHistoryModal(false)
+    }
+
     return (
         <div className="bg-teal-50 overflow-hidden flex items-start min-h-screen ">
             <aside className="w-1/5 bg-white shadow-md h-screen fixed top-0 left-0 rounded-md">
@@ -162,6 +173,28 @@ export const EmployeeHomeTemplate = () => {
                                             </g>
                                         </svg>
                                         Thêm khách hàng mới
+                                    </div>
+                                </li>
+                                <li>
+                                    <div
+                                        onClick={handleOpenAddVaccinationHistoryModal}
+                                        className="flex items-center cursor-pointer hover:bg-cyan-100 hover:text-black rounded-xl font-bold text-sm py-3 px-4"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="w-6 h-6 text-lg mr-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <g
+                                                stroke="#000"
+                                                strokeLinecap="round"
+                                                strokeWidth={1.5}
+                                            >
+                                                <path d="M15 12h-3m0 0H9m3 0V9m0 3v3M7 3.338A9.954 9.954 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5" />
+                                            </g>
+                                        </svg>
+                                        Thêm LS từ sổ tay
                                     </div>
                                 </li>
                                 <li>
@@ -397,6 +430,12 @@ export const EmployeeHomeTemplate = () => {
             <ConfirmLogoutModal
                 visibleConfirmLogoutModal={isOpenConfirmLogoutModal}
                 handleCloseConfirmLogoutModal={handleCloseConfirmLogoutModal}
+            />
+
+            <AddVaccinationHistoryModal
+                employee={employee}
+                visibleAddVaccinationHistoryModal={isOpenAddVaccinationHistoryModal}
+                handleCloseAddVaccinationHistoryModal={handleCloseAddVaccinationHistoryModal}
             />
         </div>
     )

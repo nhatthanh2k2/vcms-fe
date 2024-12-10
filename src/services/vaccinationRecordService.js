@@ -16,5 +16,8 @@ export const vaccinationRecordService = {
             params: { createDate }
         })
     },
+    createVaccinationRecordFromHandbook: (request) => {
+        return api.post("/vaccination-record/create/handbook", request)
+    },
     
 }

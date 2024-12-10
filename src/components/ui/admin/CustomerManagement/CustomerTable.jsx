@@ -157,6 +157,19 @@ export const CustomerTable = () => {
         },
     ]
 
+    const [filteredCustomerList, setFilteredCustomerList] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = customerList.filter((customer) =>
+                customer.customerFullName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            setFilteredCustomerList(filtered)
+        } else {
+            setFilteredCustomerList(customerList)
+        }
+    }, [searchQuery, customerList])
+
     return (
         <div className="bg-white shadow-default">
             <Table
@@ -165,11 +178,12 @@ export const CustomerTable = () => {
                     <div className="">
                         <div className="relative w-full max-w-xl">
                             <input
-                                placeholder="Tìm kiếm..."
+                                placeholder="Tìm kiếm tên khách hàng..."
                                 className="rounded-full w-full bg-white py-2 px-8 pr-32 outline-none border-2 border-gray-100 shadow-md hover:outline-none focus:ring-teal-200 focus:border-teal-200 h-12"
                                 type="text"
                                 name="query"
                                 id="query"
+                                onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             <button
                                 type="submit"
@@ -195,7 +209,7 @@ export const CustomerTable = () => {
                     </div>
                 )}
                 columns={customerColumns}
-                dataSource={customerList}
+                dataSource={filteredCustomerList}
                 rowKey={'customerCode'}
             />
             <CustomerDetailModal
